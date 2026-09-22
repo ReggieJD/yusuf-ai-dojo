@@ -47,7 +47,7 @@ const worlds = [
     id: 'green', name: 'Green Belt', world: 'Inside the AI Brain', color: '#2ec27e', ink: '#0d2b1d', emoji: '🧠',
     blurb: 'Neurons, weights, and networks — and how a computer "learns" by walking downhill.',
     parents: 'Artificial neurons, weights and bias, activation functions, small neural networks, gradient descent shown as "walking downhill," and the training loop that reduces error step by step.',
-    built: false,
+    built: true,
     lessons: [
       { id: 'meet-the-neuron', title: 'Meet the Neuron', emoji: '⚡', min: 12, term: 'Artificial Neuron', def: 'A tiny math unit: it multiplies inputs by weights, adds them up, and decides how strongly to "fire".' },
       { id: 'weights-and-bias', title: 'Weights & Bias', emoji: '🎚️', min: 15, term: 'Weight', def: 'A number that sets how much one input matters. Training adjusts weights.' },

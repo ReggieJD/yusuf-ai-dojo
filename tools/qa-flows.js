@@ -192,6 +192,55 @@ module.exports = {
     challenge: (pg) => solveSorter(pg, '#challenge'),
   },
   'test:orange': async (pg) => { for (let k = 0; k < 4; k++) await pg.click('#bt-proj [data-ok="1"]'); },
+
+  'green/meet-the-neuron': {
+    activity: async (pg) => {
+      await pg.click('.nr-in[data-i="2"]'); await pg.click('.nr-in[data-i="0"]');
+      await pg.click('#nr-m [data-a="no"]'); await pg.waitForTimeout(2800); await pg.click('#nr-m [data-a="y"]');
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'green/weights-and-bias': {
+    activity: async (pg) => {
+      await setRange(pg, '#activity [data-w="w1"]', '1'); await setRange(pg, '#activity [data-w="b"]', '-1');
+      await pg.click('#activity [data-next]');
+      await setRange(pg, '#activity [data-w="w1"]', '1'); await setRange(pg, '#activity [data-w="w2"]', '1'); await setRange(pg, '#activity [data-w="b"]', '-2.5');
+    },
+    challenge: async (pg) => {
+      await setRange(pg, '#challenge [data-w="w1"]', '1'); await setRange(pg, '#challenge [data-w="w2"]', '-1'); await setRange(pg, '#challenge [data-w="b"]', '-1');
+      await pg.click('#challenge [data-next]'); await pg.click('#challenge [data-imp]');
+    },
+  },
+  'green/activation-switch': {
+    activity: async (pg) => {
+      for (const [q, f] of [['all', 'step'], ['pass', 'relu'], ['smooth', 'sig']]) await pg.click(`.as-q[data-q="${q}"] [data-f="${f}"]`);
+      await pg.click('#as-final [data-ok="1"]');
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'green/network-playground': {
+    activity: async (pg) => { await pg.selectOption('[data-c="h1"]', 'or'); await pg.selectOption('[data-c="h2"]', 'nand'); await pg.selectOption('[data-c="o"]', 'and'); },
+    challenge: async (pg) => {
+      await setRange(pg, '#challenge [data-w="w1"]', '1'); await setRange(pg, '#challenge [data-w="w2"]', '1'); await setRange(pg, '#challenge [data-w="b"]', '-1.5');
+      await pg.waitForTimeout(1100); await setRange(pg, '#challenge [data-w="b"]', '-0.5'); await pg.waitForTimeout(1100);
+    },
+  },
+  'green/walking-downhill': {
+    activity: async (pg) => {
+      await pg.click('[data-lr="0.3"]'); for (let k = 0; k < 14; k++) await pg.click('#wd-step');
+      await pg.click('#wd-reset'); await pg.click('[data-lr="2.2"]'); for (let k = 0; k < 2; k++) await pg.click('#wd-step');
+      await pg.click('#wd-m [data-ok="1"]');
+    },
+    challenge: async (pg) => { await setRange(pg, '#tv-s', '-4'); await pg.click('#tv-go'); await setRange(pg, '#tv-s', '4'); await pg.click('#tv-go'); },
+  },
+  'green/how-networks-learn': {
+    activity: async (pg) => { await pg.click('#hl-10'); await pg.waitForTimeout(900); await pg.click('#hl-10'); await pg.waitForTimeout(900); },
+    challenge: async (pg) => { for (let i = 0; i < 4; i++) await pg.click(`#challenge .lo-pool [data-i="${i}"]`); },
+  },
+  'test:green': async (pg) => {
+    await setRange(pg, '#bt-proj [data-w="a"]', '1'); await setRange(pg, '#bt-proj [data-w="b"]', '-1'); await setRange(pg, '#bt-proj [data-w="c"]', '-2');
+    await pg.click('#bt-proj [data-ok="1"]');
+  },
   'test:white': async (pg) => {
     const ans = ['r', 'n', 'p', 'c', 'n', 'r'];
     for (let i = 0; i < 6; i++) await pg.click(`.gi-item[data-i="${i}"] button[data-v="${ans[i]}"]`);

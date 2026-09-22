@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>AI All Around You · White Belt · Yusuf's AI Dojo</title>
-<meta name="description" content="Computer systems that do tasks that usually need human smarts — like recognizing, predicting, deciding, or creating.">
+<title>Walking Downhill · Green Belt · Yusuf's AI Dojo</title>
+<meta name="description" content="A way to improve a model by taking small steps in the direction that reduces error the fastest.">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%A5%8B%3C%2Ftext%3E%3C%2Fsvg%3E">
@@ -174,65 +174,52 @@ footer.site a{color:inherit}
 }
 
 
-:root{--bg:#f7f2e6;--bg2:#ece3cf;--ink:#1b1b1b;--muted:#5a5247;--card:#fffdf6;--line:#1b1b1b26;
---accent:#b8241b;--accent-ink:#fff;--accent2:#1f3a60;--radius:6px;--band:#b8241b;--sensei:#fbf7ec;
---font-head:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;--head-weight:700;
---shadow:0 1px 0 #1b1b1b30, 0 10px 24px #3b2a1014}
-body{background-color:var(--bg);background-image:
- radial-gradient(circle at 20% 10%,#ffffff80 0,transparent 40%),
- radial-gradient(circle at 85% 70%,#e9dcc0 0,transparent 45%),
- url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.8%22%20numOctaves%3D%222%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.45%200%200%200%200%20.38%200%200%200%200%20.25%200%200%200%20.07%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22160%22%20height%3D%22160%22%20filter%3D%22url(%23n)%22%2F%3E%3C%2Fsvg%3E")}
-.card{border:none;border-left:6px solid var(--ink);border-radius:4px 14px 14px 4px}
-.sec-title .ico{border-radius:50%;background:var(--accent);box-shadow:inset 0 0 0 3px #fff6}
-.sec-title h2{position:relative;padding-bottom:6px}
-.sec-title h2::after{content:"";position:absolute;left:0;bottom:-4px;width:120px;height:10px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%2010%22%3E%3Cpath%20d%3D%22M2%206%20C30%201%2060%209%20118%203%22%20stroke%3D%22%231b1b1b%22%20stroke-width%3D%224%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.75%22%2F%3E%3C%2Fsvg%3E") no-repeat;background-size:contain}
-.hero-enso{width:150px;height:150px;position:relative;display:grid;place-items:center;margin:0 0 6px -8px}
-.hero-enso svg{position:absolute;inset:0}
-.hero-enso path{stroke-dasharray:420;stroke-dashoffset:420;animation:brush 1.6s .2s ease-out forwards}
-.hero-enso .em{font-size:3.6rem;animation:inkIn .8s 1.2s both}
-@keyframes brush{to{stroke-dashoffset:0}}
-@keyframes inkIn{from{opacity:0;transform:scale(.7)}}
-.hero .kicker{border-radius:3px;font-family:var(--font-head);letter-spacing:.12em}
-.hanko{position:absolute;right:6px;top:28px;width:74px;height:74px;border:3px solid var(--accent);color:var(--accent);border-radius:10px;display:grid;place-items:center;font:700 .72rem/1.1 var(--font-head);text-align:center;transform:rotate(8deg);opacity:.85;padding:4px;text-transform:uppercase;letter-spacing:.06em}
-@media (max-width:520px){.hanko{width:58px;height:58px;font-size:.6rem;top:20px}}
-details.challenge{background:repeating-linear-gradient(90deg,var(--card) 0 22px,#f1e8d3 22px 23px);border-radius:6px}
-.btn{border-radius:6px}
+:root{--bg:#062a24;--bg2:#dff7ec;--ink:#0d2b1d;--muted:#3d5c4f;--card:#f4fff9;--line:#0d2b1d22;
+--accent:#16a36b;--accent-ink:#fff;--accent2:#0b6e8a;--radius:24px;--band:#2ec27e;--sensei:#e6fff3;
+--font-head:ui-rounded,"SF Pro Rounded","Nunito","Varela Round","Segoe UI",system-ui,sans-serif;--head-weight:800;
+--shadow:0 0 0 1px #2ec27e44, 0 12px 40px #00000055}
+body{background-color:#062a24;background-image:radial-gradient(circle at 15% 10%,#2ec27e33,transparent 40%),radial-gradient(circle at 85% 30%,#0b6e8a44,transparent 45%),radial-gradient(#2ec27e26 1px,transparent 1.5px);background-size:100% 100%,100% 100%,22px 22px}
+.hero,.hero h1{color:#eafff4}.hero .hook,.wm-progress p{color:#a8d8c2} footer.site{color:#8fbfa9}
+.card{border:1px solid #2ec27e55}
+.sec-title .ico{border-radius:50%;background:radial-gradient(circle at 35% 30%,#7df0b8,#16a36b);box-shadow:0 0 14px #2ec27e88}
+.hero .kicker{background:#2ec27e;color:#062a24}
+.neuron{width:150px;height:130px;margin-bottom:6px;position:relative}
+.neuron svg{position:absolute;inset:0}
+.neuron .core{animation:glow 2.8s ease-in-out infinite}
+.neuron .sig{stroke-dasharray:6 10;animation:flow 1.6s linear infinite}
+.neuron .em{position:absolute;left:52px;top:42px;font-size:2.3rem}
+@keyframes glow{50%{opacity:.75}} @keyframes flow{to{stroke-dashoffset:-32}}
+.hanko{position:absolute;right:6px;top:26px;width:74px;height:74px;border-radius:50%;border:2px solid #7df0b8;color:#7df0b8;display:grid;place-items:center;text-align:center;font:800 .72rem/1.1 var(--font-head);text-transform:uppercase;box-shadow:0 0 16px #2ec27e55}
+details.challenge{background:linear-gradient(135deg,#f4fff9,#dff7ec);border-radius:24px}
 
 
-.day{display:grid;gap:12px}
-.day-scene{border-radius:16px;padding:12px;border:2px solid var(--line);background:linear-gradient(135deg,var(--sky1),var(--sky2))}
-.day-scene h3{margin:0 0 8px;font-size:1rem;display:flex;gap:8px;align-items:center}
-.day-items{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
-.day-item{background:#ffffffe6;border:2px solid #1b1b1b33;border-radius:12px;padding:10px;text-align:left;cursor:pointer;font:600 .95rem/1.3 var(--font-body);color:#1b1b1b;min-height:80px;display:flex;gap:8px;align-items:center;min-width:0;overflow-wrap:anywhere}
-.day-item .e{font-size:1.8rem}
-.day-item.ai{border-color:#1b7f4b;background:#e3f6ea}.day-item.plain{border-color:#667085;background:#f2f4f7}
-.day-item .tag{display:block;font-size:.75rem;font-weight:800;margin-top:2px}
-.day-pop{border:3px solid #1b1b1b;border-radius:16px;background:var(--card);padding:14px;margin-top:10px}
-.day-pop .row button{flex:1}
-.day-score{position:sticky;top:64px;z-index:5;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:6px 14px;font-weight:800;display:inline-block;margin-bottom:8px}
+.wd{background:#fff;border-radius:20px;border:2px solid #0d2b1d18;padding:8px}
+.wd svg{width:100%;height:auto;display:block}
+.wd-lr{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.wd-lr button{min-height:44px;min-width:58px;border-radius:12px;border:2px solid #0d2b1d;background:#fff;font:800 .95rem var(--font-body);cursor:pointer;color:#0d2b1d}
+.wd-lr button[aria-pressed="true"]{background:#16a36b;color:#fff}
+.wd-stats{display:flex;gap:10px;flex-wrap:wrap;font-weight:800}
+.wd-m{background:var(--bg2);border-radius:16px;padding:10px 12px;margin-top:10px}
+.wd-m .row button{flex:1 1 150px}
 
-
-.mt{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.mt-col{display:grid;gap:8px;align-content:start}
-.mt button{min-height:64px;text-align:left;padding:10px;border-radius:12px;border:2px solid var(--line);background:var(--bg);font:600 .92rem/1.3 var(--font-body);cursor:pointer;color:var(--ink)}
-.mt button[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent)}
-.mt button.matched{background:var(--good-bg);border-color:var(--good);color:#0d3b22;cursor:default}
-.mt-riddle{margin-top:14px}
-
+.tv{background:#fff;border-radius:20px;border:2px solid #0d2b1d18;padding:8px}.tv svg{width:100%;height:auto;display:block}.tv-sl input{width:100%;min-height:44px;accent-color:#16a36b}
 </style>
 </head>
-<body class="world-white">
+<body class="world-green">
 <a class="sr-only" href="#main">Skip to content</a>
 <header id="dojo-bar"><a class="db-home" href="../../index.html">🏯 Dojo</a></header>
 <noscript><div class="wrap"><p>This dojo needs JavaScript turned on to run its games and quizzes.</p></div></noscript>
 
-<main id="main" class="wrap lesson l-ai-all-around">
+<main id="main" class="wrap lesson l-walking-downhill">
   <section class="hero">
-    <div class="hanko" aria-hidden="true">White<br>Belt</div>
-    <div class="hero-enso" aria-hidden="true"><svg viewBox="0 0 150 150"><path d="M112 30 C 80 6, 24 22, 20 72 C 16 122, 76 146, 116 118 C 146 96, 140 52, 118 38" fill="none" stroke="#b8241b" stroke-width="11" stroke-linecap="round" opacity=".88"/></svg><span class="em">📱</span></div>
-    <span class="kicker">White Belt · Lesson 2 of 6</span>
-    <h1>AI All Around You</h1>
-    <p class="hook fill">AI rarely looks like a robot. It hides inside your phone, your games and your maps. Can you find it?</p>
+    <div class="hanko" aria-hidden="true">Green<br>Belt</div>
+    <div class="neuron" aria-hidden="true"><svg viewBox="0 0 150 130">
+<line class="sig" x1="8" y1="20" x2="75" y2="65" stroke="#7df0b8" stroke-width="3"/><line class="sig" x1="4" y1="65" x2="75" y2="65" stroke="#7df0b8" stroke-width="3"/><line class="sig" x1="10" y1="112" x2="75" y2="65" stroke="#7df0b8" stroke-width="3"/><line class="sig" x1="75" y1="65" x2="146" y2="65" stroke="#ffd23f" stroke-width="4"/>
+<circle cx="8" cy="20" r="6" fill="#0b6e8a"/><circle cx="4" cy="65" r="6" fill="#0b6e8a"/><circle cx="10" cy="112" r="6" fill="#0b6e8a"/>
+<circle class="core" cx="75" cy="65" r="36" fill="#16a36b" stroke="#7df0b8" stroke-width="4"/></svg><span class="em">⛰️</span></div>
+    <span class="kicker">Green Belt · Lesson 5 of 6</span>
+    <h1>Walking Downhill</h1>
+    <p class="hook fill">You’re on a foggy mountain and can only feel the slope under your feet. How do you reach the bottom? That’s exactly how AI learns.</p>
     <ul class="steps" aria-label="Lesson checklist">
       <li data-step="act"><span class="ck" aria-hidden="true"></span>Activity</li>
       <li data-step="quiz"><span class="ck" aria-hidden="true"></span>Quiz</li>
@@ -247,8 +234,8 @@ details.challenge{background:repeating-linear-gradient(90deg,var(--card) 0 22px,
   </section>
 
   <section class="card act-card" aria-labelledby="h-act">
-    <div class="sec-title"><span class="ico" aria-hidden="true">🥋</span><h2 id="h-act">Do It: A Day of Hidden AI</h2></div>
-    <p class="instructions fill">Tap each object in the day. Decide: is there AI inside, or is it a plain machine? Find all 12.</p>
+    <div class="sec-title"><span class="ico" aria-hidden="true">🥋</span><h2 id="h-act">Do It: Foggy Mountain</h2></div>
+    <p class="instructions fill">Pick a step size and press Step. Reach the bottom of the valley, then try a HUGE step size to see what happens.</p>
     <div id="activity" class="activity"></div>
   </section>
 
@@ -259,31 +246,31 @@ details.challenge{background:repeating-linear-gradient(90deg,var(--card) 0 22px,
   </section>
 
   <details class="challenge" id="challenge-box">
-    <summary><span class="flame" aria-hidden="true">🔥</span><span>Challenge Mode: Where Did It Learn That?</span><span class="tag">+30 XP</span></summary>
-    <div class="challenge-body"><div><p class="fill">Every AI learned from data. Match each AI to the data it learned from: tap an AI, then tap its data. Then answer the final riddle.</p><div id="challenge"></div></div></div>
+    <summary><span class="flame" aria-hidden="true">🔥</span><span>Challenge Mode: The Two Valleys</span><span class="tag">+30 XP</span></summary>
+    <div class="challenge-body"><div><p class="fill">Real error landscapes can have a small dip AND a deep valley. Gradient descent only feels the slope under its feet, so it can get stuck. Pick starting points to (1) get stuck in the small dip, then (2) reach the deep valley.</p><div id="challenge"></div></div></div>
   </details>
 
   <section class="card" aria-labelledby="h-term">
     <div class="sec-title"><span class="ico" aria-hidden="true">🔑</span><h2 id="h-term">Key Term</h2></div>
-    <div class="term"><span class="scroll" aria-hidden="true">📜</span><dl><dt>Artificial Intelligence (AI)</dt><dd>Computer systems that do tasks that usually need human smarts — like recognizing, predicting, deciding, or creating.</dd></dl></div>
+    <div class="term"><span class="scroll" aria-hidden="true">📜</span><dl><dt>Gradient Descent</dt><dd>A way to improve a model by taking small steps in the direction that reduces error the fastest.</dd></dl></div>
     <p><a href="../../scrolls.html">See all your Dojo Scrolls →</a></p>
   </section>
 
   <section class="card complete" id="complete" hidden>
     <h2>🎉 Lesson complete!</h2>
     <p>You earned this one. Keep the momentum going.</p>
-    <a class="btn primary" href="is-it-ai.html">Next: Is It AI? →</a>
+    <a class="btn primary" href="how-networks-learn.html">Next: How Networks Learn →</a>
   </section>
 
   <nav class="lesson-nav" aria-label="Lesson navigation">
-    <a class="btn" href="rules-vs-learning.html">← Rules vs Learning</a>
-    <a class="btn primary" href="is-it-ai.html">Next: Is It AI? →</a>
+    <a class="btn" href="network-playground.html">← Network Playground</a>
+    <a class="btn primary" href="how-networks-learn.html">Next: How Networks Learn →</a>
   </nav>
 </main>
 <footer class="site"><div class="wrap">Built for Yusuf with 🥋 · Progress is saved only on this device · <a href="../../parents.html">For parents</a></div></footer>
 <script>
 window.CURRIC={"worlds":[{"id":"white","name":"White Belt","world":"What Is AI?","color":"#f4f1ea","ink":"#1d1d1f","emoji":"🥋","blurb":"What AI really is, where it hides in your day, and where the word \"algorithm\" came from.","built":true,"lessons":[{"id":"rules-vs-learning","title":"Rules vs Learning","emoji":"🤖","min":12,"term":"Machine Learning","def":"When a computer finds patterns in examples, instead of only following rules a person wrote."},{"id":"ai-all-around","title":"AI All Around You","emoji":"📱","min":10,"term":"Artificial Intelligence (AI)","def":"Computer systems that do tasks that usually need human smarts — like recognizing, predicting, deciding, or creating."},{"id":"is-it-ai","title":"Is It AI?","emoji":"🗂️","min":10,"term":"Automation","def":"A machine doing a job by itself. Automatic is not the same as intelligent — a timer is automatic, but it is not AI."},{"id":"al-khwarizmi","title":"The Algorithm Scholar","emoji":"📜","min":15,"term":"Algorithm","def":"A precise, step-by-step set of instructions for solving a problem."},{"id":"turing-test","title":"You Be the Judge","emoji":"🕵️","min":12,"term":"Turing Test","def":"A test where a judge chats with a hidden human and a hidden machine and tries to tell which is which."},{"id":"ai-myths","title":"Myth Busters","emoji":"💥","min":10,"term":"Hype","def":"Claims that make something sound more amazing — or scarier — than it really is."}]},{"id":"yellow","name":"Yellow Belt","world":"Data Is Power","color":"#ffd23f","ink":"#1d1d1f","emoji":"📊","blurb":"Data is the fuel of AI. Collect it, label it, chart it, and learn why bad data makes bad AI.","built":true,"lessons":[{"id":"what-is-data","title":"What Is Data?","emoji":"🔢","min":10,"term":"Data","def":"Facts, numbers, words, pictures or sounds collected so they can be studied."},{"id":"collect-and-label","title":"Collect & Label","emoji":"🏷️","min":12,"term":"Label","def":"The correct answer attached to an example, like tagging a photo \"cat\". AI learns from labeled examples."},{"id":"stats-court","title":"Stats Court","emoji":"🏀","min":15,"term":"Correlation","def":"When two things tend to change together. It does NOT prove that one causes the other."},{"id":"averages-and-patterns","title":"Averages & Patterns","emoji":"📈","min":12,"term":"Average (Mean)","def":"Add up all the numbers, then divide by how many numbers there are."},{"id":"garbage-in-garbage-out","title":"Garbage In, Garbage Out","emoji":"🗑️","min":12,"term":"Garbage In, Garbage Out","def":"If the data going into a system is bad, the results coming out will be bad too."},{"id":"data-detective","title":"Data Detective","emoji":"🔍","min":12,"term":"Outlier","def":"A data point that is very different from the rest. It might be a mistake — or something really interesting."}]},{"id":"orange","name":"Orange Belt","world":"How Machines Learn","color":"#ff8c42","ink":"#1d1d1f","emoji":"⚙️","blurb":"Train your own classifier, test it fairly, and learn the difference between memorizing and understanding.","built":true,"lessons":[{"id":"train-a-classifier","title":"Train a Classifier","emoji":"🧺","min":15,"term":"Classifier","def":"A model that sorts things into groups (classes), like \"spam\" or \"not spam\"."},{"id":"train-vs-test","title":"Training vs Testing","emoji":"📝","min":12,"term":"Test Set","def":"Examples kept hidden during training, used afterward to check whether the model really learned."},{"id":"accuracy-score","title":"Accuracy Score","emoji":"🎯","min":10,"term":"Accuracy","def":"The share of answers a model gets right. 45 right out of 50 is 90% accuracy."},{"id":"overfitting","title":"Memorize or Understand?","emoji":"🧠","min":15,"term":"Overfitting","def":"When a model memorizes its training examples so closely that it fails on new ones."},{"id":"decision-trees","title":"Decision Trees","emoji":"🌳","min":15,"term":"Decision Tree","def":"A model that makes a decision by asking a series of yes/no questions."},{"id":"nearest-neighbor","title":"Nearest Neighbor","emoji":"📍","min":12,"term":"Nearest Neighbor","def":"A method that labels a new example by copying the label of the most similar examples it already knows."}]},{"id":"green","name":"Green Belt","world":"Inside the AI Brain","color":"#2ec27e","ink":"#0d2b1d","emoji":"🧠","blurb":"Neurons, weights, and networks — and how a computer \"learns\" by walking downhill.","built":true,"lessons":[{"id":"meet-the-neuron","title":"Meet the Neuron","emoji":"⚡","min":12,"term":"Artificial Neuron","def":"A tiny math unit: it multiplies inputs by weights, adds them up, and decides how strongly to \"fire\"."},{"id":"weights-and-bias","title":"Weights & Bias","emoji":"🎚️","min":15,"term":"Weight","def":"A number that sets how much one input matters. Training adjusts weights."},{"id":"activation-switch","title":"The Activation Switch","emoji":"🔌","min":12,"term":"Activation Function","def":"The rule a neuron uses to turn its total into an output, like \"fire only if the total is above zero\"."},{"id":"network-playground","title":"Network Playground","emoji":"🕸️","min":15,"term":"Neural Network","def":"Many artificial neurons connected in layers, passing numbers forward."},{"id":"walking-downhill","title":"Walking Downhill","emoji":"⛰️","min":15,"term":"Gradient Descent","def":"A way to improve a model by taking small steps in the direction that reduces error the fastest."},{"id":"how-networks-learn","title":"How Networks Learn","emoji":"🔁","min":15,"term":"Loss","def":"A score for how wrong a model's guesses are. Training tries to make the loss smaller."}]},{"id":"blue","name":"Blue Belt","world":"AI Senses","color":"#3a86ff","ink":"#0a1a33","emoji":"👁️","blurb":"How computers see and hear: pixels, colors, filters, edges, and sound turned into numbers.","built":false,"lessons":[{"id":"pixels","title":"Pixel Zoom","emoji":"🔬","min":10,"term":"Pixel","def":"One tiny square of color. Digital images are grids of pixels, and each pixel is stored as numbers."},{"id":"color-numbers","title":"Colors Are Numbers","emoji":"🎨","min":10,"term":"RGB","def":"Red, Green, Blue: screens make every color by mixing these three lights, each stored as a number from 0 to 255."},{"id":"filters-and-edges","title":"Filters & Edges","emoji":"✏️","min":15,"term":"Filter","def":"A small grid of numbers slid across an image to find or change things, like edges or blur."},{"id":"draw-and-guess","title":"Draw & Guess","emoji":"🖍️","min":15,"term":"Pattern Matching","def":"Comparing something new to stored examples to find the closest match."},{"id":"sound-to-numbers","title":"Sound to Numbers","emoji":"🔊","min":12,"term":"Sampling","def":"Measuring a sound wave many times per second and storing each measurement as a number."},{"id":"how-ai-sees","title":"How AI Sees","emoji":"👀","min":15,"term":"Feature","def":"A useful clue in data, like an edge, a corner, or a color patch, that helps a model recognize things."}]},{"id":"purple","name":"Purple Belt","world":"Game AI & Strategy","color":"#8e44ec","ink":"#ffffff","emoji":"♟️","blurb":"Think ahead like a chess engine, build an unbeatable tic-tac-toe AI, and train an agent by trial and error.","built":false,"lessons":[{"id":"search-trees","title":"Search Trees","emoji":"🌲","min":12,"term":"Game Tree","def":"A map of every possible move, then every reply, then every reply to that, branching like a tree."},{"id":"tic-tac-toe-minimax","title":"The Unbeatable Bot","emoji":"❌","min":18,"term":"Minimax","def":"A strategy that assumes your opponent plays their best, then picks the move that leaves you best off."},{"id":"chess-engine-thinking","title":"How Chess Engines Think","emoji":"♞","min":15,"term":"Evaluation Function","def":"A formula that scores a position, like counting material, when there is no time to search to the end."},{"id":"maze-sensei","title":"Maze Sensei","emoji":"🏯","min":15,"term":"Reinforcement Learning","def":"Learning by trial and error: an agent tries actions, gets rewards or penalties, and improves over time."},{"id":"explore-vs-exploit","title":"Explore or Exploit?","emoji":"🧭","min":12,"term":"Exploration","def":"Trying something new to learn more, instead of repeating what already works (exploitation)."},{"id":"game-character-ai","title":"Game Character AI","emoji":"👾","min":12,"term":"State Machine","def":"A set of modes (like patrol, chase, flee) and rules for switching between them."}]},{"id":"brown","name":"Brown Belt","world":"Talking Machines","color":"#9c6b3f","ink":"#ffffff","emoji":"💬","blurb":"How chatbots really work: tokens, next-word prediction, word maps, and why AI can be confidently wrong.","built":false,"lessons":[{"id":"tokens","title":"Tokens","emoji":"🧩","min":10,"term":"Token","def":"A chunk of text — a word or piece of a word — that a language model reads and writes one at a time."},{"id":"next-word","title":"Guess the Next Word","emoji":"🔮","min":12,"term":"Language Model","def":"An AI trained on lots of text to predict which token is likely to come next."},{"id":"word-maps","title":"Word Maps","emoji":"🗺️","min":15,"term":"Embedding","def":"A list of numbers that places a word on a \"meaning map\", so similar words end up close together."},{"id":"temperature","title":"The Creativity Dial","emoji":"🌡️","min":12,"term":"Temperature","def":"A setting that controls how random a model's word choices are. Low = safe and predictable, high = surprising."},{"id":"confidently-wrong","title":"Confidently Wrong","emoji":"🤥","min":15,"term":"Hallucination","def":"When an AI states something false or made-up as if it were true."},{"id":"prompt-puzzles","title":"Prompt Puzzles","emoji":"🗝️","min":15,"term":"Prompt","def":"The instructions and information you give an AI. Clear prompts get better results."}]},{"id":"black","name":"Black Belt","world":"Builder Lab & AI Citizen","color":"#1b1b1b","ink":"#f5c542","emoji":"🏆","blurb":"Build real apps with AI, and become a smart, fair, and safe AI citizen.","built":false,"lessons":[{"id":"how-app-builders-work","title":"How AI App Builders Work","emoji":"🏗️","min":12,"term":"AI App Builder","def":"A tool where you describe an app in words and AI writes the code, which you then test and improve."},{"id":"idea-to-spec","title":"From Idea to Spec","emoji":"📋","min":15,"term":"Spec","def":"Short for specification: a clear description of what an app should do, for whom, and how you know it works."},{"id":"spec-to-prompts","title":"Spec to Prompts","emoji":"✍️","min":15,"term":"Context","def":"The background information you give an AI so it understands your goal, your users and your limits."},{"id":"test-and-debug","title":"Test & Debug","emoji":"🐞","min":15,"term":"Bug","def":"A mistake in a program that makes it behave differently than it should."},{"id":"code-playground","title":"Code Playground","emoji":"💻","min":20,"term":"Code","def":"Instructions written in a programming language that a computer can run."},{"id":"app-blueprints","title":"App Blueprints","emoji":"📐","min":15,"term":"Prototype","def":"An early, simple version of an app built to test an idea quickly."},{"id":"bias-and-fairness","title":"Bias & Fairness","emoji":"⚖️","min":15,"term":"Bias (Fairness)","def":"When a system treats some people or groups unfairly — often because of unbalanced data. (Different from the \"bias\" number inside a neuron!)"},{"id":"privacy-shield","title":"Privacy Shield","emoji":"🛡️","min":12,"term":"Personal Information","def":"Details that can identify you, like your full name, address, school, photos, or passwords. Keep them private."},{"id":"spotting-fakes","title":"Spotting Fakes","emoji":"🎭","min":15,"term":"Deepfake","def":"Fake images, video or audio made with AI to look or sound real."},{"id":"learn-dont-skip","title":"Learn, Don't Skip","emoji":"🧗","min":12,"term":"Critical Thinking","def":"Checking ideas carefully — asking \"How do I know?\" — instead of just accepting them."},{"id":"trusted-adult","title":"Your Trusted Adult","emoji":"🤝","min":10,"term":"Trusted Adult","def":"A grown-up you know well and can go to when something online feels wrong, confusing, or scary."},{"id":"ai-careers","title":"Cool AI Careers","emoji":"🚀","min":12,"term":"Data Scientist","def":"Someone who collects, cleans and studies data to find answers — and often builds AI models."},{"id":"final-project","title":"Black Belt Project","emoji":"🏁","min":30,"term":"Iteration","def":"Improving something in repeated rounds: build, test, fix, repeat."}]}],"themes":{"chess":{"name":"Chess","emoji":"♟️","hero":"a grandmaster","place":"the chessboard","thing":"a knight","group":"the chess club","items":["♔","♕","♖","♗","♘","♙"]},"martial":{"name":"Martial Arts","emoji":"🥋","hero":"a black belt","place":"the dojo","thing":"a training dummy","group":"the dojo team","items":["🥋","🥊","🎯","🏆","🥇","🧘"]},"basketball":{"name":"Basketball","emoji":"🏀","hero":"a point guard","place":"the court","thing":"a basketball","group":"the team","items":["🏀","⛹️","👟","🏆","⏱️","🥇"]},"soccer":{"name":"Soccer","emoji":"⚽","hero":"a striker","place":"the pitch","thing":"a soccer ball","group":"the squad","items":["⚽","🥅","👟","🏆","🧤","🥇"]},"space":{"name":"Space Missions","emoji":"🚀","hero":"an astronaut","place":"the space station","thing":"a rocket","group":"mission control","items":["🚀","🛰️","🪐","🌙","☄️","👩‍🚀"]},"robots":{"name":"Robots","emoji":"🤖","hero":"a robot engineer","place":"the robot lab","thing":"a robot arm","group":"the robotics club","items":["🤖","🦾","🔋","⚙️","🔧","📡"]},"detective":{"name":"Detective Mysteries","emoji":"🕵️","hero":"a detective","place":"the crime lab","thing":"a magnifying glass","group":"the detective agency","items":["🔍","🕵️","🗝️","📁","🧩","👣"]},"gamedesign":{"name":"Video Game Design","emoji":"🎮","hero":"a game designer","place":"the game studio","thing":"a game controller","group":"the dev team","items":["🎮","👾","🕹️","💎","🏰","⭐"]},"inventions":{"name":"Inventions","emoji":"💡","hero":"an inventor","place":"the workshop","thing":"a gadget","group":"the inventors' club","items":["💡","🔧","⚙️","🧪","🔋","🛠️"]},"animals":{"name":"Animals","emoji":"🐯","hero":"a wildlife ranger","place":"the jungle","thing":"a tiger","group":"the ranger crew","items":["🐯","🦅","🐬","🦁","🐼","🦊"]},"music":{"name":"Music Beats","emoji":"🎧","hero":"a beat producer","place":"the studio","thing":"a drum machine","group":"the band","items":["🎧","🥁","🎹","🎸","🎤","🎵"]},"worlds":{"name":"Building Worlds","emoji":"🏰","hero":"a world builder","place":"your block world","thing":"a castle","group":"the build crew","items":["🏰","🌋","🌲","🏝️","⛏️","🧱"]}},"arcade":[]};
-window.PAGE={"root":"../../","type":"lesson","id":"white/ai-all-around","world":"white"};
+window.PAGE={"root":"../../","type":"lesson","id":"green/walking-downhill","world":"green"};
 /* Yusuf's AI Dojo — shared runtime. Inlined into every page so each file works on its own. */
 (function () {
   'use strict';
@@ -691,126 +678,95 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/ai-all-around","world":
 
 </script>
 <script>
-window.LESSON={"id":"white/ai-all-around","title":"AI All Around You","story":[["sensei","{{nick}}, how many times do you think you used AI today?"],["you","Um… zero? I haven’t talked to any robots."],["sensei","Ha! AI almost never looks like a robot. It hides inside everyday things: your phone, your apps, your maps."],["sensei","\u003cb>Artificial intelligence\u003c/b> means computer systems that do jobs that usually need human smarts: \u003cb>recognizing\u003c/b> faces, \u003cb>understanding\u003c/b> speech, \u003cb>predicting\u003c/b> what comes next, \u003cb>recommending\u003c/b>, and \u003cb>creating\u003c/b>."],["sensei","But not every gadget is AI. A light switch just follows one rule. Your mission: walk through a whole day and uncover the hidden AI."]],"quiz":[{"q":"Which of these uses AI?","a":["A phone that unlocks when it recognizes your face","A light switch","A calculator","An alarm clock set for 7:00"],"c":0,"why":"Recognizing a face — from new angles, in different light — takes learned patterns. The others just follow fixed rules."},{"q":"How does a video app guess what you might like?","a":["It finds patterns in what you and similar viewers watched","It asks your friends","It picks totally at random","A person watches everything with you"],"c":0,"why":"Recommendation systems learn from what millions of people watched, liked and skipped, then predict what you’ll enjoy."},{"q":"Why isn’t a simple alarm clock AI?","a":["It follows one fixed rule — it doesn’t recognize, predict or learn anything","It’s too small","It doesn’t use electricity","AI can’t tell time"],"c":0,"why":"Being automatic isn’t the same as being intelligent. “Ring at 7:00” is a single rule."},{"q":"You type “basketball” and your keyboard suggests “practice”. What is it doing?","a":["Predicting a likely next word from patterns in lots of text","Reading your mind","Copying your friend’s messages","Guessing totally at random"],"c":0,"why":"It learned which words often come next. Chatbots use a much bigger version of the same idea!"}]};
-window.ACTIVITY=(function (el, api) {
-      var D = api.D;
-      var scenes = [
-        ['🌅', 'Morning', '#ffe8cc', '#fff4e6', [
-          ['⏰', 'Alarm clock that rings at 7:00', 0, 'It follows one fixed rule: when the time is 7:00, ring. No recognizing, predicting or learning.'],
-          ['📱', 'Phone that unlocks when it sees your face', 1, 'Face unlock uses a model trained on huge numbers of face images, so it can recognize YOUR face from new angles.']]],
-        ['🚗', 'On the way', '#d0ebff', '#e7f5ff', [
-          ['🗺️', 'Map app that predicts when you’ll arrive', 1, 'It learns patterns from lots of trip and traffic data to predict how long the drive will take.'],
-          ['🚦', 'Traffic light that changes every 60 seconds', 0, 'A timer rule. Some cities use smarter systems, but a fixed timer is not AI.']]],
-        ['🏫', 'School', '#d3f9d8', '#ebfbee', [
-          ['⌨️', 'Keyboard that suggests your next word', 1, 'It predicts likely next words using patterns learned from lots of text — a tiny cousin of chatbots.'],
-          ['🧮', 'Calculator', 0, 'Exact math rules, the same every time. Super useful, not AI.']]],
-        ['🌤️', 'Afternoon', '#fff3bf', '#fff9db', [
-          ['📺', 'Video app that recommends what to watch', 1, 'It finds patterns in what you and millions of similar viewers watched, then predicts what you might like.'],
-          ['🍿', 'Microwave with a 2-minute button', 0, 'It heats for exactly the time you choose. A rule, not intelligence.']]],
-        ['🌆', 'Evening', '#e5dbff', '#f3f0ff', [
-          ['📸', 'Photo app that finds every picture of your dog', 1, 'Image-recognition AI learned what dogs look like from many labeled photos.'],
-          ['💡', 'Light switch', 0, 'Flip it and the circuit connects. No smarts involved.']]],
-        ['🌙', 'Night', '#dbe4ff', '#edf2ff', [
-          ['🗣️', 'Voice assistant that answers “What’s the weather?”', 1, 'Speech-recognition AI turns your voice into words, then the assistant looks up the answer.'],
-          ['📧', 'Email app that moves junk mail to spam', 1, 'Spam filters learn from millions of emails that people marked as spam.']]],
-      ];
-      var total = 0; scenes.forEach(function (s) { total += s[4].length; });
-      var found = 0, right = 0, answered = {};
-      el.innerHTML = '<span class="day-score" id="day-score" aria-live="polite"></span><div class="day">' + scenes.map(function (s, si) {
-        return '<div class="day-scene" style="--sky1:' + s[2] + ';--sky2:' + s[3] + '"><h3><span aria-hidden="true">' + s[0] + '</span>' + s[1] + '</h3><div class="day-items">' +
-          s[4].map(function (it, ii) { return '<button type="button" class="day-item" data-k="' + si + '-' + ii + '"><span class="e" aria-hidden="true">' + it[0] + '</span><span>' + it[1] + '<span class="tag"></span></span></button>'; }).join('') +
-          '</div><div class="day-pop-slot"></div></div>';
-      }).join('') + '</div><p class="feedback" id="day-end" aria-live="polite"></p>';
-      function score() { D.$('#day-score', el).textContent = '🔎 Checked ' + found + ' / ' + total + ' · ✅ ' + right + ' right'; }
-      score();
-      D.$all('.day-item', el).forEach(function (b) {
-        b.addEventListener('click', function () {
-          var k = b.getAttribute('data-k'); if (answered[k]) return;
-          var p = k.split('-'), it = scenes[+p[0]][4][+p[1]];
-          var slot = b.closest('.day-scene').querySelector('.day-pop-slot');
-          slot.innerHTML = '<div class="day-pop"><p><b>' + it[1] + '</b> — AI or not?</p><div class="row"><button type="button" class="btn small" data-v="1">🤖 AI inside</button><button type="button" class="btn small" data-v="0">🔧 Plain machine</button></div></div>';
-          var first = slot.querySelector('button'); first.focus();
-          D.$all('button', slot).forEach(function (c) {
-            c.addEventListener('click', function () {
-              answered[k] = true; found++;
-              var A = api.load().ans || {}; A[k] = c.getAttribute('data-v'); api.save({ ans: A });
-              var ok = +c.getAttribute('data-v') === it[2]; if (ok) right++;
-              b.classList.add(it[2] ? 'ai' : 'plain');
-              b.querySelector('.tag').textContent = (it[2] ? '🤖 AI inside' : '🔧 Plain machine') + (ok ? ' ✓' : ' — you said ' + (it[2] ? 'plain' : 'AI'));
-              slot.innerHTML = '<div class="day-pop"><p>' + (ok ? '✅ ' : '❌ ') + it[3] + '</p></div>';
-              D.sfx(ok ? 'good' : 'bad'); score();
-              if (found === total) {
-                var end = D.$('#day-end', el);
-                end.className = 'feedback ok';
-                end.innerHTML = 'You found them all — ' + right + ' of ' + total + ' judged right. That’s 7 AIs in one ordinary day! AI is already part of your life, so understanding it is a superpower.';
-                api.done();
-              }
-            });
-          });
-        });
-      });
-      // restore autosaved answers
-      var A0 = api.load().ans || {};
-      Object.keys(A0).forEach(function (k) {
-        var b = D.$('.day-item[data-k="' + k + '"]', el); if (!b) return; b.click();
-        var c = b.closest('.day-scene').querySelector('.day-pop-slot button[data-v="' + A0[k] + '"]'); if (c) c.click();
-      });
-      if (Object.keys(A0).length) D.$all('.day-pop-slot', el).forEach(function (s) { s.innerHTML = ''; });
-    });
-window.CHALLENGE=(function (el, api) {
-      var D = api.D;
-      var pairs = [
-        ['📱 Face unlock', 'Many photos of faces'],
-        ['🗺️ Traffic predictions', 'Records of past trips and traffic speeds'],
-        ['⌨️ Next-word suggestions', 'Huge amounts of written text'],
-        ['📺 Video recommendations', 'What millions of viewers watched and liked'],
-        ['📧 Spam filter', 'Emails that people marked as spam'],
-      ];
-      var right = D.shuffle(pairs.map(function (p, i) { return i; }));
-      var sel = null, matched = 0, misses = 0;
-      el.innerHTML = '<div class="mt"><div class="mt-col" aria-label="AI systems">' + pairs.map(function (p, i) { return '<button type="button" data-a="' + i + '" aria-pressed="false">' + p[0] + '</button>'; }).join('') +
-        '</div><div class="mt-col" aria-label="Training data">' + right.map(function (i) { return '<button type="button" data-d="' + i + '">' + pairs[i][1] + '</button>'; }).join('') + '</div></div><p class="feedback" id="mt-fb" aria-live="polite"></p><div id="mt-riddle" class="mt-riddle"></div>';
-      var fb = D.$('#mt-fb', el);
-      D.$all('[data-a]', el).forEach(function (b) {
-        b.addEventListener('click', function () {
-          if (b.classList.contains('matched')) return;
-          sel = +b.getAttribute('data-a');
-          D.$all('[data-a]', el).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-          fb.textContent = 'Now tap the data it learned from.'; fb.className = 'feedback';
-        });
-      });
-      D.$all('[data-d]', el).forEach(function (b) {
-        b.addEventListener('click', function () {
-          if (b.classList.contains('matched')) return;
-          if (sel == null) { fb.textContent = 'Tap an AI on the left first.'; return; }
-          var d = +b.getAttribute('data-d');
-          if (d === sel) {
-            matched++; b.classList.add('matched'); b.disabled = true;
-            var a = D.$('[data-a="' + sel + '"]', el); a.classList.add('matched'); a.disabled = true; a.setAttribute('aria-pressed', 'false');
-            var M = api.load().m || []; if (M.indexOf(sel) < 0) M.push(sel); api.save({ m: M });
-            fb.className = 'feedback ok'; fb.textContent = '✅ Match! ' + pairs[sel][0].slice(2) + ' learned from ' + pairs[sel][1].toLowerCase() + '.'; D.sfx('good'); sel = null;
-            if (matched === pairs.length) riddle();
-          } else { misses++; fb.className = 'feedback no'; fb.textContent = '❌ Not that one — think about what the AI needs to see lots of.'; D.sfx('bad'); }
-        });
-      });
-      (api.load().m || []).forEach(function (i) { var a = D.$('[data-a="' + i + '"]', el), d = D.$('[data-d="' + i + '"]', el); if (a && d) { a.click(); d.click(); } });
-      function riddle() {
-        var r = D.$('#mt-riddle', el);
-        r.innerHTML = '<p><b>Final riddle:</b> A huge snowstorm hits your city — the first one in 50 years. The map app’s arrival time is way off. Why?</p>' +
-          '<div class="qz-choices"><button type="button" class="qz-choice" data-v="0">The app is broken and needs a new phone</button><button type="button" class="qz-choice" data-v="1">It learned from past trips, and it has almost never seen traffic like this</button><button type="button" class="qz-choice" data-v="0">Snow blocks all phone signals</button></div><p class="feedback" aria-live="polite"></p>';
-        D.$all('.qz-choice', r).forEach(function (c) {
-          c.addEventListener('click', function () {
-            var f = r.querySelector('.feedback');
-            if (c.getAttribute('data-v') === '1') {
-              c.classList.add('right'); f.className = 'feedback ok';
-              f.textContent = '✅ Exactly. AI learns patterns from its data. Rare situations it has barely seen are where it’s most likely to be wrong. (Matches: ' + misses + ' miss' + (misses === 1 ? '' : 'es') + '.)';
-              D.$all('.qz-choice', r).forEach(function (x) { x.disabled = true; });
-              api.done();
-            } else { c.classList.add('wrong'); c.disabled = true; f.className = 'feedback no'; f.textContent = 'Not quite. Think about where the app’s “knowledge” comes from.'; D.sfx('bad'); }
-          });
-        });
+window.LESSON={"id":"green/walking-downhill","title":"Walking Downhill","story":[["sensei","Picture this, {{nick}}: you’re on a mountain in thick fog. You want to reach the lowest valley, but you can only feel the ground right under your feet."],["you","I’d step in whichever direction goes down."],["sensei","That’s the whole idea! In AI, the mountain is the \u003cb>error\u003c/b>: how wrong the model is. Your position is the model’s \u003cb>weights\u003c/b>. Each step downhill tweaks the weights so the model gets a little less wrong."],["sensei","This is called \u003cb>gradient descent\u003c/b>. “Gradient” means slope, and “descent” means going down. The big question is how big your steps should be."]],"quiz":[{"q":"In gradient descent, what is the “mountain”?","a":["The model’s error (how wrong it is)","A real mountain","The computer screen","The dataset size"],"c":0,"why":"Going downhill = making the error smaller."},{"q":"What does each step downhill do to the model?","a":["Tweaks its weights so it’s a little less wrong","Deletes data","Makes it bigger","Adds new labels"],"c":0,"why":"Each step adjusts the weights in the direction that lowers the error."},{"q":"What happened with a HUGE step size?","a":["It overshot the valley and the error got worse","It reached the bottom instantly every time","Nothing moved","The mountain disappeared"],"c":0,"why":"Too big a learning rate jumps right over the bottom."},{"q":"What happened with a TINY step size?","a":["It moved in the right direction, but very slowly","It overshot","It went uphill","It stopped immediately"],"c":0,"why":"Tiny steps are safe but slow."}]};
+window.ACTIVITY=(function anonymous(el,api
+) {
+function hillGame(el, api, cfg) {
+  var D = api.D;
+  var W = 340, H = 220, X = function (x) { return 16 + (x - cfg.lo) / (cfg.hi - cfg.lo) * (W - 32); }, Y = function (y) { return H - 18 - (y - cfg.ymin) / (cfg.ymax - cfg.ymin) * (H - 40); };
+  function grad(x) { var e = 1e-4; return (cfg.f(x + e) - cfg.f(x - e)) / (2 * e); }
+  function draw(x, trail, note) {
+    var d = ''; for (var i = 0; i <= 160; i++) { var v = cfg.lo + (cfg.hi - cfg.lo) * i / 160; d += (i ? 'L' : 'M') + X(v).toFixed(1) + ' ' + Y(Math.min(cfg.ymax, cfg.f(v))).toFixed(1); }
+    var g = grad(x), dir = g > 0 ? -1 : 1, cx = X(Math.max(cfg.lo, Math.min(cfg.hi, x))), cy = Y(Math.min(cfg.ymax, cfg.f(x)));
+    var tr = (trail || []).map(function (t) { return '<circle cx="' + X(Math.max(cfg.lo, Math.min(cfg.hi, t))) + '" cy="' + Y(Math.min(cfg.ymax, cfg.f(t))) + '" r="3.5" fill="#0b6e8a" opacity=".55"/>'; }).join('');
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Error landscape. The walker is at position ' + x.toFixed(2) + ' with error ' + cfg.f(x).toFixed(2) + '."><defs><linearGradient id="hg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#b8f0d2"/><stop offset="1" stop-color="#0d6b48"/></linearGradient></defs>' +
+      '<path d="' + d + ' L' + X(cfg.hi) + ' ' + H + ' L' + X(cfg.lo) + ' ' + H + ' Z" fill="url(#hg)" stroke="#0d2b1d" stroke-width="2.5"/>' + tr +
+      (Math.abs(g) > 0.02 ? '<line x1="' + cx + '" y1="' + (cy - 26) + '" x2="' + (cx + dir * 30) + '" y2="' + (cy - 26) + '" stroke="#ffd23f" stroke-width="4" marker-end="url(#ar)"/><marker id="ar" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#ffd23f"/></marker>' : '') +
+      '<text x="' + cx + '" y="' + (cy - 4) + '" font-size="24" text-anchor="middle">' + (cfg.avatar || '🥷') + '</text>' +
+      '<text x="' + (W - 12) + '" y="16" font-size="11" text-anchor="end" fill="#0d2b1d">error (loss) ↑ · position →</text>' + (note || '') + '</svg>';
+  }
+  return { draw: draw, grad: grad };
+}
+      var D = api.D, S = api.load();
+      var f = function (x) { return 0.5 * Math.pow(x - 3, 2) + 1; };
+      var H = hillGame(el, api, { f: f, lo: -5, hi: 9, ymin: 0, ymax: 34, avatar: D.avatar() });
+      var x = S.x != null ? S.x : -4, lr = S.lr || 0.3, trail = S.trail || [], steps = S.steps || 0, m = S.m || 0;
+      el.innerHTML = '<div class="wd" id="wd"></div><div class="wd-lr" role="group" aria-label="Step size (learning rate)">Step size: ' + [0.05, 0.3, 1, 1.9, 2.2].map(function (v) { return '<button type="button" data-lr="' + v + '">' + v + '</button>'; }).join('') + '</div>' +
+        '<div class="row"><button type="button" class="btn primary" id="wd-step">👣 Step</button><button type="button" class="btn" id="wd-reset">↺ Back to the top</button></div><div class="wd-stats" id="wd-stats" aria-live="polite"></div><div class="wd-m" id="wd-m" aria-live="polite"></div>';
+      function draw() {
+        D.$('#wd', el).innerHTML = H.draw(x, trail);
+        D.$all('[data-lr]', el).forEach(function (b) { b.setAttribute('aria-pressed', +b.getAttribute('data-lr') === lr ? 'true' : 'false'); });
+        D.$('#wd-stats', el).innerHTML = '<span>👣 Steps: ' + steps + '</span><span>📉 Error: ' + f(x).toFixed(2) + '</span><span>📐 Slope: ' + H.grad(x).toFixed(2) + '</span>';
       }
-    });
+      function save() { api.save({ x: x, lr: lr, trail: trail.slice(-40), steps: steps, m: m }); }
+      function mission() {
+        var box = D.$('#wd-m', el);
+        if (m === 0) box.innerHTML = '<p><b>Mission 1:</b> Reach the bottom (error under 1.01). Try step size 0.05 first… then 0.3. Which is faster?</p>';
+        else if (m === 1) box.innerHTML = '<p><b>Mission 2:</b> Now go back to the top and choose a HUGE step size (2.2). Take a few steps. What happens?</p>';
+        else if (m === 2) {
+          box.innerHTML = '<p><b>Mission 3:</b> What’s the lesson about step size (called the <b>learning rate</b>)?</p><div class="row">' + D.shuffle([[1, 'Too small is slow, too big overshoots. Pick something in between'], [0, 'Bigger is always better'], [0, 'Step size doesn’t matter']]).map(function (o) { return '<button type="button" class="btn small" data-ok="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div><p class="feedback" aria-live="polite"></p>';
+          D.$all('[data-ok]', box).forEach(function (b) { b.addEventListener('click', function () { if (b.getAttribute('data-ok') === '1') { D.sfx('win'); m = 3; save(); mission(); } else { D.sfx('bad'); b.disabled = true; box.querySelector('.feedback').className = 'feedback no'; box.querySelector('.feedback').textContent = 'Remember what happened with 0.05 and with 2.2.'; } }); });
+        } else { box.innerHTML = '<p class="feedback ok">🏆 You understand the learning rate, one of the most important settings in all of AI. Real engineers tune it carefully, exactly like you just did.</p>'; api.done(); }
+      }
+      D.$all('[data-lr]', el).forEach(function (b) { b.addEventListener('click', function () { lr = +b.getAttribute('data-lr'); save(); draw(); }); });
+      D.$('#wd-reset', el).addEventListener('click', function () { x = -4; trail = []; steps = 0; save(); draw(); });
+      D.$('#wd-step', el).addEventListener('click', function () {
+        var before = f(x); trail.push(x); x = x - lr * H.grad(x); steps++; D.sfx('step');
+        if (Math.abs(x) > 60) x = x > 0 ? 60 : -60;
+        if (m === 0 && f(x) < 1.01) { m = 1; D.toast('🏁 Bottom reached in ' + steps + ' steps!'); D.sfx('good'); mission(); }
+        else if (m === 1 && lr >= 2 && f(x) > before) { m = 2; D.toast('💥 Overshoot! The error went UP.'); mission(); }
+        save(); draw();
+      });
+      draw(); mission();
+});
+window.CHALLENGE=(function anonymous(el,api
+) {
+function hillGame(el, api, cfg) {
+  var D = api.D;
+  var W = 340, H = 220, X = function (x) { return 16 + (x - cfg.lo) / (cfg.hi - cfg.lo) * (W - 32); }, Y = function (y) { return H - 18 - (y - cfg.ymin) / (cfg.ymax - cfg.ymin) * (H - 40); };
+  function grad(x) { var e = 1e-4; return (cfg.f(x + e) - cfg.f(x - e)) / (2 * e); }
+  function draw(x, trail, note) {
+    var d = ''; for (var i = 0; i <= 160; i++) { var v = cfg.lo + (cfg.hi - cfg.lo) * i / 160; d += (i ? 'L' : 'M') + X(v).toFixed(1) + ' ' + Y(Math.min(cfg.ymax, cfg.f(v))).toFixed(1); }
+    var g = grad(x), dir = g > 0 ? -1 : 1, cx = X(Math.max(cfg.lo, Math.min(cfg.hi, x))), cy = Y(Math.min(cfg.ymax, cfg.f(x)));
+    var tr = (trail || []).map(function (t) { return '<circle cx="' + X(Math.max(cfg.lo, Math.min(cfg.hi, t))) + '" cy="' + Y(Math.min(cfg.ymax, cfg.f(t))) + '" r="3.5" fill="#0b6e8a" opacity=".55"/>'; }).join('');
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Error landscape. The walker is at position ' + x.toFixed(2) + ' with error ' + cfg.f(x).toFixed(2) + '."><defs><linearGradient id="hg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#b8f0d2"/><stop offset="1" stop-color="#0d6b48"/></linearGradient></defs>' +
+      '<path d="' + d + ' L' + X(cfg.hi) + ' ' + H + ' L' + X(cfg.lo) + ' ' + H + ' Z" fill="url(#hg)" stroke="#0d2b1d" stroke-width="2.5"/>' + tr +
+      (Math.abs(g) > 0.02 ? '<line x1="' + cx + '" y1="' + (cy - 26) + '" x2="' + (cx + dir * 30) + '" y2="' + (cy - 26) + '" stroke="#ffd23f" stroke-width="4" marker-end="url(#ar)"/><marker id="ar" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#ffd23f"/></marker>' : '') +
+      '<text x="' + cx + '" y="' + (cy - 4) + '" font-size="24" text-anchor="middle">' + (cfg.avatar || '🥷') + '</text>' +
+      '<text x="' + (W - 12) + '" y="16" font-size="11" text-anchor="end" fill="#0d2b1d">error (loss) ↑ · position →</text>' + (note || '') + '</svg>';
+  }
+  return { draw: draw, grad: grad };
+}
+      var D = api.D, S = api.load();
+      var f = function (x) { return 0.12 * Math.pow(x - 3, 2) - 2.2 * Math.exp(-Math.pow(x - 3, 2) / 1.2) - 1.1 * Math.exp(-Math.pow(x + 2.5, 2) / 0.6) + 3; };
+      var H = hillGame(el, api, { f: f, lo: -5, hi: 8, ymin: 0, ymax: 11, avatar: D.avatar() });
+      var start = S.start != null ? S.start : -4, got = S.got || {};
+      el.innerHTML = '<div class="tv" id="tv"></div><div class="tv-sl"><label for="tv-s"><b>Starting point: <span id="tv-v"></span></b></label><input type="range" id="tv-s" min="-5" max="8" step="0.25" value="' + start + '"></div><div class="row"><button type="button" class="btn primary" id="tv-go">⛷️ Roll downhill</button></div><p class="feedback" id="tv-fb" aria-live="polite"></p>';
+      function show(x, trail, msg) { D.$('#tv', el).innerHTML = H.draw(x, trail); D.$('#tv-v', el).textContent = (+D.$('#tv-s', el).value).toFixed(2); if (msg != null) D.$('#tv-fb', el).innerHTML = msg; }
+      function status() { return 'Goals: ' + (got.local ? '✅' : '⬜') + ' stuck in the small dip · ' + (got.global ? '✅' : '⬜') + ' reached the deep valley'; }
+      D.$('#tv-s', el).addEventListener('input', function () { start = +this.value; api.save({ start: start }); show(start, [], status()); });
+      D.$('#tv-go', el).addEventListener('click', function () {
+        var x = start, trail = [];
+        for (var i = 0; i < 80; i++) { trail.push(x); x = x - 0.25 * H.grad(x); }
+        var where = Math.abs(x + 2) < 0.8 ? 'local' : Math.abs(x - 3) < 0.8 ? 'global' : 'none';
+        if (where !== 'none') got[where] = 1; api.save({ got: got });
+        var fb = where === 'local' ? '🪤 Stuck in the small dip! The slope there is flat, so the walker thinks it’s done, even though a deeper valley exists. ' : where === 'global' ? '🏔️ Reached the deep valley! ' : '';
+        D.sfx(where === 'none' ? 'click' : 'good');
+        show(x, trail, fb + status());
+        if (got.local && got.global) { D.$('#tv-fb', el).className = 'feedback ok'; D.$('#tv-fb', el).innerHTML += '<br>🏆 Where you START can change where you END. Engineers use tricks like trying several starting points.'; api.done(); }
+      });
+      show(start, [], status());
+});
 </script>
 <script>
 (function(){var D=window.Dojo,T=D.theme('lesson');D.$all('.fill').forEach(function(e){e.innerHTML=D.fill(e.innerHTML,T);});})();
