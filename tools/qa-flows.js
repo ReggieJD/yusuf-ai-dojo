@@ -156,6 +156,42 @@ module.exports = {
   'test:yellow': async (pg) => {
     await pg.click('.ms-g[data-i="3"]'); await pg.click('#ms-avg [data-v="14"]'); await pg.click('#ms-chart [data-v="line"]'); await pg.click('#ms-conc [data-v="a"]');
   },
+
+  'orange/train-a-classifier': {
+    activity: async (pg) => {
+      const shine = [85, 15, 72, 30, 92, 8, 65, 40, 78, 22];
+      for (let i = 0; i < shine.length; i++) { await pg.click(`#tc-pool .tc-rock[data-i="${i}"]`); await pg.click(`.tc-bin[data-c="${shine[i] > 50 ? 1 : 0}"] h4`); }
+      await pg.click('#tc-test');
+    },
+    challenge: (pg) => solveSorter(pg, '#challenge'),
+  },
+  'orange/train-vs-test': {
+    activity: async (pg) => { for (const i of [0, 1, 6, 7]) await pg.click(`.tt-mail[data-i="${i}"]`); await pg.click('#tt-cheat'); await pg.click('#tt-fair'); },
+    challenge: (pg) => solveSorter(pg, '#challenge'),
+  },
+  'orange/accuracy-score': {
+    activity: async (pg) => { for (let k = 0; k < 3; k++) { await pg.click('#activity [data-q] button[data-i="0"]'); await pg.waitForTimeout(1800); } },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'orange/overfitting': {
+    activity: async (pg) => { await setRange(pg, '#of-d', '7'); await pg.click('#of-rev'); await setRange(pg, '#of-d', '2'); await pg.click('#of-lock'); },
+    challenge: (pg) => solveSorter(pg, '#challenge'),
+  },
+  'orange/decision-trees': {
+    activity: async (pg) => { await pg.selectOption('select[data-n="root"]', 'rain'); await pg.selectOption('select[data-n="no"]', 'wind'); },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'orange/nearest-neighbor': {
+    activity: async (pg) => {
+      await pg.click('#nn-task [data-c="S"]'); await pg.waitForTimeout(1700);
+      await pg.$eval('#nn-svg', (svg) => { const r = svg.getBoundingClientRect(), W = 320, H = 270; const sx = 34 + 2.15 / 6 * (W - 48), sy = H - 32 - 3.5 / 6 * (H - 48);
+        svg.dispatchEvent(new MouseEvent('click', { bubbles: true, clientX: r.left + sx / W * r.width, clientY: r.top + sy / H * r.height })); });
+      await pg.waitForTimeout(2000);
+      await pg.click('#nn-task [data-ok="1"]');
+    },
+    challenge: (pg) => solveSorter(pg, '#challenge'),
+  },
+  'test:orange': async (pg) => { for (let k = 0; k < 4; k++) await pg.click('#bt-proj [data-ok="1"]'); },
   'test:white': async (pg) => {
     const ans = ['r', 'n', 'p', 'c', 'n', 'r'];
     for (let i = 0; i < 6; i++) await pg.click(`.gi-item[data-i="${i}"] button[data-v="${ans[i]}"]`);

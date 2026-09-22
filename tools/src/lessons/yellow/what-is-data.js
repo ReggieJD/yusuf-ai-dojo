@@ -45,7 +45,7 @@ module.exports = {
         var box = D.$('#dt-q', el);
         if (qStep >= Q.length) { box.innerHTML = '<p class="feedback ok">🏆 Table complete and understood! You just turned messy notes into <b>structured data</b> — the fuel for machine learning.</p>'; api.done(); return; }
         var q = Q[qStep];
-        box.innerHTML = '<div class="dt-q"><p><b>' + q[0] + '</b></p><div class="row">' + q[1].map(function (a, i) { return '<button type="button" class="btn small" data-i="' + i + '">' + a + '</button>'; }).join('') + '</div><p class="feedback" aria-live="polite"></p></div>';
+        box.innerHTML = '<div class="dt-q"><p><b>' + q[0] + '</b></p><div class="row">' + D.shuffle(q[1].map(function (a, i) { return '<button type="button" class="btn small" data-i="' + i + '">' + a + '</button>'; })).join('') + '</div><p class="feedback" aria-live="polite"></p></div>';
         D.$all('button', box).forEach(function (b) {
           b.addEventListener('click', function () {
             var f = box.querySelector('.feedback');

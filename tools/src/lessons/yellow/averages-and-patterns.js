@@ -67,7 +67,7 @@ module.exports = {
     },
   },
   quiz: [
-    { q: 'What is the average (mean) of 4, 6 and 8?', a: ['6', '18', '8', '4'], c: 0, keep: true, why: '4 + 6 + 8 = 18, and 18 ÷ 3 = 6.' },
+    { q: 'What is the average (mean) of 4, 6 and 8?', a: ['6', '18', '8', '4'], c: 0, why: '4 + 6 + 8 = 18, and 18 ÷ 3 = 6.' },
     { q: 'You made 8, 8, 8, 8 and then 48 shots. What happens to the average?', a: ['One extreme value pulls it up a lot', 'It stays 8', 'It goes down', 'Averages ignore big numbers'], c: 0, why: '(8+8+8+8+48) ÷ 5 = 16, double the “usual” day. Extreme values tug the average.' },
     { q: 'Where is the average on a “seesaw” of data points?', a: ['Exactly at the balance point', 'Always at the far left', 'At the biggest number', 'Nowhere'], c: 0, why: 'The mean is the point where values on each side balance out.' },
     { q: 'Why do AI systems care about patterns?', a: ['Patterns let them make predictions about new situations', 'Patterns make data prettier', 'They don’t care about patterns', 'Patterns delete bad data'], c: 0, why: 'Learning = finding patterns in examples, then using them to predict.' },
@@ -77,7 +77,7 @@ module.exports = {
     intro: 'The <b>median</b> is the middle value when you line numbers up in order. It isn’t bothered by extreme values. Answer 2 of 3.',
     js: function (el, api) {
       api.D.quiz(el, [
-        { q: 'Points in 5 games: 2, 3, 3, 4, 28. What is the MEDIAN?', a: ['3', '8', '28', '4'], c: 0, keep: true, why: 'In order: 2, 3, <b>3</b>, 4, 28. The middle one is 3.' },
+        { q: 'Points in 5 games: 2, 3, 3, 4, 28. What is the MEDIAN?', a: ['3', '8', '28', '4'], c: 0, why: 'In order: 2, 3, <b>3</b>, 4, 28. The middle one is 3.' },
         { q: 'For the same games, the MEAN is 8. Which number better describes a “typical” game?', a: ['The median (3) — one huge game pulled the mean up', 'The mean (8) — it’s always better', 'Neither', '28'], c: 0, why: 'When there’s an extreme value, the median often describes the typical case better.' },
         { q: 'A news story says “the average person in this room is a billionaire” after one billionaire walks in. What’s going on?', a: ['One extreme value pulled the mean way up — the median would tell a truer story', 'Everyone got rich', 'Averages can’t be calculated for people', 'The room is magic'], c: 0, why: 'This classic example shows why smart analysts check the median too.' },
       ], { saveKey: 'chquiz', onDone: function (s) { if (s >= 2) api.done(); } });

@@ -82,7 +82,7 @@ module.exports = {
         if (!T) { box.innerHTML = '<p class="feedback ok">🏆 Scouting report complete! You read three bar charts and spotted a correlation. That’s exactly what sports analysts do.</p>'; api.done(); return; }
         if (T.scatter) {
           scatter();
-          box.innerHTML = '<p><b>Question ' + (t + 1) + '/4:</b> ' + T.q + '</p><div class="row">' + T.choices.map(function (c, i) { return '<button type="button" class="btn small" data-i="' + i + '">' + c + '</button>'; }).join('') + '</div><p class="feedback" aria-live="polite"></p>';
+          box.innerHTML = '<p><b>Question ' + (t + 1) + '/4:</b> ' + T.q + '</p><div class="row">' + D.shuffle(T.choices.map(function (c, i) { return '<button type="button" class="btn small" data-i="' + i + '">' + c + '</button>'; })).join('') + '</div><p class="feedback" aria-live="polite"></p>';
           D.$all('button', box).forEach(function (b) {
             b.addEventListener('click', function () {
               var f = box.querySelector('.feedback');

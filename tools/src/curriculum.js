@@ -33,7 +33,7 @@ const worlds = [
     id: 'orange', name: 'Orange Belt', world: 'How Machines Learn', color: '#ff8c42', ink: '#1d1d1f', emoji: '⚙️',
     blurb: 'Train your own classifier, test it fairly, and learn the difference between memorizing and understanding.',
     parents: 'Training a classifier by example, why we keep separate training and testing data, measuring accuracy, overfitting (memorizing vs. understanding), building decision trees, and nearest-neighbor classification.',
-    built: false,
+    built: true,
     lessons: [
       { id: 'train-a-classifier', title: 'Train a Classifier', emoji: '🧺', min: 15, term: 'Classifier', def: 'A model that sorts things into groups (classes), like "spam" or "not spam".' },
       { id: 'train-vs-test', title: 'Training vs Testing', emoji: '📝', min: 12, term: 'Test Set', def: 'Examples kept hidden during training, used afterward to check whether the model really learned.' },
