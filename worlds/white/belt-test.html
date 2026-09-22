@@ -65,6 +65,7 @@ noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px
 .nudge{background:var(--card);border:2px dashed var(--accent);border-radius:14px;padding:10px 14px;margin:10px 0 0}
 
 /* ---- section cards ---- */
+.card,details.challenge{scroll-margin-top:76px}
 .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 18px;margin:18px 0;border:2px solid var(--line);position:relative}
 @media (min-width:640px){ .card{padding:28px} }
 .sec-title{display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -99,6 +100,8 @@ noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px
 .qz-feedback{margin-top:12px}
 .qz-feedback p{padding:12px 14px;border-radius:12px}
 .qz-feedback.ok p{background:var(--good-bg);color:#0d3b22} .qz-feedback.no p{background:var(--bad-bg);color:#5c130e}
+.qz-resume{font-size:.9rem;font-weight:700;color:var(--accent2);margin:0 0 6px}
+.saved-note{display:inline-block;font-size:.85rem;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--good-bg);color:#0d3b22;margin:0 0 10px}
 .qz-end{text-align:center;padding:10px}
 .qz-stars{font-size:2.4rem} .qz-score{font-size:1.4rem}
 
@@ -283,7 +286,7 @@ window.PAGE={"root":"../../","type":"test","id":"white/belt-test","world":"white
   function blank() {
     return { v: 1, profile: null, xp: 0, lessons: {}, tests: {}, belts: {}, badges: {},
       streak: { count: 0, best: 0, last: null }, sound: false, daily: {}, arcade: {},
-      unlockAll: false, project: null };
+      unlockAll: false, project: null, saves: {}, last: null };
   }
   var storageOK = (function () {
     try { var t = '__dojo_test'; window.localStorage.setItem(t, '1'); window.localStorage.removeItem(t); return true; }
@@ -299,7 +302,7 @@ window.PAGE={"root":"../../","type":"test","id":"white/belt-test","world":"white
       } catch (e) { /* corrupted data: start fresh */ }
     }
     if (!s.streak || typeof s.streak !== 'object') s.streak = { count: 0, best: 0, last: null };
-    ['lessons', 'tests', 'belts', 'badges', 'daily', 'arcade'].forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
+    ['lessons', 'tests', 'belts', 'badges', 'daily', 'arcade', 'saves'].forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
     if (typeof s.xp !== 'number' || !isFinite(s.xp)) s.xp = 0;
     return s;
   }
@@ -309,6 +312,12 @@ window.PAGE={"root":"../../","type":"test","id":"white/belt-test","world":"white
     try { window.localStorage.setItem(KEY, JSON.stringify(st)); return true; } catch (e) { return false; }
   }
   function reset() { st = blank(); save(); }
+  // ---------- autosave: in-progress work for each page, keyed by page id ----------
+  function pageKey() { return P.id || P.type || 'page'; }
+  function saveGet(key, page) { var b = st.saves[page || pageKey()]; return b && b[key] != null ? JSON.parse(JSON.stringify(b[key])) : null; }
+  function saveSet(key, val, page) { page = page || pageKey(); (st.saves[page] || (st.saves[page] = {}))[key] = val; save(); }
+  function saveClear(key, page) { var b = st.saves[page || pageKey()]; if (b && key in b) { delete b[key]; save(); } }
+  function setLast(info) { st.last = info; save(); }
 
   // ---------- small helpers ----------
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -544,7 +553,14 @@ window.PAGE={"root":"../../","type":"test","id":"white/belt-test","world":"white
     var T = opts.T || theme('quiz');
     var i = 0, score = 0;
     function sample() { return opts.count ? shuffle(qs).slice(0, opts.count) : qs; }
-    var order = sample();
+    var order = sample(), K = opts.saveKey;
+    function persist() { if (K) saveSet(K, { i: i, score: score, order: order.map(function (q) { return qs.indexOf(q); }) }); }
+    if (K) {
+      var sv = saveGet(K);
+      if (sv && sv.order && sv.order.every(function (k) { return qs[k]; }) && sv.i > 0 && sv.i < sv.order.length) {
+        order = sv.order.map(function (k) { return qs[k]; }); i = sv.i; score = sv.score || 0; opts.resumed = true;
+      }
+    }
     function render() {
       if (i >= order.length) return finish();
       var q = order[i];
@@ -564,6 +580,7 @@ window.PAGE={"root":"../../","type":"test","id":"white/belt-test","world":"white
       $all('.qz-choice', el).forEach(function (b) { b.disabled = true; if (+b.getAttribute('data-k') === q.c) b.classList.add('right'); });
       var fb = $('.qz-feedback', el), ok = k === q.c;
       if (ok) { score++; sfx('good'); } else { btn.classList.add('wrong'); sfx('bad'); }
+      i++; persist(); i--;
       var msg = ok ? ('<b>✅ Correct!</b> ' + fill(q.yes || q.why || '', T))
         : ('<b>❌ Not quite.</b> ' + fill((q.wrong && q.wrong[k]) || q.why || '', T));
       fb.className = 'qz-feedback ' + (ok ? 'ok' : 'no');
@@ -572,17 +589,19 @@ window.PAGE={"root":"../../","type":"test","id":"white/belt-test","world":"white
       nx.focus({ preventScroll: true });
     }
     function finish() {
+      if (K) saveClear(K);
       var pass = score / order.length >= (opts.pass || 0.6);
       var stars = score === order.length ? '🌟🌟🌟' : pass ? '🌟🌟' : '🌟';
       el.innerHTML = '<div class="qz-end ' + (pass ? 'pass' : 'fail') + '"><div class="qz-stars" aria-hidden="true">' + stars + '</div>' +
         '<p class="qz-score">You got <b>' + score + ' / ' + order.length + '</b></p>' +
         '<p>' + (score === order.length ? 'Flawless! Your sensei is impressed.' : pass ? 'Nice work — you passed! Want to go for a perfect score?' : 'Every black belt was once a white belt who kept going. Try again — you’ve got this.') + '</p>' +
         '<button type="button" class="btn qz-retry">↻ ' + (score === order.length ? 'Play again' : 'Try again') + '</button></div>';
-      $('.qz-retry', el).addEventListener('click', function () { i = 0; score = 0; if (opts.reshuffle) order = sample(); render(); });
+      $('.qz-retry', el).addEventListener('click', function () { i = 0; score = 0; if (opts.reshuffle) order = sample(); if (K) saveClear(K); render(); });
       if (score === order.length) confetti(40);
       if (opts.onDone) opts.onDone(score, order.length, pass);
     }
     render();
+    if (opts.resumed) { var tp = el.querySelector('.qz-top'); if (tp) tp.insertAdjacentHTML('afterend', '<p class="qz-resume">💾 Welcome back! You were on question ' + (i + 1) + '.</p>'); }
     return { restart: function () { i = 0; score = 0; render(); } };
   }
 
@@ -609,6 +628,7 @@ window.PAGE={"root":"../../","type":"test","id":"white/belt-test","world":"white
 
   window.Dojo = {
     state: function () { return st; }, save: save, reset: reset, storageOK: storageOK,
+    saveGet: saveGet, saveSet: saveSet, saveClear: saveClear, setLast: setLast,
     esc: esc, $: $, $all: $all, today: today, hash: hash, shuffle: shuffle, reducedMotion: reducedMotion,
     profile: profile, nick: nick, avatar: avatar, student: STUDENT, favs: favs, theme: theme, fill: fill,
     setProfile: function (p) { st.profile = p; save(); refreshBar(); },
@@ -635,6 +655,8 @@ function makeGridGame(el, api, levels, opts) {
   var D = api.D;
   var DIRS = [[0, -1], [1, 0], [0, 1], [-1, 0]], ARROW = ['⬆', '➡', '⬇', '⬅'];
   var lv = 0, prog = [], running = false, beaten = {};
+  var SK = opts.saveKey || 'grid';
+  function persist() { if (api.save) { var o = {}; o[SK] = { lv: lv, beaten: beaten, prog: prog }; api.save(o); } }
   el.innerHTML = '<div class="gg"><div class="gg-head"><b data-g="title"></b><span class="pill" data-g="limit"></span></div>' +
     '<div class="gg-board" data-g="board" role="img"></div>' +
     '<div class="gg-pal" aria-label="Command blocks"></div>' +
@@ -654,6 +676,7 @@ function makeGridGame(el, api, levels, opts) {
     D.$all('button', p).forEach(function (b) { b.addEventListener('click', function () { if (running) return; prog.splice(+b.getAttribute('data-i'), 1); renderProg(); }); });
     var lim = L().limit; D.$('[data-g="limit"]', el).textContent = lim ? ('Blocks: ' + prog.length + ' / ' + lim) : ('Blocks: ' + prog.length);
     D.$('[data-g="limit"]', el).style.background = lim && prog.length > lim ? 'var(--bad-bg)' : '';
+    persist();
   }
   function draw(pos, dir, trail, crash) {
     var l = L(), n = l.size, h = '';
@@ -715,7 +738,7 @@ function makeGridGame(el, api, levels, opts) {
       draw(pos, dir, trail); setTimeout(next, delay);
     })();
     function win() {
-      beaten[lv] = true; fb.className = 'feedback ok';
+      beaten[lv] = true; persist(); fb.className = 'feedback ok';
       fb.innerHTML = '🎯 Goal reached with ' + prog.length + ' block' + (prog.length === 1 ? '' : 's') + '! ' + (l.win || '');
       D.sfx('win'); levelsBar();
       var all = levels.every(function (_, i) { return beaten[i]; });
@@ -723,7 +746,11 @@ function makeGridGame(el, api, levels, opts) {
       else if (lv + 1 < levels.length) { fb.innerHTML += ' <button type="button" class="btn small primary" data-g="next">Next level →</button>'; D.$('[data-g="next"]', el).addEventListener('click', function () { loadLevel(lv + 1); }); }
     }
   });
-  loadLevel(0);
+  var S0 = api.load ? (api.load()[SK] || null) : null;
+  if (S0 && levels[S0.lv]) {
+    beaten = S0.beaten || {}; loadLevel(S0.lv); prog = (S0.prog || []).slice(); renderProg();
+    if (prog.length || Object.keys(beaten).length) { var f0 = D.$('[data-g="fb"]', el); f0.innerHTML = '💾 Welcome back! Your level and blocks were saved. ' + (L().hint || ''); }
+  } else loadLevel(0);
 }
       var D = api.D;
       var G = [
@@ -746,10 +773,11 @@ function makeGridGame(el, api, levels, opts) {
           if (b.getAttribute('data-v') === g[1]) {
             box.classList.add('ok'); D.$all('button', box).forEach(function (x) { x.disabled = true; });
             why.textContent = '✅ ' + g[2]; solved++; D.sfx('good');
+            var A = api.load().gi || {}; A[box.getAttribute('data-i')] = 1; api.save({ gi: A });
             if (solved === G.length) {
               D.$('#gi-fb', el).className = 'feedback ok'; D.$('#gi-fb', el).textContent = 'Inspection complete! Now for the final kata…';
               var m = D.$('#bt-maze', el); m.hidden = false;
-              makeGridGame(D.$('#bt-maze-game', el), { D: D, T: api.T, done: api.done }, [
+              makeGridGame(D.$('#bt-maze-game', el), { D: D, T: api.T, done: api.done, save: api.save, load: api.load }, [
                 { n: '★', title: 'The Sensei’s Maze (max 11 blocks)', size: 7, start: [0, 6], dir: 1, goal: [6, 0],
                   walls: ['4,6', '4,5', '4,4', '6,6', '6,5', '6,4', '3,2', '4,2', '5,2', '0,3', '1,3', '2,3', '1,1'], limit: 11,
                   hint: 'Your ninja faces right ➡. Find the path, then squeeze it into 11 blocks with repeats.', win: 'The sensei nods. Your algorithm is flawless.' },
@@ -759,6 +787,8 @@ function makeGridGame(el, api, levels, opts) {
           } else { b.disabled = true; why.textContent = '❌ Not quite — ask: does it recognize, predict, create, or just follow a rule?'; D.sfx('bad'); }
         });
       });
+      var GI = api.load().gi || {};
+      Object.keys(GI).forEach(function (i) { var b = D.$('.gi-item[data-i="' + i + '"] button[data-v="' + G[i][1] + '"]', el); if (b) b.click(); });
 });
 (function(){var D=window.Dojo,w=D.worldById("white"),T=D.theme('test');
 D.$all('.fill').forEach(function(e){e.innerHTML=D.fill(e.innerHTML,T);});
@@ -771,11 +801,12 @@ if(!D.testReady(w)&&!st.belts[w.id]){var p=D.worldProgress(w);document.getElemen
 var projBuilt=false;
 function openProject(){document.getElementById('bt-proj-lock').hidden=true;document.getElementById('bt-proj-wrap').hidden=false;
  if(projBuilt)return;projBuilt=true;
- window.TEST_PROJECT(document.getElementById('bt-proj'),{T:T,D:D,nick:D.nick(),fill:function(s){return D.fill(s,T);},done:function(){
+ window.TEST_PROJECT(document.getElementById('bt-proj'),{T:T,D:D,nick:D.nick(),fill:function(s){return D.fill(s,T);},
+ save:function(o){var c=D.saveGet('proj')||{};for(var k in o)c[k]=o[k];D.saveSet('proj',c);},load:function(){return D.saveGet('proj')||{};},done:function(){
    if(rec.proj&&st.belts[w.id])return; rec.proj=true;D.save();tryBelt();}});}
 function tryBelt(){refresh();if(rec.quiz&&rec.proj&&!st.belts[w.id]){var q=rec.score||0;D.earnBelt(w.id,q,10);rec=st.tests[w.id];rec.quiz=true;rec.proj=true;D.save();
  D.ceremony(w,function(){refresh();done.scrollIntoView({behavior:D.reducedMotion()?'auto':'smooth'});});refresh();}}
-D.quiz(document.getElementById('bt-quiz'),window.TEST_QUIZ,{T:T,pass:0.7,count:10,reshuffle:true,onDone:function(sc,tot,pass){
+D.quiz(document.getElementById('bt-quiz'),window.TEST_QUIZ,{T:T,pass:0.7,count:10,reshuffle:true,saveKey:'quiz',onDone:function(sc,tot,pass){
   if(pass){if(!rec.quiz||sc>(rec.score||0)){rec.score=sc;}rec.quiz=true;D.save();D.toast('⚔️ Trial 1 passed!');openProject();tryBelt();
    setTimeout(function(){document.getElementById('bt-proj-sec').scrollIntoView({behavior:D.reducedMotion()?'auto':'smooth'});},600);}
   else D.toast('You need 7 of 10. Review and try again!');}});

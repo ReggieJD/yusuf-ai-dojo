@@ -65,6 +65,7 @@ noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px
 .nudge{background:var(--card);border:2px dashed var(--accent);border-radius:14px;padding:10px 14px;margin:10px 0 0}
 
 /* ---- section cards ---- */
+.card,details.challenge{scroll-margin-top:76px}
 .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 18px;margin:18px 0;border:2px solid var(--line);position:relative}
 @media (min-width:640px){ .card{padding:28px} }
 .sec-title{display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -99,6 +100,8 @@ noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px
 .qz-feedback{margin-top:12px}
 .qz-feedback p{padding:12px 14px;border-radius:12px}
 .qz-feedback.ok p{background:var(--good-bg);color:#0d3b22} .qz-feedback.no p{background:var(--bad-bg);color:#5c130e}
+.qz-resume{font-size:.9rem;font-weight:700;color:var(--accent2);margin:0 0 6px}
+.saved-note{display:inline-block;font-size:.85rem;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--good-bg);color:#0d3b22;margin:0 0 10px}
 .qz-end{text-align:center;padding:10px}
 .qz-stars{font-size:2.4rem} .qz-score{font-size:1.4rem}
 
@@ -265,7 +268,7 @@ window.PAGE={"root":"./","type":"parents","id":"parents"};
   function blank() {
     return { v: 1, profile: null, xp: 0, lessons: {}, tests: {}, belts: {}, badges: {},
       streak: { count: 0, best: 0, last: null }, sound: false, daily: {}, arcade: {},
-      unlockAll: false, project: null };
+      unlockAll: false, project: null, saves: {}, last: null };
   }
   var storageOK = (function () {
     try { var t = '__dojo_test'; window.localStorage.setItem(t, '1'); window.localStorage.removeItem(t); return true; }
@@ -281,7 +284,7 @@ window.PAGE={"root":"./","type":"parents","id":"parents"};
       } catch (e) { /* corrupted data: start fresh */ }
     }
     if (!s.streak || typeof s.streak !== 'object') s.streak = { count: 0, best: 0, last: null };
-    ['lessons', 'tests', 'belts', 'badges', 'daily', 'arcade'].forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
+    ['lessons', 'tests', 'belts', 'badges', 'daily', 'arcade', 'saves'].forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
     if (typeof s.xp !== 'number' || !isFinite(s.xp)) s.xp = 0;
     return s;
   }
@@ -291,6 +294,12 @@ window.PAGE={"root":"./","type":"parents","id":"parents"};
     try { window.localStorage.setItem(KEY, JSON.stringify(st)); return true; } catch (e) { return false; }
   }
   function reset() { st = blank(); save(); }
+  // ---------- autosave: in-progress work for each page, keyed by page id ----------
+  function pageKey() { return P.id || P.type || 'page'; }
+  function saveGet(key, page) { var b = st.saves[page || pageKey()]; return b && b[key] != null ? JSON.parse(JSON.stringify(b[key])) : null; }
+  function saveSet(key, val, page) { page = page || pageKey(); (st.saves[page] || (st.saves[page] = {}))[key] = val; save(); }
+  function saveClear(key, page) { var b = st.saves[page || pageKey()]; if (b && key in b) { delete b[key]; save(); } }
+  function setLast(info) { st.last = info; save(); }
 
   // ---------- small helpers ----------
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -526,7 +535,14 @@ window.PAGE={"root":"./","type":"parents","id":"parents"};
     var T = opts.T || theme('quiz');
     var i = 0, score = 0;
     function sample() { return opts.count ? shuffle(qs).slice(0, opts.count) : qs; }
-    var order = sample();
+    var order = sample(), K = opts.saveKey;
+    function persist() { if (K) saveSet(K, { i: i, score: score, order: order.map(function (q) { return qs.indexOf(q); }) }); }
+    if (K) {
+      var sv = saveGet(K);
+      if (sv && sv.order && sv.order.every(function (k) { return qs[k]; }) && sv.i > 0 && sv.i < sv.order.length) {
+        order = sv.order.map(function (k) { return qs[k]; }); i = sv.i; score = sv.score || 0; opts.resumed = true;
+      }
+    }
     function render() {
       if (i >= order.length) return finish();
       var q = order[i];
@@ -546,6 +562,7 @@ window.PAGE={"root":"./","type":"parents","id":"parents"};
       $all('.qz-choice', el).forEach(function (b) { b.disabled = true; if (+b.getAttribute('data-k') === q.c) b.classList.add('right'); });
       var fb = $('.qz-feedback', el), ok = k === q.c;
       if (ok) { score++; sfx('good'); } else { btn.classList.add('wrong'); sfx('bad'); }
+      i++; persist(); i--;
       var msg = ok ? ('<b>✅ Correct!</b> ' + fill(q.yes || q.why || '', T))
         : ('<b>❌ Not quite.</b> ' + fill((q.wrong && q.wrong[k]) || q.why || '', T));
       fb.className = 'qz-feedback ' + (ok ? 'ok' : 'no');
@@ -554,17 +571,19 @@ window.PAGE={"root":"./","type":"parents","id":"parents"};
       nx.focus({ preventScroll: true });
     }
     function finish() {
+      if (K) saveClear(K);
       var pass = score / order.length >= (opts.pass || 0.6);
       var stars = score === order.length ? '🌟🌟🌟' : pass ? '🌟🌟' : '🌟';
       el.innerHTML = '<div class="qz-end ' + (pass ? 'pass' : 'fail') + '"><div class="qz-stars" aria-hidden="true">' + stars + '</div>' +
         '<p class="qz-score">You got <b>' + score + ' / ' + order.length + '</b></p>' +
         '<p>' + (score === order.length ? 'Flawless! Your sensei is impressed.' : pass ? 'Nice work — you passed! Want to go for a perfect score?' : 'Every black belt was once a white belt who kept going. Try again — you’ve got this.') + '</p>' +
         '<button type="button" class="btn qz-retry">↻ ' + (score === order.length ? 'Play again' : 'Try again') + '</button></div>';
-      $('.qz-retry', el).addEventListener('click', function () { i = 0; score = 0; if (opts.reshuffle) order = sample(); render(); });
+      $('.qz-retry', el).addEventListener('click', function () { i = 0; score = 0; if (opts.reshuffle) order = sample(); if (K) saveClear(K); render(); });
       if (score === order.length) confetti(40);
       if (opts.onDone) opts.onDone(score, order.length, pass);
     }
     render();
+    if (opts.resumed) { var tp = el.querySelector('.qz-top'); if (tp) tp.insertAdjacentHTML('afterend', '<p class="qz-resume">💾 Welcome back! You were on question ' + (i + 1) + '.</p>'); }
     return { restart: function () { i = 0; score = 0; render(); } };
   }
 
@@ -591,6 +610,7 @@ window.PAGE={"root":"./","type":"parents","id":"parents"};
 
   window.Dojo = {
     state: function () { return st; }, save: save, reset: reset, storageOK: storageOK,
+    saveGet: saveGet, saveSet: saveSet, saveClear: saveClear, setLast: setLast,
     esc: esc, $: $, $all: $all, today: today, hash: hash, shuffle: shuffle, reducedMotion: reducedMotion,
     profile: profile, nick: nick, avatar: avatar, student: STUDENT, favs: favs, theme: theme, fill: fill,
     setProfile: function (p) { st.profile = p; save(); refreshBar(); },

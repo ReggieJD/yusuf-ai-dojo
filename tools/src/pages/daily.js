@@ -56,7 +56,7 @@ var mine=window.DAILY_BANK.filter(function(q){return D.lessonDone(q.from);});var
 var left=300,timer=null,tEl=document.getElementById('dl-timer');
 function tick(){left=Math.max(0,left-1);tEl.textContent='⏱️ '+Math.floor(left/60)+':'+('0'+left%60).slice(-2);if(!left){clearInterval(timer);tEl.textContent='⏱️ Time! Finish up — no rush.';}}
 timer=setInterval(tick,1000);
-D.quiz(document.getElementById('dl-quiz'),bank,{count:5,reshuffle:true,onDone:function(sc,tot){clearInterval(timer);
+D.quiz(document.getElementById('dl-quiz'),bank,{count:5,reshuffle:true,saveKey:'q-'+t,onDone:function(sc,tot){clearInterval(timer);
  var first=D.markDaily();stats();
  if(first){D.confetti(50);D.toast('🔥 Streak: '+D.streakNow()+' day'+(D.streakNow()===1?'':'s')+'!');}
  else D.toast('Extra practice complete. Your streak is already safe today!');}});

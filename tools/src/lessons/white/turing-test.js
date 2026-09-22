@@ -31,7 +31,8 @@ module.exports = {
         { q: 'Tell me about your weekend.', A: 'My cousin came over and we built a massive couch-cushion fort. Then my little brother knocked it down in about four seconds.', B: 'It was great! We went hiking with my family and saw an amazing sunset from the top of the trail.', bot: 'both', clue: '<b>Plot twist: BOTH answers were written by a chatbot.</b> Modern AI can write very human-sounding text in a short chat. Sometimes you truly can’t tell.' },
         { q: 'What does your house smell like right now?', A: 'I don’t have a sense of smell or a house — I’m an AI, so I can’t smell anything.', B: 'Popcorn. Someone burned it. AGAIN.', bot: 'A', clue: 'Some chatbots are designed to be honest about being AI. That’s a good thing! But not every bot is built that way.' },
       ];
-      var r = 0, right = 0;
+      var r = 0, right = 0, S = api.load();
+      if (S.r > 0 && S.r <= rounds.length) { r = S.r; right = S.right || 0; }
       function show() {
         if (r >= rounds.length) return end();
         var R = rounds[r];
@@ -41,6 +42,7 @@ module.exports = {
         D.$all('.tt-pick button', el).forEach(function (b) {
           b.addEventListener('click', function () {
             var v = b.getAttribute('data-v'), ok = v === R.bot; if (ok) right++;
+            api.save({ r: r + 1, right: right });
             D.$all('.tt-pick button', el).forEach(function (x) { x.disabled = true; });
             if (R.bot === 'both') { D.$('#tt-A', el).classList.add('bot'); D.$('#tt-B', el).classList.add('bot'); } else D.$('#tt-' + R.bot, el).classList.add('bot');
             D.$('#tt-out', el).innerHTML = '<div class="tt-clue"><p><b>' + (ok ? '✅ Good judging!' : '❌ Fooled you!') + '</b> ' + R.clue + '</p><button type="button" class="btn primary small" id="tt-next">' + (r + 1 < rounds.length ? 'Next round →' : 'See the verdict') + '</button></div>';
@@ -51,10 +53,11 @@ module.exports = {
       }
       function end() {
         el.innerHTML = '<div class="tt-clue"><h3>⚖️ Final verdict: ' + right + ' / ' + rounds.length + '</h3><p>' + (right >= 4 ? 'Sharp judging!' : 'Those bots were sneaky!') + ' Here’s the big idea: modern chatbots can fool many people in short chats. But passing the Turing Test only shows a machine can <b>imitate</b> human conversation. It doesn’t prove it understands, feels or thinks the way you do.</p><button type="button" class="btn small" id="tt-again">↻ Judge again</button></div>';
-        D.$('#tt-again', el).addEventListener('click', function () { r = 0; right = 0; show(); });
+        D.$('#tt-again', el).addEventListener('click', function () { r = 0; right = 0; api.save({ r: 0, right: 0 }); show(); });
         api.done();
       }
       show();
+      if (r > 0 && r < rounds.length) el.insertAdjacentHTML('afterbegin', '<p class="saved-note">💾 Welcome back! Resuming at round ' + (r + 1) + '.</p>');
     },
   },
   quiz: [
@@ -73,7 +76,7 @@ module.exports = {
         { q: 'A chatbot answers every question smoothly. Does that mean it understands like a person?', a: ['Not necessarily — it may be producing likely-sounding words without understanding like you do', 'Yes — smooth answers prove understanding', 'Yes — computers never pretend', 'No — chatbots can’t write sentences'], c: 0, why: 'Smooth language can come from patterns learned from huge amounts of text. Sounding smart and understanding are different things.' },
         { q: 'You’re chatting online and can’t tell if it’s a person or a bot. What’s the smartest move?', a: ['Be careful what you share either way, and ask a trusted adult if something feels off', 'Share your address to test it', 'Assume it’s definitely a human', 'Assume bots can’t trick you'], c: 0, why: 'Online you can’t always know who — or what — you’re talking to. Protect your personal info no matter what.' },
         { q: 'If a machine passes the Turing Test, what has it shown?', a: ['That it can imitate human conversation well enough to fool judges', 'That it has feelings', 'That it is alive', 'That it is always right'], c: 0, why: 'The test measures imitation of conversation, not feelings, life or truthfulness.' },
-      ], { onDone: function (s) { if (s >= 3) api.done(); } });
+      ], { saveKey: 'chquiz', onDone: function (s) { if (s >= 3) api.done(); } });
     },
   },
 };

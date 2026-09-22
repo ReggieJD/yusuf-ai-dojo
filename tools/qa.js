@@ -182,6 +182,49 @@ const FLOWS = require('./qa-flows');
     } catch (e) { failures++; record('flow: daily dojo', false, e.message.split('\n')[0]); }
   }
 
+  // autosave: leave mid-activity / mid-quiz, come back, and everything is restored
+  if (!filter || filter.includes('save') || filter.includes('flow')) {
+    const c2 = await browser.newContext({ viewport: { width: 390, height: 800 } });
+    const p2 = await c2.newPage(); const e2 = [];
+    p2.on('pageerror', (e) => e2.push(e.message));
+    const check = (name, ok, note) => { if (!ok) failures++; record('autosave: ' + name, ok, note); };
+    try {
+      await p2.goto(base + 'worlds/white/is-it-ai.html');
+      for (let k = 0; k < 3; k++) { await p2.click('#sm-yes'); await p2.waitForTimeout(450); }
+      await p2.reload(); await p2.waitForTimeout(300);
+      const n = await p2.textContent('#sm-n');
+      check('sorting game resumes at card 4', /Card 4 \/ 12/.test(n), n);
+      // quiz mid-way
+      const qs = await p2.$$('#quiz .qz-choice');
+      await qs[0].click(); await p2.click('#quiz .qz-next');
+      await (await p2.$$('#quiz .qz-choice'))[0].click();
+      await p2.reload(); await p2.waitForTimeout(300);
+      const qc = await p2.textContent('#quiz .qz-count');
+      check('quiz resumes at question 3', /Question 3 of/.test(qc), qc);
+      // grid levels + blocks
+      await p2.goto(base + 'worlds/white/al-khwarizmi.html');
+      for (const b of ['F', 'F', 'F']) await p2.click(`#activity .gg-pal [data-b="${b}"]`);
+      await p2.click('#activity [data-g="run"]');
+      await p2.waitForFunction(() => /Goal reached/.test(document.querySelector('#activity [data-g="fb"]').textContent), null, { timeout: 15000 });
+      await p2.click('#activity [data-g="next"]');
+      await p2.click('#activity .gg-pal [data-b="L"]');
+      await p2.reload(); await p2.waitForTimeout(300);
+      const title = await p2.textContent('#activity [data-g="title"]');
+      const blocks = await p2.$$eval('#activity [data-g="prog"] .gg-blk', (x) => x.length);
+      check('algorithm dojo resumes on level 2 with saved blocks', /Level 2/.test(title) && blocks === 1, title + ' / blocks=' + blocks);
+      // hub continue button points to the last unfinished lesson
+      await p2.goto(base + 'index.html'); await p2.waitForTimeout(200);
+      if (await p2.$('#picker:not([hidden])')) { await p2.click('[data-go="2"]'); await p2.click('[data-go="3"]'); await p2.click('#pk-done'); }
+      const href = await p2.getAttribute('#cont-btn', 'href');
+      check('hub Continue returns to last lesson', href === 'worlds/white/al-khwarizmi.html', href);
+      // picker only on first visit
+      await p2.reload(); await p2.waitForTimeout(200);
+      check('ninja picker does not reappear', !!(await p2.$('#picker[hidden]')));
+      check('no page errors', !e2.length, e2.join(' | '));
+    } catch (e) { failures++; record('autosave', false, e.message.split('\n')[0]); }
+    await c2.close();
+  }
+
   await browser.close(); srv.close();
   const bad = results.filter((r) => !r.ok).length;
   console.log(`\n${results.length - bad}/${results.length} checks passed.`);

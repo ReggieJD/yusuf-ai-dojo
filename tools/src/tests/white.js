@@ -52,10 +52,11 @@ module.exports = {
           if (b.getAttribute('data-v') === g[1]) {
             box.classList.add('ok'); D.$all('button', box).forEach(function (x) { x.disabled = true; });
             why.textContent = '✅ ' + g[2]; solved++; D.sfx('good');
+            var A = api.load().gi || {}; A[box.getAttribute('data-i')] = 1; api.save({ gi: A });
             if (solved === G.length) {
               D.$('#gi-fb', el).className = 'feedback ok'; D.$('#gi-fb', el).textContent = 'Inspection complete! Now for the final kata…';
               var m = D.$('#bt-maze', el); m.hidden = false;
-              makeGridGame(D.$('#bt-maze-game', el), { D: D, T: api.T, done: api.done }, [
+              makeGridGame(D.$('#bt-maze-game', el), { D: D, T: api.T, done: api.done, save: api.save, load: api.load }, [
                 { n: '★', title: 'The Sensei’s Maze (max 11 blocks)', size: 7, start: [0, 6], dir: 1, goal: [6, 0],
                   walls: ['4,6', '4,5', '4,4', '6,6', '6,5', '6,4', '3,2', '4,2', '5,2', '0,3', '1,3', '2,3', '1,1'], limit: 11,
                   hint: 'Your ninja faces right ➡. Find the path, then squeeze it into 11 blocks with repeats.', win: 'The sensei nods. Your algorithm is flawless.' },
@@ -64,6 +65,8 @@ module.exports = {
             }
           } else { b.disabled = true; why.textContent = '❌ Not quite — ask: does it recognize, predict, create, or just follow a rule?'; D.sfx('bad'); }
         });
-      });`),
+      });
+      var GI = api.load().gi || {};
+      Object.keys(GI).forEach(function (i) { var b = D.$('.gi-item[data-i="' + i + '"] button[data-v="' + G[i][1] + '"]', el); if (b) b.click(); });`),
   },
 };

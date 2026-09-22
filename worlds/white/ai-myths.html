@@ -65,6 +65,7 @@ noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px
 .nudge{background:var(--card);border:2px dashed var(--accent);border-radius:14px;padding:10px 14px;margin:10px 0 0}
 
 /* ---- section cards ---- */
+.card,details.challenge{scroll-margin-top:76px}
 .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 18px;margin:18px 0;border:2px solid var(--line);position:relative}
 @media (min-width:640px){ .card{padding:28px} }
 .sec-title{display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -99,6 +100,8 @@ noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px
 .qz-feedback{margin-top:12px}
 .qz-feedback p{padding:12px 14px;border-radius:12px}
 .qz-feedback.ok p{background:var(--good-bg);color:#0d3b22} .qz-feedback.no p{background:var(--bad-bg);color:#5c130e}
+.qz-resume{font-size:.9rem;font-weight:700;color:var(--accent2);margin:0 0 6px}
+.saved-note{display:inline-block;font-size:.85rem;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--good-bg);color:#0d3b22;margin:0 0 10px}
 .qz-end{text-align:center;padding:10px}
 .qz-stars{font-size:2.4rem} .qz-score{font-size:1.4rem}
 
@@ -280,7 +283,7 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/ai-myths","world":"whit
   function blank() {
     return { v: 1, profile: null, xp: 0, lessons: {}, tests: {}, belts: {}, badges: {},
       streak: { count: 0, best: 0, last: null }, sound: false, daily: {}, arcade: {},
-      unlockAll: false, project: null };
+      unlockAll: false, project: null, saves: {}, last: null };
   }
   var storageOK = (function () {
     try { var t = '__dojo_test'; window.localStorage.setItem(t, '1'); window.localStorage.removeItem(t); return true; }
@@ -296,7 +299,7 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/ai-myths","world":"whit
       } catch (e) { /* corrupted data: start fresh */ }
     }
     if (!s.streak || typeof s.streak !== 'object') s.streak = { count: 0, best: 0, last: null };
-    ['lessons', 'tests', 'belts', 'badges', 'daily', 'arcade'].forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
+    ['lessons', 'tests', 'belts', 'badges', 'daily', 'arcade', 'saves'].forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
     if (typeof s.xp !== 'number' || !isFinite(s.xp)) s.xp = 0;
     return s;
   }
@@ -306,6 +309,12 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/ai-myths","world":"whit
     try { window.localStorage.setItem(KEY, JSON.stringify(st)); return true; } catch (e) { return false; }
   }
   function reset() { st = blank(); save(); }
+  // ---------- autosave: in-progress work for each page, keyed by page id ----------
+  function pageKey() { return P.id || P.type || 'page'; }
+  function saveGet(key, page) { var b = st.saves[page || pageKey()]; return b && b[key] != null ? JSON.parse(JSON.stringify(b[key])) : null; }
+  function saveSet(key, val, page) { page = page || pageKey(); (st.saves[page] || (st.saves[page] = {}))[key] = val; save(); }
+  function saveClear(key, page) { var b = st.saves[page || pageKey()]; if (b && key in b) { delete b[key]; save(); } }
+  function setLast(info) { st.last = info; save(); }
 
   // ---------- small helpers ----------
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -541,7 +550,14 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/ai-myths","world":"whit
     var T = opts.T || theme('quiz');
     var i = 0, score = 0;
     function sample() { return opts.count ? shuffle(qs).slice(0, opts.count) : qs; }
-    var order = sample();
+    var order = sample(), K = opts.saveKey;
+    function persist() { if (K) saveSet(K, { i: i, score: score, order: order.map(function (q) { return qs.indexOf(q); }) }); }
+    if (K) {
+      var sv = saveGet(K);
+      if (sv && sv.order && sv.order.every(function (k) { return qs[k]; }) && sv.i > 0 && sv.i < sv.order.length) {
+        order = sv.order.map(function (k) { return qs[k]; }); i = sv.i; score = sv.score || 0; opts.resumed = true;
+      }
+    }
     function render() {
       if (i >= order.length) return finish();
       var q = order[i];
@@ -561,6 +577,7 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/ai-myths","world":"whit
       $all('.qz-choice', el).forEach(function (b) { b.disabled = true; if (+b.getAttribute('data-k') === q.c) b.classList.add('right'); });
       var fb = $('.qz-feedback', el), ok = k === q.c;
       if (ok) { score++; sfx('good'); } else { btn.classList.add('wrong'); sfx('bad'); }
+      i++; persist(); i--;
       var msg = ok ? ('<b>✅ Correct!</b> ' + fill(q.yes || q.why || '', T))
         : ('<b>❌ Not quite.</b> ' + fill((q.wrong && q.wrong[k]) || q.why || '', T));
       fb.className = 'qz-feedback ' + (ok ? 'ok' : 'no');
@@ -569,17 +586,19 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/ai-myths","world":"whit
       nx.focus({ preventScroll: true });
     }
     function finish() {
+      if (K) saveClear(K);
       var pass = score / order.length >= (opts.pass || 0.6);
       var stars = score === order.length ? '🌟🌟🌟' : pass ? '🌟🌟' : '🌟';
       el.innerHTML = '<div class="qz-end ' + (pass ? 'pass' : 'fail') + '"><div class="qz-stars" aria-hidden="true">' + stars + '</div>' +
         '<p class="qz-score">You got <b>' + score + ' / ' + order.length + '</b></p>' +
         '<p>' + (score === order.length ? 'Flawless! Your sensei is impressed.' : pass ? 'Nice work — you passed! Want to go for a perfect score?' : 'Every black belt was once a white belt who kept going. Try again — you’ve got this.') + '</p>' +
         '<button type="button" class="btn qz-retry">↻ ' + (score === order.length ? 'Play again' : 'Try again') + '</button></div>';
-      $('.qz-retry', el).addEventListener('click', function () { i = 0; score = 0; if (opts.reshuffle) order = sample(); render(); });
+      $('.qz-retry', el).addEventListener('click', function () { i = 0; score = 0; if (opts.reshuffle) order = sample(); if (K) saveClear(K); render(); });
       if (score === order.length) confetti(40);
       if (opts.onDone) opts.onDone(score, order.length, pass);
     }
     render();
+    if (opts.resumed) { var tp = el.querySelector('.qz-top'); if (tp) tp.insertAdjacentHTML('afterend', '<p class="qz-resume">💾 Welcome back! You were on question ' + (i + 1) + '.</p>'); }
     return { restart: function () { i = 0; score = 0; render(); } };
   }
 
@@ -606,6 +625,7 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/ai-myths","world":"whit
 
   window.Dojo = {
     state: function () { return st; }, save: save, reset: reset, storageOK: storageOK,
+    saveGet: saveGet, saveSet: saveSet, saveClear: saveClear, setLast: setLast,
     esc: esc, $: $, $all: $all, today: today, hash: hash, shuffle: shuffle, reducedMotion: reducedMotion,
     profile: profile, nick: nick, avatar: avatar, student: STUDENT, favs: favs, theme: theme, fill: fill,
     setProfile: function (p) { st.profile = p; save(); refreshBar(); },
@@ -639,7 +659,12 @@ window.ACTIVITY=(function (el, api) {
         ['Using AI to learn is great — if you still think for yourself.', 1, 'AI can explain, quiz and inspire you. But if it does all your thinking, your brain doesn’t get stronger.'],
         ['Training big AI models takes huge amounts of computing power and electricity.', 1, 'Big models are trained in data centers packed with powerful computers running for weeks or longer.'],
       ];
-      var order = D.shuffle(S), i = 0, marks = [], right = 0, busy = false;
+      var order = D.shuffle(S), i = 0, marks = [], right = 0, busy = false, sv = api.load();
+      if (sv.order && sv.order.length === S.length) {
+        var o2 = sv.order.map(function (t) { return S.filter(function (x) { return x[0] === t; })[0]; });
+        if (o2.every(Boolean)) { order = o2; i = sv.i || 0; right = sv.right || 0; marks = sv.marks || []; }
+      }
+      function persist() { api.save({ order: order.map(function (x) { return x[0]; }), i: i, right: right, marks: marks }); }
       function show() {
         if (i >= order.length) return end();
         busy = false;
@@ -651,6 +676,7 @@ window.ACTIVITY=(function (el, api) {
       function pick(v) {
         if (busy) return; busy = true;
         var s = order[i], ok = v === s[1]; if (ok) right++; marks[i] = ok ? 'ok' : 'no';
+        i++; persist(); i--;
         D.$('#mb-card', el).insertAdjacentHTML('beforeend', '<span class="mb-stamp ' + (s[1] ? 'fact' : 'myth') + '" aria-hidden="true">' + (s[1] ? 'FACT' : 'BUSTED') + '</span>');
         D.$all('.mb-btns button', el).forEach(function (x) { x.disabled = true; });
         D.$('#mb-why', el).innerHTML = (ok ? '✅ <b>Right!</b> ' : '❌ <b>That’s a ' + (s[1] ? 'fact' : 'myth') + '.</b> ') + s[2] + ' <button type="button" class="btn small primary" id="mb-next">' + (i + 1 < order.length ? 'Next →' : 'Finish') + '</button>';
@@ -659,7 +685,7 @@ window.ACTIVITY=(function (el, api) {
       }
       function end() {
         el.innerHTML = '<div class="mb"><div class="mb-card"><p>🔨 You busted ' + right + ' of ' + order.length + '!<br><span style="font-weight:600;font-size:1rem">Clear eyes. No hype. No fear. That’s the ninja way.</span></p></div><p class="row" style="justify-content:center;margin-top:12px"><button type="button" class="btn small" id="mb-again">↻ Play again</button></p></div>';
-        D.$('#mb-again', el).addEventListener('click', function () { order = D.shuffle(S); i = 0; marks = []; right = 0; show(); });
+        D.$('#mb-again', el).addEventListener('click', function () { order = D.shuffle(S); i = 0; marks = []; right = 0; persist(); show(); });
         api.done();
       }
       show();
@@ -675,25 +701,28 @@ window.CHALLENGE=(function (el, api) {
         ['“Chatbots can write fluent text but sometimes invent false information”', 'a', 'Accurate and balanced: a strength AND a weakness.'],
       ];
       var n = 0, r = 0;
-      function render() {
-        n = 0; r = 0;
+      function render(fresh) {
+        n = 0; r = 0; if (fresh) api.save({ ans: {} });
         el.innerHTML = '<div class="hd">' + H.map(function (h, i) { return '<div class="hd-item" data-i="' + i + '"><p>' + h[0] + '</p><div class="row"><button type="button" class="btn small" data-v="h">🚨 Hype</button><button type="button" class="btn small" data-v="a">👍 Accurate</button></div><div class="hd-why" aria-live="polite"></div></div>'; }).join('') + '</div><p class="feedback" id="hd-sum" aria-live="polite"></p>';
         D.$all('.hd-item button', el).forEach(function (b) {
           b.addEventListener('click', function () {
             var box = b.closest('.hd-item'), h = H[+box.getAttribute('data-i')];
             if (box.classList.contains('ok') || box.classList.contains('no')) return;
             var ok = b.getAttribute('data-v') === h[1]; n++; if (ok) r++;
+            var A = api.load().ans || {}; A[box.getAttribute('data-i')] = b.getAttribute('data-v'); api.save({ ans: A });
             box.classList.add(ok ? 'ok' : 'no'); D.$all('button', box).forEach(function (x) { x.disabled = true; });
             box.querySelector('.hd-why').innerHTML = (ok ? '✅ ' : '❌ ') + h[2]; D.sfx(ok ? 'good' : 'bad');
             if (n === H.length) {
               var s = D.$('#hd-sum', el);
               if (r >= 5) { s.className = 'feedback ok'; s.textContent = r + '/6 — your hype detector is finely tuned!'; api.done(); }
-              else { s.className = 'feedback no'; s.innerHTML = r + '/6. Look for exaggeration words, then <button type="button" class="btn small" id="hd-again">try again</button>'; D.$('#hd-again', el).addEventListener('click', render); }
+              else { s.className = 'feedback no'; s.innerHTML = r + '/6. Look for exaggeration words, then <button type="button" class="btn small" id="hd-again">try again</button>'; D.$('#hd-again', el).addEventListener('click', function () { render(true); }); }
             }
           });
         });
       }
       render();
+      var A0 = api.load().ans || {};
+      Object.keys(A0).forEach(function (i) { var b = D.$('.hd-item[data-i="' + i + '"] button[data-v="' + A0[i] + '"]', el); if (b) b.click(); });
     });
 </script>
 <script>
@@ -749,10 +778,14 @@ window.CHALLENGE=(function (el, api) {
     var fired = false;
     return {
       T: T, D: D, nick: D.nick(), fill: function (s) { return D.fill(s, T); },
+      // autosave for in-progress work: save(obj) merges, load() returns {} when nothing is saved
+      save: function (obj) { var cur = D.saveGet(kind) || {}; for (var k in obj) cur[k] = obj[k]; D.saveSet(kind, cur); },
+      load: function () { return D.saveGet(kind) || {}; },
+      clear: function () { D.saveClear(kind); },
       done: function (msg) {
         if (fired) return; fired = true;
         var first = kind === 'act' ? D.markActivity(id) : D.markChallenge(id);
-        if (msg !== false) D.toast(kind === 'act' ? '🥋 Activity complete!' : '🔥 Challenge conquered!');
+        if (first && msg !== false) D.toast(kind === 'act' ? '🥋 Activity complete!' : '🔥 Challenge conquered!');
         if (first) D.confetti(kind === 'act' ? 30 : 50);
         refreshChecklist();
         if (kind === 'act') { var q = document.getElementById('quiz-sec'); if (q) q.classList.add('ready'); }
@@ -763,6 +796,8 @@ window.CHALLENGE=(function (el, api) {
 
   // ---- activity ----
   var actEl = document.getElementById('activity');
+  var prior = D.state().lessons[id] || {};
+  if (actEl && prior.act) actEl.insertAdjacentHTML('beforebegin', '<p class="saved-note">✅ You already beat this activity. Replay it any time!</p>');
   if (actEl && window.ACTIVITY) {
     try { window.ACTIVITY(actEl, api('act')); }
     catch (e) { actEl.innerHTML = '<p class="err">This activity hit a snag. Try reloading the page.</p>'; if (window.console) console.error(e); }
@@ -770,7 +805,7 @@ window.CHALLENGE=(function (el, api) {
 
   // ---- quiz ----
   var qEl = document.getElementById('quiz');
-  if (qEl) D.quiz(qEl, Lz.quiz, { T: T, onDone: function (sc, tot) { D.markQuiz(id, sc, tot); refreshChecklist(); } });
+  if (qEl) D.quiz(qEl, Lz.quiz, { T: T, saveKey: 'quiz', onDone: function (sc, tot) { D.markQuiz(id, sc, tot); refreshChecklist(); } });
 
   // ---- challenge (built on first open) ----
   var chBox = document.getElementById('challenge-box');
@@ -782,7 +817,8 @@ window.CHALLENGE=(function (el, api) {
     catch (e) { chEl.innerHTML = '<p class="err">This challenge hit a snag. Try reloading the page.</p>'; if (window.console) console.error(e); }
   }
   if (chBox) chBox.addEventListener('toggle', function () { if (chBox.open) buildChallenge(); });
-  if (chBox && chBox.open) buildChallenge();
+  if (chBox && (chBox.open || D.saveGet('ch'))) { chBox.open = true; buildChallenge(); }
+  if (chBox && prior.ch) chBox.querySelector('summary .tag').textContent = '✅ Beaten';
 
   // ---- profile nudge ----
   if (!D.profile()) {
@@ -790,6 +826,31 @@ window.CHALLENGE=(function (el, api) {
     if (n) { n.hidden = false; }
   }
   refreshChecklist();
+
+  // ---- remember where he is, and bring him back there next time ----
+  var here = { href: 'worlds/' + id + '.html', title: Lz.title, id: id, section: 'story' };
+  var last = D.state().last;
+  var resumeTo = last && last.id === id && last.section && last.section !== 'story' ? last.section : null;
+  if (last && last.id === id) here.section = last.section;
+  D.setLast(here);
+  var secs = { story: document.querySelector('.story-card'), activity: document.querySelector('.act-card'), quiz: document.getElementById('quiz-sec'), challenge: chBox };
+  if ('IntersectionObserver' in window) {
+    var t = null;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        for (var k in secs) if (secs[k] === e.target) { here.section = k; }
+        clearTimeout(t); t = setTimeout(function () { D.setLast(here); }, 400);
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    for (var k in secs) if (secs[k]) io.observe(secs[k]);
+  }
+  if (resumeTo && secs[resumeTo] && !(D.state().lessons[id] || {}).done) {
+    setTimeout(function () {
+      secs[resumeTo].scrollIntoView({ block: 'start' });
+      D.toast('💾 Welcome back! Picking up where you left off.');
+    }, 250);
+  }
 })();
 
 </script>

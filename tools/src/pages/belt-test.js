@@ -59,11 +59,12 @@ if(!D.testReady(w)&&!st.belts[w.id]){var p=D.worldProgress(w);document.getElemen
 var projBuilt=false;
 function openProject(){document.getElementById('bt-proj-lock').hidden=true;document.getElementById('bt-proj-wrap').hidden=false;
  if(projBuilt)return;projBuilt=true;
- window.TEST_PROJECT(document.getElementById('bt-proj'),{T:T,D:D,nick:D.nick(),fill:function(s){return D.fill(s,T);},done:function(){
+ window.TEST_PROJECT(document.getElementById('bt-proj'),{T:T,D:D,nick:D.nick(),fill:function(s){return D.fill(s,T);},
+ save:function(o){var c=D.saveGet('proj')||{};for(var k in o)c[k]=o[k];D.saveSet('proj',c);},load:function(){return D.saveGet('proj')||{};},done:function(){
    if(rec.proj&&st.belts[w.id])return; rec.proj=true;D.save();tryBelt();}});}
 function tryBelt(){refresh();if(rec.quiz&&rec.proj&&!st.belts[w.id]){var q=rec.score||0;D.earnBelt(w.id,q,10);rec=st.tests[w.id];rec.quiz=true;rec.proj=true;D.save();
  D.ceremony(w,function(){refresh();done.scrollIntoView({behavior:D.reducedMotion()?'auto':'smooth'});});refresh();}}
-D.quiz(document.getElementById('bt-quiz'),window.TEST_QUIZ,{T:T,pass:0.7,count:10,reshuffle:true,onDone:function(sc,tot,pass){
+D.quiz(document.getElementById('bt-quiz'),window.TEST_QUIZ,{T:T,pass:0.7,count:10,reshuffle:true,saveKey:'quiz',onDone:function(sc,tot,pass){
   if(pass){if(!rec.quiz||sc>(rec.score||0)){rec.score=sc;}rec.quiz=true;D.save();D.toast('⚔️ Trial 1 passed!');openProject();tryBelt();
    setTimeout(function(){document.getElementById('bt-proj-sec').scrollIntoView({behavior:D.reducedMotion()?'auto':'smooth'});},600);}
   else D.toast('You need 7 of 10. Review and try again!');}});

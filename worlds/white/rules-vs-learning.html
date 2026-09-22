@@ -65,6 +65,7 @@ noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px
 .nudge{background:var(--card);border:2px dashed var(--accent);border-radius:14px;padding:10px 14px;margin:10px 0 0}
 
 /* ---- section cards ---- */
+.card,details.challenge{scroll-margin-top:76px}
 .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 18px;margin:18px 0;border:2px solid var(--line);position:relative}
 @media (min-width:640px){ .card{padding:28px} }
 .sec-title{display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -99,6 +100,8 @@ noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px
 .qz-feedback{margin-top:12px}
 .qz-feedback p{padding:12px 14px;border-radius:12px}
 .qz-feedback.ok p{background:var(--good-bg);color:#0d3b22} .qz-feedback.no p{background:var(--bad-bg);color:#5c130e}
+.qz-resume{font-size:.9rem;font-weight:700;color:var(--accent2);margin:0 0 6px}
+.saved-note{display:inline-block;font-size:.85rem;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--good-bg);color:#0d3b22;margin:0 0 10px}
 .qz-end{text-align:center;padding:10px}
 .qz-stars{font-size:2.4rem} .qz-score{font-size:1.4rem}
 
@@ -293,7 +296,7 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/rules-vs-learning","wor
   function blank() {
     return { v: 1, profile: null, xp: 0, lessons: {}, tests: {}, belts: {}, badges: {},
       streak: { count: 0, best: 0, last: null }, sound: false, daily: {}, arcade: {},
-      unlockAll: false, project: null };
+      unlockAll: false, project: null, saves: {}, last: null };
   }
   var storageOK = (function () {
     try { var t = '__dojo_test'; window.localStorage.setItem(t, '1'); window.localStorage.removeItem(t); return true; }
@@ -309,7 +312,7 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/rules-vs-learning","wor
       } catch (e) { /* corrupted data: start fresh */ }
     }
     if (!s.streak || typeof s.streak !== 'object') s.streak = { count: 0, best: 0, last: null };
-    ['lessons', 'tests', 'belts', 'badges', 'daily', 'arcade'].forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
+    ['lessons', 'tests', 'belts', 'badges', 'daily', 'arcade', 'saves'].forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
     if (typeof s.xp !== 'number' || !isFinite(s.xp)) s.xp = 0;
     return s;
   }
@@ -319,6 +322,12 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/rules-vs-learning","wor
     try { window.localStorage.setItem(KEY, JSON.stringify(st)); return true; } catch (e) { return false; }
   }
   function reset() { st = blank(); save(); }
+  // ---------- autosave: in-progress work for each page, keyed by page id ----------
+  function pageKey() { return P.id || P.type || 'page'; }
+  function saveGet(key, page) { var b = st.saves[page || pageKey()]; return b && b[key] != null ? JSON.parse(JSON.stringify(b[key])) : null; }
+  function saveSet(key, val, page) { page = page || pageKey(); (st.saves[page] || (st.saves[page] = {}))[key] = val; save(); }
+  function saveClear(key, page) { var b = st.saves[page || pageKey()]; if (b && key in b) { delete b[key]; save(); } }
+  function setLast(info) { st.last = info; save(); }
 
   // ---------- small helpers ----------
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -554,7 +563,14 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/rules-vs-learning","wor
     var T = opts.T || theme('quiz');
     var i = 0, score = 0;
     function sample() { return opts.count ? shuffle(qs).slice(0, opts.count) : qs; }
-    var order = sample();
+    var order = sample(), K = opts.saveKey;
+    function persist() { if (K) saveSet(K, { i: i, score: score, order: order.map(function (q) { return qs.indexOf(q); }) }); }
+    if (K) {
+      var sv = saveGet(K);
+      if (sv && sv.order && sv.order.every(function (k) { return qs[k]; }) && sv.i > 0 && sv.i < sv.order.length) {
+        order = sv.order.map(function (k) { return qs[k]; }); i = sv.i; score = sv.score || 0; opts.resumed = true;
+      }
+    }
     function render() {
       if (i >= order.length) return finish();
       var q = order[i];
@@ -574,6 +590,7 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/rules-vs-learning","wor
       $all('.qz-choice', el).forEach(function (b) { b.disabled = true; if (+b.getAttribute('data-k') === q.c) b.classList.add('right'); });
       var fb = $('.qz-feedback', el), ok = k === q.c;
       if (ok) { score++; sfx('good'); } else { btn.classList.add('wrong'); sfx('bad'); }
+      i++; persist(); i--;
       var msg = ok ? ('<b>✅ Correct!</b> ' + fill(q.yes || q.why || '', T))
         : ('<b>❌ Not quite.</b> ' + fill((q.wrong && q.wrong[k]) || q.why || '', T));
       fb.className = 'qz-feedback ' + (ok ? 'ok' : 'no');
@@ -582,17 +599,19 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/rules-vs-learning","wor
       nx.focus({ preventScroll: true });
     }
     function finish() {
+      if (K) saveClear(K);
       var pass = score / order.length >= (opts.pass || 0.6);
       var stars = score === order.length ? '🌟🌟🌟' : pass ? '🌟🌟' : '🌟';
       el.innerHTML = '<div class="qz-end ' + (pass ? 'pass' : 'fail') + '"><div class="qz-stars" aria-hidden="true">' + stars + '</div>' +
         '<p class="qz-score">You got <b>' + score + ' / ' + order.length + '</b></p>' +
         '<p>' + (score === order.length ? 'Flawless! Your sensei is impressed.' : pass ? 'Nice work — you passed! Want to go for a perfect score?' : 'Every black belt was once a white belt who kept going. Try again — you’ve got this.') + '</p>' +
         '<button type="button" class="btn qz-retry">↻ ' + (score === order.length ? 'Play again' : 'Try again') + '</button></div>';
-      $('.qz-retry', el).addEventListener('click', function () { i = 0; score = 0; if (opts.reshuffle) order = sample(); render(); });
+      $('.qz-retry', el).addEventListener('click', function () { i = 0; score = 0; if (opts.reshuffle) order = sample(); if (K) saveClear(K); render(); });
       if (score === order.length) confetti(40);
       if (opts.onDone) opts.onDone(score, order.length, pass);
     }
     render();
+    if (opts.resumed) { var tp = el.querySelector('.qz-top'); if (tp) tp.insertAdjacentHTML('afterend', '<p class="qz-resume">💾 Welcome back! You were on question ' + (i + 1) + '.</p>'); }
     return { restart: function () { i = 0; score = 0; render(); } };
   }
 
@@ -619,6 +638,7 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/rules-vs-learning","wor
 
   window.Dojo = {
     state: function () { return st; }, save: save, reset: reset, storageOK: storageOK,
+    saveGet: saveGet, saveSet: saveSet, saveClear: saveClear, setLast: setLast,
     esc: esc, $: $, $all: $all, today: today, hash: hash, shuffle: shuffle, reducedMotion: reducedMotion,
     profile: profile, nick: nick, avatar: avatar, student: STUDENT, favs: favs, theme: theme, fill: fill,
     setProfile: function (p) { st.profile = p; save(); refreshBar(); },
@@ -685,7 +705,7 @@ window.ACTIVITY=(function (el, api) {
           D.$all('.rv-rule', el).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
           var r = RULES.filter(function (x) { return x.id === b.getAttribute('data-r'); })[0];
           var out = D.$('#rv1-out', el);
-          ruleScore = runTest(r.fn, out, 'RuleBot');
+          ruleScore = runTest(r.fn, out, 'RuleBot'); api.save({ rule: r.id });
           var tips = {
             mouth: 'Good thinking! But look at the misses: <b>sneaky grins</b> — a smile with angry eyebrows. One rule couldn’t catch them.',
             brows: 'Clever! Eyebrows are a strong clue. But RuleBot missed <b>frowning faces</b> with relaxed eyebrows. One rule wasn’t enough.',
@@ -694,7 +714,7 @@ window.ACTIVITY=(function (el, api) {
           };
           out.innerHTML += '<p class="feedback">' + tips[r.id] + ' You could keep adding rules… but real faces have <i>thousands</i> of details: lighting, angles, glasses, hair. Writing rules for all of them is nearly impossible.</p>' +
             '<p class="row"><button type="button" class="btn" id="rv-next">Next: try LearnBot →</button> <span class="pill">Or tap another rule to test it</span></p>';
-          D.$('#rv-next', el).addEventListener('click', function () { var r2 = D.$('#rv2', el); r2.hidden = false; r2.scrollIntoView({ behavior: D.reducedMotion() ? 'auto' : 'smooth', block: 'start' }); });
+          D.$('#rv-next', el).addEventListener('click', function () { var r2 = D.$('#rv2', el); r2.hidden = false; api.save({ r2: true }); r2.scrollIntoView({ behavior: D.reducedMotion() ? 'auto' : 'smooth', block: 'start' }); });
           D.sfx('click');
         });
       });
@@ -706,7 +726,7 @@ window.ACTIVITY=(function (el, api) {
       D.$all('.rv-lbl button', tr).forEach(function (b) {
         b.addEventListener('click', function () {
           var card = b.closest('.rv-face'), i = +card.getAttribute('data-i');
-          labels[i] = b.getAttribute('data-v') === '1';
+          labels[i] = b.getAttribute('data-v') === '1'; api.save({ labels: labels });
           D.$all('button', card).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
           var n = Object.keys(labels).length, go = D.$('#rv-go', el);
           go.disabled = n < 8; go.textContent = n < 8 ? 'Train LearnBot (' + n + ' / 8 labeled)' : 'Train LearnBot 🧠';
@@ -719,7 +739,7 @@ window.ACTIVITY=(function (el, api) {
           train.forEach(function (t, i) { var d = Math.pow(t[0] - f[0], 2) + Math.pow(t[1] - f[1], 2); if (d < best) { best = d; lab = labels[i]; } });
           return lab;
         }
-        var out = D.$('#rv2-out', el);
+        var out = D.$('#rv2-out', el); api.save({ trained: true });
         var s = runTest(predict, out, 'LearnBot');
         var wrongLabels = train.filter(function (f, i) { return labels[i] !== truth(f); }).length;
         var msg = wrongLabels === 0
@@ -729,6 +749,12 @@ window.ACTIVITY=(function (el, api) {
         D.sfx(s >= 9 ? 'win' : 'good');
         if (ruleScore != null) api.done();
       });
+      // restore autosaved progress
+      var S = api.load();
+      if (S.rule) { var rb = D.$('.rv-rule[data-r="' + S.rule + '"]', el); if (rb) rb.click(); }
+      if (S.r2) D.$('#rv2', el).hidden = false;
+      if (S.labels) Object.keys(S.labels).forEach(function (i) { var lb = D.$('.rv-face[data-i="' + i + '"] button[data-v="' + (S.labels[i] ? 1 : 0) + '"]', tr); if (lb) lb.click(); });
+      if (S.trained && Object.keys(labels).length === 8) D.$('#rv-go', el).click();
     });
 window.CHALLENGE=(function (el, api) {
       var D = api.D;
@@ -743,8 +769,8 @@ window.CHALLENGE=(function (el, api) {
         ['Adding up the points scored in a basketball game', 'r', '2 points, 3 points, free throws — exact rules you can write down.'],
       ];
       var answered = {}, right = 0;
-      function render() {
-        answered = {}; right = 0;
+      function render(fresh) {
+        answered = {}; right = 0; if (fresh) api.save({ ans: {} });
         el.innerHTML = items.map(function (it, i) {
           return '<div class="rl-item" data-i="' + i + '"><p>' + (i + 1) + '. ' + it[0] + '</p><div class="row"><button type="button" class="btn small" data-v="r">📏 Rules</button><button type="button" class="btn small" data-v="l">🧠 Learning</button></div><div class="rl-why" aria-live="polite"></div></div>';
         }).join('') + '<p class="feedback" id="rl-sum" aria-live="polite"></p>';
@@ -753,18 +779,21 @@ window.CHALLENGE=(function (el, api) {
             var box = b.closest('.rl-item'), i = +box.getAttribute('data-i');
             if (answered[i]) return; answered[i] = true;
             var ok = b.getAttribute('data-v') === items[i][1]; if (ok) right++;
+            var A = api.load().ans || {}; A[i] = b.getAttribute('data-v'); api.save({ ans: A });
             box.classList.add(ok ? 'ok' : 'no'); D.$all('button', box).forEach(function (x) { x.disabled = true; });
             D.$('.rl-why', box).innerHTML = (ok ? '✅ ' : '❌ Best answer: <b>' + (items[i][1] === 'r' ? 'Rules' : 'Learning') + '</b>. ') + items[i][2];
             D.sfx(ok ? 'good' : 'bad');
             if (Object.keys(answered).length === items.length) {
               var sum = D.$('#rl-sum', el);
               if (right >= 6) { sum.className = 'feedback ok'; sum.textContent = 'You scored ' + right + '/8. You think like an AI engineer!'; api.done(); }
-              else { sum.className = 'feedback no'; sum.innerHTML = 'You scored ' + right + '/8. Read the explanations, then <button type="button" class="btn small" id="rl-again">try again</button>'; D.$('#rl-again', el).addEventListener('click', render); }
+              else { sum.className = 'feedback no'; sum.innerHTML = 'You scored ' + right + '/8. Read the explanations, then <button type="button" class="btn small" id="rl-again">try again</button>'; D.$('#rl-again', el).addEventListener('click', function () { render(true); }); }
             }
           });
         });
       }
       render();
+      var A0 = api.load().ans || {};
+      Object.keys(A0).forEach(function (i) { var b = D.$('.rl-item[data-i="' + i + '"] button[data-v="' + A0[i] + '"]', el); if (b) b.click(); });
     });
 </script>
 <script>
@@ -820,10 +849,14 @@ window.CHALLENGE=(function (el, api) {
     var fired = false;
     return {
       T: T, D: D, nick: D.nick(), fill: function (s) { return D.fill(s, T); },
+      // autosave for in-progress work: save(obj) merges, load() returns {} when nothing is saved
+      save: function (obj) { var cur = D.saveGet(kind) || {}; for (var k in obj) cur[k] = obj[k]; D.saveSet(kind, cur); },
+      load: function () { return D.saveGet(kind) || {}; },
+      clear: function () { D.saveClear(kind); },
       done: function (msg) {
         if (fired) return; fired = true;
         var first = kind === 'act' ? D.markActivity(id) : D.markChallenge(id);
-        if (msg !== false) D.toast(kind === 'act' ? '🥋 Activity complete!' : '🔥 Challenge conquered!');
+        if (first && msg !== false) D.toast(kind === 'act' ? '🥋 Activity complete!' : '🔥 Challenge conquered!');
         if (first) D.confetti(kind === 'act' ? 30 : 50);
         refreshChecklist();
         if (kind === 'act') { var q = document.getElementById('quiz-sec'); if (q) q.classList.add('ready'); }
@@ -834,6 +867,8 @@ window.CHALLENGE=(function (el, api) {
 
   // ---- activity ----
   var actEl = document.getElementById('activity');
+  var prior = D.state().lessons[id] || {};
+  if (actEl && prior.act) actEl.insertAdjacentHTML('beforebegin', '<p class="saved-note">✅ You already beat this activity. Replay it any time!</p>');
   if (actEl && window.ACTIVITY) {
     try { window.ACTIVITY(actEl, api('act')); }
     catch (e) { actEl.innerHTML = '<p class="err">This activity hit a snag. Try reloading the page.</p>'; if (window.console) console.error(e); }
@@ -841,7 +876,7 @@ window.CHALLENGE=(function (el, api) {
 
   // ---- quiz ----
   var qEl = document.getElementById('quiz');
-  if (qEl) D.quiz(qEl, Lz.quiz, { T: T, onDone: function (sc, tot) { D.markQuiz(id, sc, tot); refreshChecklist(); } });
+  if (qEl) D.quiz(qEl, Lz.quiz, { T: T, saveKey: 'quiz', onDone: function (sc, tot) { D.markQuiz(id, sc, tot); refreshChecklist(); } });
 
   // ---- challenge (built on first open) ----
   var chBox = document.getElementById('challenge-box');
@@ -853,7 +888,8 @@ window.CHALLENGE=(function (el, api) {
     catch (e) { chEl.innerHTML = '<p class="err">This challenge hit a snag. Try reloading the page.</p>'; if (window.console) console.error(e); }
   }
   if (chBox) chBox.addEventListener('toggle', function () { if (chBox.open) buildChallenge(); });
-  if (chBox && chBox.open) buildChallenge();
+  if (chBox && (chBox.open || D.saveGet('ch'))) { chBox.open = true; buildChallenge(); }
+  if (chBox && prior.ch) chBox.querySelector('summary .tag').textContent = '✅ Beaten';
 
   // ---- profile nudge ----
   if (!D.profile()) {
@@ -861,6 +897,31 @@ window.CHALLENGE=(function (el, api) {
     if (n) { n.hidden = false; }
   }
   refreshChecklist();
+
+  // ---- remember where he is, and bring him back there next time ----
+  var here = { href: 'worlds/' + id + '.html', title: Lz.title, id: id, section: 'story' };
+  var last = D.state().last;
+  var resumeTo = last && last.id === id && last.section && last.section !== 'story' ? last.section : null;
+  if (last && last.id === id) here.section = last.section;
+  D.setLast(here);
+  var secs = { story: document.querySelector('.story-card'), activity: document.querySelector('.act-card'), quiz: document.getElementById('quiz-sec'), challenge: chBox };
+  if ('IntersectionObserver' in window) {
+    var t = null;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        for (var k in secs) if (secs[k] === e.target) { here.section = k; }
+        clearTimeout(t); t = setTimeout(function () { D.setLast(here); }, 400);
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    for (var k in secs) if (secs[k]) io.observe(secs[k]);
+  }
+  if (resumeTo && secs[resumeTo] && !(D.state().lessons[id] || {}).done) {
+    setTimeout(function () {
+      secs[resumeTo].scrollIntoView({ block: 'start' });
+      D.toast('💾 Welcome back! Picking up where you left off.');
+    }, 250);
+  }
 })();
 
 </script>

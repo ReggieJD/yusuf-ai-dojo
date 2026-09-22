@@ -64,6 +64,7 @@ module.exports = {
           D.$all('button', slot).forEach(function (c) {
             c.addEventListener('click', function () {
               answered[k] = true; found++;
+              var A = api.load().ans || {}; A[k] = c.getAttribute('data-v'); api.save({ ans: A });
               var ok = +c.getAttribute('data-v') === it[2]; if (ok) right++;
               b.classList.add(it[2] ? 'ai' : 'plain');
               b.querySelector('.tag').textContent = (it[2] ? '🤖 AI inside' : '🔧 Plain machine') + (ok ? ' ✓' : ' — you said ' + (it[2] ? 'plain' : 'AI'));
@@ -79,6 +80,13 @@ module.exports = {
           });
         });
       });
+      // restore autosaved answers
+      var A0 = api.load().ans || {};
+      Object.keys(A0).forEach(function (k) {
+        var b = D.$('.day-item[data-k="' + k + '"]', el); if (!b) return; b.click();
+        var c = b.closest('.day-scene').querySelector('.day-pop-slot button[data-v="' + A0[k] + '"]'); if (c) c.click();
+      });
+      if (Object.keys(A0).length) D.$all('.day-pop-slot', el).forEach(function (s) { s.innerHTML = ''; });
     },
   },
   quiz: [
@@ -128,11 +136,13 @@ module.exports = {
           if (d === sel) {
             matched++; b.classList.add('matched'); b.disabled = true;
             var a = D.$('[data-a="' + sel + '"]', el); a.classList.add('matched'); a.disabled = true; a.setAttribute('aria-pressed', 'false');
+            var M = api.load().m || []; if (M.indexOf(sel) < 0) M.push(sel); api.save({ m: M });
             fb.className = 'feedback ok'; fb.textContent = '✅ Match! ' + pairs[sel][0].slice(2) + ' learned from ' + pairs[sel][1].toLowerCase() + '.'; D.sfx('good'); sel = null;
             if (matched === pairs.length) riddle();
           } else { misses++; fb.className = 'feedback no'; fb.textContent = '❌ Not that one — think about what the AI needs to see lots of.'; D.sfx('bad'); }
         });
       });
+      (api.load().m || []).forEach(function (i) { var a = D.$('[data-a="' + i + '"]', el), d = D.$('[data-d="' + i + '"]', el); if (a && d) { a.click(); d.click(); } });
       function riddle() {
         var r = D.$('#mt-riddle', el);
         r.innerHTML = '<p><b>Final riddle:</b> A huge snowstorm hits your city — the first one in 50 years. The map app’s arrival time is way off. Why?</p>' +

@@ -77,7 +77,7 @@ module.exports = {
           D.$all('.rv-rule', el).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
           var r = RULES.filter(function (x) { return x.id === b.getAttribute('data-r'); })[0];
           var out = D.$('#rv1-out', el);
-          ruleScore = runTest(r.fn, out, 'RuleBot');
+          ruleScore = runTest(r.fn, out, 'RuleBot'); api.save({ rule: r.id });
           var tips = {
             mouth: 'Good thinking! But look at the misses: <b>sneaky grins</b> — a smile with angry eyebrows. One rule couldn’t catch them.',
             brows: 'Clever! Eyebrows are a strong clue. But RuleBot missed <b>frowning faces</b> with relaxed eyebrows. One rule wasn’t enough.',
@@ -86,7 +86,7 @@ module.exports = {
           };
           out.innerHTML += '<p class="feedback">' + tips[r.id] + ' You could keep adding rules… but real faces have <i>thousands</i> of details: lighting, angles, glasses, hair. Writing rules for all of them is nearly impossible.</p>' +
             '<p class="row"><button type="button" class="btn" id="rv-next">Next: try LearnBot →</button> <span class="pill">Or tap another rule to test it</span></p>';
-          D.$('#rv-next', el).addEventListener('click', function () { var r2 = D.$('#rv2', el); r2.hidden = false; r2.scrollIntoView({ behavior: D.reducedMotion() ? 'auto' : 'smooth', block: 'start' }); });
+          D.$('#rv-next', el).addEventListener('click', function () { var r2 = D.$('#rv2', el); r2.hidden = false; api.save({ r2: true }); r2.scrollIntoView({ behavior: D.reducedMotion() ? 'auto' : 'smooth', block: 'start' }); });
           D.sfx('click');
         });
       });
@@ -98,7 +98,7 @@ module.exports = {
       D.$all('.rv-lbl button', tr).forEach(function (b) {
         b.addEventListener('click', function () {
           var card = b.closest('.rv-face'), i = +card.getAttribute('data-i');
-          labels[i] = b.getAttribute('data-v') === '1';
+          labels[i] = b.getAttribute('data-v') === '1'; api.save({ labels: labels });
           D.$all('button', card).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
           var n = Object.keys(labels).length, go = D.$('#rv-go', el);
           go.disabled = n < 8; go.textContent = n < 8 ? 'Train LearnBot (' + n + ' / 8 labeled)' : 'Train LearnBot 🧠';
@@ -111,7 +111,7 @@ module.exports = {
           train.forEach(function (t, i) { var d = Math.pow(t[0] - f[0], 2) + Math.pow(t[1] - f[1], 2); if (d < best) { best = d; lab = labels[i]; } });
           return lab;
         }
-        var out = D.$('#rv2-out', el);
+        var out = D.$('#rv2-out', el); api.save({ trained: true });
         var s = runTest(predict, out, 'LearnBot');
         var wrongLabels = train.filter(function (f, i) { return labels[i] !== truth(f); }).length;
         var msg = wrongLabels === 0
@@ -121,6 +121,12 @@ module.exports = {
         D.sfx(s >= 9 ? 'win' : 'good');
         if (ruleScore != null) api.done();
       });
+      // restore autosaved progress
+      var S = api.load();
+      if (S.rule) { var rb = D.$('.rv-rule[data-r="' + S.rule + '"]', el); if (rb) rb.click(); }
+      if (S.r2) D.$('#rv2', el).hidden = false;
+      if (S.labels) Object.keys(S.labels).forEach(function (i) { var lb = D.$('.rv-face[data-i="' + i + '"] button[data-v="' + (S.labels[i] ? 1 : 0) + '"]', tr); if (lb) lb.click(); });
+      if (S.trained && Object.keys(labels).length === 8) D.$('#rv-go', el).click();
     },
   },
   quiz: [
@@ -152,8 +158,8 @@ module.exports = {
         ['Adding up the points scored in a basketball game', 'r', '2 points, 3 points, free throws — exact rules you can write down.'],
       ];
       var answered = {}, right = 0;
-      function render() {
-        answered = {}; right = 0;
+      function render(fresh) {
+        answered = {}; right = 0; if (fresh) api.save({ ans: {} });
         el.innerHTML = items.map(function (it, i) {
           return '<div class="rl-item" data-i="' + i + '"><p>' + (i + 1) + '. ' + it[0] + '</p><div class="row"><button type="button" class="btn small" data-v="r">📏 Rules</button><button type="button" class="btn small" data-v="l">🧠 Learning</button></div><div class="rl-why" aria-live="polite"></div></div>';
         }).join('') + '<p class="feedback" id="rl-sum" aria-live="polite"></p>';
@@ -162,18 +168,21 @@ module.exports = {
             var box = b.closest('.rl-item'), i = +box.getAttribute('data-i');
             if (answered[i]) return; answered[i] = true;
             var ok = b.getAttribute('data-v') === items[i][1]; if (ok) right++;
+            var A = api.load().ans || {}; A[i] = b.getAttribute('data-v'); api.save({ ans: A });
             box.classList.add(ok ? 'ok' : 'no'); D.$all('button', box).forEach(function (x) { x.disabled = true; });
             D.$('.rl-why', box).innerHTML = (ok ? '✅ ' : '❌ Best answer: <b>' + (items[i][1] === 'r' ? 'Rules' : 'Learning') + '</b>. ') + items[i][2];
             D.sfx(ok ? 'good' : 'bad');
             if (Object.keys(answered).length === items.length) {
               var sum = D.$('#rl-sum', el);
               if (right >= 6) { sum.className = 'feedback ok'; sum.textContent = 'You scored ' + right + '/8. You think like an AI engineer!'; api.done(); }
-              else { sum.className = 'feedback no'; sum.innerHTML = 'You scored ' + right + '/8. Read the explanations, then <button type="button" class="btn small" id="rl-again">try again</button>'; D.$('#rl-again', el).addEventListener('click', render); }
+              else { sum.className = 'feedback no'; sum.innerHTML = 'You scored ' + right + '/8. Read the explanations, then <button type="button" class="btn small" id="rl-again">try again</button>'; D.$('#rl-again', el).addEventListener('click', function () { render(true); }); }
             }
           });
         });
       }
       render();
+      var A0 = api.load().ans || {};
+      Object.keys(A0).forEach(function (i) { var b = D.$('.rl-item[data-i="' + i + '"] button[data-v="' + A0[i] + '"]', el); if (b) b.click(); });
     },
   },
 };

@@ -47,10 +47,14 @@
     var fired = false;
     return {
       T: T, D: D, nick: D.nick(), fill: function (s) { return D.fill(s, T); },
+      // autosave for in-progress work: save(obj) merges, load() returns {} when nothing is saved
+      save: function (obj) { var cur = D.saveGet(kind) || {}; for (var k in obj) cur[k] = obj[k]; D.saveSet(kind, cur); },
+      load: function () { return D.saveGet(kind) || {}; },
+      clear: function () { D.saveClear(kind); },
       done: function (msg) {
         if (fired) return; fired = true;
         var first = kind === 'act' ? D.markActivity(id) : D.markChallenge(id);
-        if (msg !== false) D.toast(kind === 'act' ? '🥋 Activity complete!' : '🔥 Challenge conquered!');
+        if (first && msg !== false) D.toast(kind === 'act' ? '🥋 Activity complete!' : '🔥 Challenge conquered!');
         if (first) D.confetti(kind === 'act' ? 30 : 50);
         refreshChecklist();
         if (kind === 'act') { var q = document.getElementById('quiz-sec'); if (q) q.classList.add('ready'); }
@@ -61,6 +65,8 @@
 
   // ---- activity ----
   var actEl = document.getElementById('activity');
+  var prior = D.state().lessons[id] || {};
+  if (actEl && prior.act) actEl.insertAdjacentHTML('beforebegin', '<p class="saved-note">✅ You already beat this activity. Replay it any time!</p>');
   if (actEl && window.ACTIVITY) {
     try { window.ACTIVITY(actEl, api('act')); }
     catch (e) { actEl.innerHTML = '<p class="err">This activity hit a snag. Try reloading the page.</p>'; if (window.console) console.error(e); }
@@ -68,7 +74,7 @@
 
   // ---- quiz ----
   var qEl = document.getElementById('quiz');
-  if (qEl) D.quiz(qEl, Lz.quiz, { T: T, onDone: function (sc, tot) { D.markQuiz(id, sc, tot); refreshChecklist(); } });
+  if (qEl) D.quiz(qEl, Lz.quiz, { T: T, saveKey: 'quiz', onDone: function (sc, tot) { D.markQuiz(id, sc, tot); refreshChecklist(); } });
 
   // ---- challenge (built on first open) ----
   var chBox = document.getElementById('challenge-box');
@@ -80,7 +86,8 @@
     catch (e) { chEl.innerHTML = '<p class="err">This challenge hit a snag. Try reloading the page.</p>'; if (window.console) console.error(e); }
   }
   if (chBox) chBox.addEventListener('toggle', function () { if (chBox.open) buildChallenge(); });
-  if (chBox && chBox.open) buildChallenge();
+  if (chBox && (chBox.open || D.saveGet('ch'))) { chBox.open = true; buildChallenge(); }
+  if (chBox && prior.ch) chBox.querySelector('summary .tag').textContent = '✅ Beaten';
 
   // ---- profile nudge ----
   if (!D.profile()) {
@@ -88,4 +95,29 @@
     if (n) { n.hidden = false; }
   }
   refreshChecklist();
+
+  // ---- remember where he is, and bring him back there next time ----
+  var here = { href: 'worlds/' + id + '.html', title: Lz.title, id: id, section: 'story' };
+  var last = D.state().last;
+  var resumeTo = last && last.id === id && last.section && last.section !== 'story' ? last.section : null;
+  if (last && last.id === id) here.section = last.section;
+  D.setLast(here);
+  var secs = { story: document.querySelector('.story-card'), activity: document.querySelector('.act-card'), quiz: document.getElementById('quiz-sec'), challenge: chBox };
+  if ('IntersectionObserver' in window) {
+    var t = null;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        for (var k in secs) if (secs[k] === e.target) { here.section = k; }
+        clearTimeout(t); t = setTimeout(function () { D.setLast(here); }, 400);
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    for (var k in secs) if (secs[k]) io.observe(secs[k]);
+  }
+  if (resumeTo && secs[resumeTo] && !(D.state().lessons[id] || {}).done) {
+    setTimeout(function () {
+      secs[resumeTo].scrollIntoView({ block: 'start' });
+      D.toast('💾 Welcome back! Picking up where you left off.');
+    }, 250);
+  }
 })();

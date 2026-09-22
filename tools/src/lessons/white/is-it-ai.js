@@ -43,6 +43,9 @@ module.exports = {
         ['🥤', 'A vending machine that drops a snack when you pay', 0, 'Coin in, snack out: fixed rules.'],
       ]);
       var i = 0, right = 0, streak = 0, best = 0, busy = false, bins = { 1: [], 0: [] };
+      var ALL = cards.slice(), S = api.load();
+      if (S.order && S.order.length === ALL.length) { cards = S.order.map(function (t) { return ALL.filter(function (c) { return c[1] === t; })[0]; }).filter(Boolean); if (cards.length !== ALL.length) cards = ALL; else { i = S.i || 0; right = S.right || 0; best = S.best || 0; bins = S.bins || bins; } }
+      function persist() { api.save({ order: cards.map(function (c) { return c[1]; }), i: i, right: right, best: best, bins: bins }); }
       el.innerHTML = '<div class="sm"><div class="sm-bar"><span id="sm-n"></span><span id="sm-streak"></span></div><div class="sm-stage" id="sm-stage"></div>' +
         '<div class="sm-btns"><button type="button" class="btn" id="sm-no">🔧 Not AI</button><button type="button" class="btn primary" id="sm-yes">🤖 AI</button></div>' +
         '<div class="sm-why" id="sm-why" aria-live="polite"></div><div class="sm-bins"><div><b>🔧 Not AI</b><div id="sm-b0"></div></div><div><b>🤖 AI</b><div id="sm-b1"></div></div></div></div>';
@@ -63,11 +66,11 @@ module.exports = {
         why.innerHTML = (ok ? '✅ <b>Correct!</b> ' : '❌ <b>It’s ' + (c[2] ? 'AI' : 'not AI') + '.</b> ') + c[3];
         bins[c[2]].push(c[0]); D.$('#sm-b' + c[2], el).textContent = bins[c[2]].join(' ');
         var card = D.$('#sm-card', el); if (card) card.classList.add(v ? 'right' : 'left');
-        i++; setTimeout(show, D.reducedMotion() ? 50 : 380);
+        i++; persist(); setTimeout(show, D.reducedMotion() ? 50 : 380);
       }
       function end() {
         stage.innerHTML = '<div class="sm-card" style="animation:none"><span class="e" aria-hidden="true">' + (right >= 10 ? '🏆' : '🕵️') + '</span><p>Case closed! ' + right + ' / ' + cards.length + '</p><p style="font-weight:600;font-size:.95rem">Best streak: ' + best + '</p><button type="button" class="btn small" id="sm-again">↻ Sort again</button></div>';
-        D.$('#sm-again', el).addEventListener('click', function () { cards = D.shuffle(cards); i = 0; right = 0; streak = 0; bins = { 1: [], 0: [] }; D.$('#sm-b0', el).textContent = ''; D.$('#sm-b1', el).textContent = ''; why.textContent = ''; why.className = 'sm-why'; show(); });
+        D.$('#sm-again', el).addEventListener('click', function () { cards = D.shuffle(cards); i = 0; right = 0; streak = 0; bins = { 1: [], 0: [] }; persist(); D.$('#sm-b0', el).textContent = ''; D.$('#sm-b1', el).textContent = ''; why.textContent = ''; why.className = 'sm-why'; show(); });
         api.done();
       }
       function swipe(card) {
@@ -80,6 +83,8 @@ module.exports = {
       D.$('#sm-yes', el).addEventListener('click', function () { answer(1); });
       D.$('#sm-no', el).addEventListener('click', function () { answer(0); });
       el.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') { answer(1); e.preventDefault(); } if (e.key === 'ArrowLeft') { answer(0); e.preventDefault(); } });
+      D.$('#sm-b0', el).textContent = bins[0].join(' '); D.$('#sm-b1', el).textContent = bins[1].join(' ');
+      if (i > 0 && i < cards.length) { why.className = 'sm-why'; why.textContent = '💾 Welcome back! You’d sorted ' + i + ' cards.'; }
       show();
     },
   },
@@ -103,8 +108,8 @@ module.exports = {
         ['🔎 A web search engine that ranks the best results', 'a', 'Modern search engines use machine learning to understand your question and rank pages.'],
       ];
       var done = 0, right = 0;
-      function render() {
-        done = 0; right = 0;
+      function render(fresh) {
+        done = 0; right = 0; if (fresh) api.save({ ans: {} });
         el.innerHTML = '<div class="gz">' + items.map(function (it, i) {
           return '<div class="gz-item" data-i="' + i + '"><p>' + it[0] + '</p><div class="row"><button type="button" class="btn small" data-v="a">🤖 AI</button><button type="button" class="btn small" data-v="n">🔧 Not AI</button><button type="button" class="btn small" data-v="d">🤔 It depends!</button></div><div class="gz-why" aria-live="polite"></div></div>';
         }).join('') + '</div><p class="feedback" id="gz-sum" aria-live="polite"></p>';
@@ -113,18 +118,21 @@ module.exports = {
             var box = b.closest('.gz-item'), it = items[+box.getAttribute('data-i')];
             if (box.classList.contains('ok') || box.classList.contains('no')) return;
             var ok = b.getAttribute('data-v') === it[1]; done++; if (ok) right++;
+            var A = api.load().ans || {}; A[box.getAttribute('data-i')] = b.getAttribute('data-v'); api.save({ ans: A });
             box.classList.add(ok ? 'ok' : 'no'); D.$all('button', box).forEach(function (x) { x.disabled = true; });
             box.querySelector('.gz-why').innerHTML = (ok ? '✅ ' : '❌ Best answer: <b>' + { a: 'AI', n: 'Not AI', d: 'It depends' }[it[1]] + '</b>. ') + it[2];
             D.sfx(ok ? 'good' : 'bad');
             if (done === items.length) {
               var s = D.$('#gz-sum', el);
               if (right >= 4) { s.className = 'feedback ok'; s.textContent = right + '/5 — you can handle the gray zone. That’s expert-level thinking.'; api.done(); }
-              else { s.className = 'feedback no'; s.innerHTML = right + '/5. Read the explanations and <button type="button" class="btn small" id="gz-again">try again</button>'; D.$('#gz-again', el).addEventListener('click', render); }
+              else { s.className = 'feedback no'; s.innerHTML = right + '/5. Read the explanations and <button type="button" class="btn small" id="gz-again">try again</button>'; D.$('#gz-again', el).addEventListener('click', function () { render(true); }); }
             }
           });
         });
       }
       render();
+      var A0 = api.load().ans || {};
+      Object.keys(A0).forEach(function (i) { var b = D.$('.gz-item[data-i="' + i + '"] button[data-v="' + A0[i] + '"]', el); if (b) b.click(); });
     },
   },
 };

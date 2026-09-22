@@ -37,7 +37,12 @@ module.exports = {
         ['Using AI to learn is great — if you still think for yourself.', 1, 'AI can explain, quiz and inspire you. But if it does all your thinking, your brain doesn’t get stronger.'],
         ['Training big AI models takes huge amounts of computing power and electricity.', 1, 'Big models are trained in data centers packed with powerful computers running for weeks or longer.'],
       ];
-      var order = D.shuffle(S), i = 0, marks = [], right = 0, busy = false;
+      var order = D.shuffle(S), i = 0, marks = [], right = 0, busy = false, sv = api.load();
+      if (sv.order && sv.order.length === S.length) {
+        var o2 = sv.order.map(function (t) { return S.filter(function (x) { return x[0] === t; })[0]; });
+        if (o2.every(Boolean)) { order = o2; i = sv.i || 0; right = sv.right || 0; marks = sv.marks || []; }
+      }
+      function persist() { api.save({ order: order.map(function (x) { return x[0]; }), i: i, right: right, marks: marks }); }
       function show() {
         if (i >= order.length) return end();
         busy = false;
@@ -49,6 +54,7 @@ module.exports = {
       function pick(v) {
         if (busy) return; busy = true;
         var s = order[i], ok = v === s[1]; if (ok) right++; marks[i] = ok ? 'ok' : 'no';
+        i++; persist(); i--;
         D.$('#mb-card', el).insertAdjacentHTML('beforeend', '<span class="mb-stamp ' + (s[1] ? 'fact' : 'myth') + '" aria-hidden="true">' + (s[1] ? 'FACT' : 'BUSTED') + '</span>');
         D.$all('.mb-btns button', el).forEach(function (x) { x.disabled = true; });
         D.$('#mb-why', el).innerHTML = (ok ? '✅ <b>Right!</b> ' : '❌ <b>That’s a ' + (s[1] ? 'fact' : 'myth') + '.</b> ') + s[2] + ' <button type="button" class="btn small primary" id="mb-next">' + (i + 1 < order.length ? 'Next →' : 'Finish') + '</button>';
@@ -57,7 +63,7 @@ module.exports = {
       }
       function end() {
         el.innerHTML = '<div class="mb"><div class="mb-card"><p>🔨 You busted ' + right + ' of ' + order.length + '!<br><span style="font-weight:600;font-size:1rem">Clear eyes. No hype. No fear. That’s the ninja way.</span></p></div><p class="row" style="justify-content:center;margin-top:12px"><button type="button" class="btn small" id="mb-again">↻ Play again</button></p></div>';
-        D.$('#mb-again', el).addEventListener('click', function () { order = D.shuffle(S); i = 0; marks = []; right = 0; show(); });
+        D.$('#mb-again', el).addEventListener('click', function () { order = D.shuffle(S); i = 0; marks = []; right = 0; persist(); show(); });
         api.done();
       }
       show();
@@ -84,25 +90,28 @@ module.exports = {
         ['“Chatbots can write fluent text but sometimes invent false information”', 'a', 'Accurate and balanced: a strength AND a weakness.'],
       ];
       var n = 0, r = 0;
-      function render() {
-        n = 0; r = 0;
+      function render(fresh) {
+        n = 0; r = 0; if (fresh) api.save({ ans: {} });
         el.innerHTML = '<div class="hd">' + H.map(function (h, i) { return '<div class="hd-item" data-i="' + i + '"><p>' + h[0] + '</p><div class="row"><button type="button" class="btn small" data-v="h">🚨 Hype</button><button type="button" class="btn small" data-v="a">👍 Accurate</button></div><div class="hd-why" aria-live="polite"></div></div>'; }).join('') + '</div><p class="feedback" id="hd-sum" aria-live="polite"></p>';
         D.$all('.hd-item button', el).forEach(function (b) {
           b.addEventListener('click', function () {
             var box = b.closest('.hd-item'), h = H[+box.getAttribute('data-i')];
             if (box.classList.contains('ok') || box.classList.contains('no')) return;
             var ok = b.getAttribute('data-v') === h[1]; n++; if (ok) r++;
+            var A = api.load().ans || {}; A[box.getAttribute('data-i')] = b.getAttribute('data-v'); api.save({ ans: A });
             box.classList.add(ok ? 'ok' : 'no'); D.$all('button', box).forEach(function (x) { x.disabled = true; });
             box.querySelector('.hd-why').innerHTML = (ok ? '✅ ' : '❌ ') + h[2]; D.sfx(ok ? 'good' : 'bad');
             if (n === H.length) {
               var s = D.$('#hd-sum', el);
               if (r >= 5) { s.className = 'feedback ok'; s.textContent = r + '/6 — your hype detector is finely tuned!'; api.done(); }
-              else { s.className = 'feedback no'; s.innerHTML = r + '/6. Look for exaggeration words, then <button type="button" class="btn small" id="hd-again">try again</button>'; D.$('#hd-again', el).addEventListener('click', render); }
+              else { s.className = 'feedback no'; s.innerHTML = r + '/6. Look for exaggeration words, then <button type="button" class="btn small" id="hd-again">try again</button>'; D.$('#hd-again', el).addEventListener('click', function () { render(true); }); }
             }
           });
         });
       }
       render();
+      var A0 = api.load().ans || {};
+      Object.keys(A0).forEach(function (i) { var b = D.$('.hd-item[data-i="' + i + '"] button[data-v="' + A0[i] + '"]', el); if (b) b.click(); });
     },
   },
 };

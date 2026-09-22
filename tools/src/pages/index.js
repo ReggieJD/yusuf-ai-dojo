@@ -92,6 +92,7 @@ body{--bg:#fbf6ef;--bg2:#f1e7da;--accent:#e4572e;--accent2:#5b2a86;--card:#fff;b
 .hub-top{position:relative;z-index:1}
 .hub-kicker{text-transform:uppercase;letter-spacing:.25em;font-weight:800;margin:0;opacity:.9}
 .hub-top h1{font-size:clamp(2.3rem,9vw,4.4rem);text-shadow:0 4px 0 #0003;margin:.1em 0 .2em}
+.hub-warn{background:#fff3cd;color:#3d2c00;border-radius:12px;padding:10px 14px;font-weight:700;max-width:34em}
 .hub-greet{font-size:1.15rem;font-weight:600;max-width:34em}
 .hub-stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
 .hub-stat{background:#ffffff26;border:2px solid #ffffff55;border-radius:16px;padding:8px 14px;min-width:92px}
@@ -150,8 +151,9 @@ function render(){
  var belts=D.countBelts();
  document.getElementById('hub-stats').innerHTML=[['⭐',st.xp.toLocaleString(),'XP'],['🥋',belts+'/'+D.C.worlds.length,'Belts'],['🔥',D.streakNow(),'Day streak'],['🏅',D.badgeCount(),'Badges'],['📚',D.countDone()+'/'+D.allLessons().length,'Lessons']]
   .map(function(s){return '<div class="hub-stat"><b><span aria-hidden="true">'+s[0]+'</span> '+s[1]+'</b><small>'+s[2]+'</small></div>';}).join('');
- var n=D.nextStep(),cb=document.getElementById('cont-btn'),cs=document.getElementById('cont-sub');
- if(n){cb.href=n.href;cb.textContent=(D.countDone()?'▶ Continue: ':'▶ Start: ')+n.label;cs.textContent=n.sub;}
+ var n=D.nextStep(),cb=document.getElementById('cont-btn'),cs=document.getElementById('cont-sub'),L=st.last;
+ if(L&&L.id&&!D.lessonDone(L.id)&&D.worldUnlocked(D.worldById(L.id.split('/')[0]))){n={href:L.href,label:L.title,sub:'💾 Pick up right where you left off'+(L.section&&L.section!=='story'?' (the '+L.section+')':'')};}
+ if(n){cb.href=n.href;cb.textContent=(D.countDone()||L?'▶ Continue: ':'▶ Start: ')+n.label;cs.textContent=n.sub;}
  else{var all=D.C.worlds.every(function(w){return st.belts[w.id];});
   if(all){cb.href='certificate.html';cb.textContent='📜 View your certificate';cs.textContent='Black Belt master. Keep sharpening in the Arcade and Daily Dojo!';}
   else{cb.href='daily.html';cb.textContent='🌅 Daily Dojo';cs.textContent='You’ve finished every open lesson. New worlds are on the way — sharpen your skills in the Daily Dojo!';}}
@@ -199,6 +201,7 @@ pk.addEventListener('keydown',function(e){if(e.key==='Escape'&&D.profile())close
   if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}}});
 document.getElementById('edit-profile').addEventListener('click',openPicker);
 render();
+if(!D.storageOK)document.getElementById('hub-greet').insertAdjacentHTML('afterend','<p class="hub-warn">⚠️ This browser is blocking saving (maybe a private window), so progress will reset when you close it. Open the dojo in a normal browser window to keep your progress.</p>');
 if(!D.profile())openPicker();
 })();`;
   return { title: "Yusuf's AI Dojo", desc: 'An interactive, belt-by-belt adventure in how AI works, how to use it well, and how to build with it.', css, body, scripts: [js], meta: { type: 'hub', id: 'hub' }, bodyClass: 'hub-page' };

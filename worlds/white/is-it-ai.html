@@ -65,6 +65,7 @@ noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px
 .nudge{background:var(--card);border:2px dashed var(--accent);border-radius:14px;padding:10px 14px;margin:10px 0 0}
 
 /* ---- section cards ---- */
+.card,details.challenge{scroll-margin-top:76px}
 .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 18px;margin:18px 0;border:2px solid var(--line);position:relative}
 @media (min-width:640px){ .card{padding:28px} }
 .sec-title{display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -99,6 +100,8 @@ noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px
 .qz-feedback{margin-top:12px}
 .qz-feedback p{padding:12px 14px;border-radius:12px}
 .qz-feedback.ok p{background:var(--good-bg);color:#0d3b22} .qz-feedback.no p{background:var(--bad-bg);color:#5c130e}
+.qz-resume{font-size:.9rem;font-weight:700;color:var(--accent2);margin:0 0 6px}
+.saved-note{display:inline-block;font-size:.85rem;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--good-bg);color:#0d3b22;margin:0 0 10px}
 .qz-end{text-align:center;padding:10px}
 .qz-stars{font-size:2.4rem} .qz-score{font-size:1.4rem}
 
@@ -283,7 +286,7 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/is-it-ai","world":"whit
   function blank() {
     return { v: 1, profile: null, xp: 0, lessons: {}, tests: {}, belts: {}, badges: {},
       streak: { count: 0, best: 0, last: null }, sound: false, daily: {}, arcade: {},
-      unlockAll: false, project: null };
+      unlockAll: false, project: null, saves: {}, last: null };
   }
   var storageOK = (function () {
     try { var t = '__dojo_test'; window.localStorage.setItem(t, '1'); window.localStorage.removeItem(t); return true; }
@@ -299,7 +302,7 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/is-it-ai","world":"whit
       } catch (e) { /* corrupted data: start fresh */ }
     }
     if (!s.streak || typeof s.streak !== 'object') s.streak = { count: 0, best: 0, last: null };
-    ['lessons', 'tests', 'belts', 'badges', 'daily', 'arcade'].forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
+    ['lessons', 'tests', 'belts', 'badges', 'daily', 'arcade', 'saves'].forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
     if (typeof s.xp !== 'number' || !isFinite(s.xp)) s.xp = 0;
     return s;
   }
@@ -309,6 +312,12 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/is-it-ai","world":"whit
     try { window.localStorage.setItem(KEY, JSON.stringify(st)); return true; } catch (e) { return false; }
   }
   function reset() { st = blank(); save(); }
+  // ---------- autosave: in-progress work for each page, keyed by page id ----------
+  function pageKey() { return P.id || P.type || 'page'; }
+  function saveGet(key, page) { var b = st.saves[page || pageKey()]; return b && b[key] != null ? JSON.parse(JSON.stringify(b[key])) : null; }
+  function saveSet(key, val, page) { page = page || pageKey(); (st.saves[page] || (st.saves[page] = {}))[key] = val; save(); }
+  function saveClear(key, page) { var b = st.saves[page || pageKey()]; if (b && key in b) { delete b[key]; save(); } }
+  function setLast(info) { st.last = info; save(); }
 
   // ---------- small helpers ----------
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -544,7 +553,14 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/is-it-ai","world":"whit
     var T = opts.T || theme('quiz');
     var i = 0, score = 0;
     function sample() { return opts.count ? shuffle(qs).slice(0, opts.count) : qs; }
-    var order = sample();
+    var order = sample(), K = opts.saveKey;
+    function persist() { if (K) saveSet(K, { i: i, score: score, order: order.map(function (q) { return qs.indexOf(q); }) }); }
+    if (K) {
+      var sv = saveGet(K);
+      if (sv && sv.order && sv.order.every(function (k) { return qs[k]; }) && sv.i > 0 && sv.i < sv.order.length) {
+        order = sv.order.map(function (k) { return qs[k]; }); i = sv.i; score = sv.score || 0; opts.resumed = true;
+      }
+    }
     function render() {
       if (i >= order.length) return finish();
       var q = order[i];
@@ -564,6 +580,7 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/is-it-ai","world":"whit
       $all('.qz-choice', el).forEach(function (b) { b.disabled = true; if (+b.getAttribute('data-k') === q.c) b.classList.add('right'); });
       var fb = $('.qz-feedback', el), ok = k === q.c;
       if (ok) { score++; sfx('good'); } else { btn.classList.add('wrong'); sfx('bad'); }
+      i++; persist(); i--;
       var msg = ok ? ('<b>✅ Correct!</b> ' + fill(q.yes || q.why || '', T))
         : ('<b>❌ Not quite.</b> ' + fill((q.wrong && q.wrong[k]) || q.why || '', T));
       fb.className = 'qz-feedback ' + (ok ? 'ok' : 'no');
@@ -572,17 +589,19 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/is-it-ai","world":"whit
       nx.focus({ preventScroll: true });
     }
     function finish() {
+      if (K) saveClear(K);
       var pass = score / order.length >= (opts.pass || 0.6);
       var stars = score === order.length ? '🌟🌟🌟' : pass ? '🌟🌟' : '🌟';
       el.innerHTML = '<div class="qz-end ' + (pass ? 'pass' : 'fail') + '"><div class="qz-stars" aria-hidden="true">' + stars + '</div>' +
         '<p class="qz-score">You got <b>' + score + ' / ' + order.length + '</b></p>' +
         '<p>' + (score === order.length ? 'Flawless! Your sensei is impressed.' : pass ? 'Nice work — you passed! Want to go for a perfect score?' : 'Every black belt was once a white belt who kept going. Try again — you’ve got this.') + '</p>' +
         '<button type="button" class="btn qz-retry">↻ ' + (score === order.length ? 'Play again' : 'Try again') + '</button></div>';
-      $('.qz-retry', el).addEventListener('click', function () { i = 0; score = 0; if (opts.reshuffle) order = sample(); render(); });
+      $('.qz-retry', el).addEventListener('click', function () { i = 0; score = 0; if (opts.reshuffle) order = sample(); if (K) saveClear(K); render(); });
       if (score === order.length) confetti(40);
       if (opts.onDone) opts.onDone(score, order.length, pass);
     }
     render();
+    if (opts.resumed) { var tp = el.querySelector('.qz-top'); if (tp) tp.insertAdjacentHTML('afterend', '<p class="qz-resume">💾 Welcome back! You were on question ' + (i + 1) + '.</p>'); }
     return { restart: function () { i = 0; score = 0; render(); } };
   }
 
@@ -609,6 +628,7 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/is-it-ai","world":"whit
 
   window.Dojo = {
     state: function () { return st; }, save: save, reset: reset, storageOK: storageOK,
+    saveGet: saveGet, saveSet: saveSet, saveClear: saveClear, setLast: setLast,
     esc: esc, $: $, $all: $all, today: today, hash: hash, shuffle: shuffle, reducedMotion: reducedMotion,
     profile: profile, nick: nick, avatar: avatar, student: STUDENT, favs: favs, theme: theme, fill: fill,
     setProfile: function (p) { st.profile = p; save(); refreshBar(); },
@@ -645,6 +665,9 @@ window.ACTIVITY=(function (el, api) {
         ['🥤', 'A vending machine that drops a snack when you pay', 0, 'Coin in, snack out: fixed rules.'],
       ]);
       var i = 0, right = 0, streak = 0, best = 0, busy = false, bins = { 1: [], 0: [] };
+      var ALL = cards.slice(), S = api.load();
+      if (S.order && S.order.length === ALL.length) { cards = S.order.map(function (t) { return ALL.filter(function (c) { return c[1] === t; })[0]; }).filter(Boolean); if (cards.length !== ALL.length) cards = ALL; else { i = S.i || 0; right = S.right || 0; best = S.best || 0; bins = S.bins || bins; } }
+      function persist() { api.save({ order: cards.map(function (c) { return c[1]; }), i: i, right: right, best: best, bins: bins }); }
       el.innerHTML = '<div class="sm"><div class="sm-bar"><span id="sm-n"></span><span id="sm-streak"></span></div><div class="sm-stage" id="sm-stage"></div>' +
         '<div class="sm-btns"><button type="button" class="btn" id="sm-no">🔧 Not AI</button><button type="button" class="btn primary" id="sm-yes">🤖 AI</button></div>' +
         '<div class="sm-why" id="sm-why" aria-live="polite"></div><div class="sm-bins"><div><b>🔧 Not AI</b><div id="sm-b0"></div></div><div><b>🤖 AI</b><div id="sm-b1"></div></div></div></div>';
@@ -665,11 +688,11 @@ window.ACTIVITY=(function (el, api) {
         why.innerHTML = (ok ? '✅ <b>Correct!</b> ' : '❌ <b>It’s ' + (c[2] ? 'AI' : 'not AI') + '.</b> ') + c[3];
         bins[c[2]].push(c[0]); D.$('#sm-b' + c[2], el).textContent = bins[c[2]].join(' ');
         var card = D.$('#sm-card', el); if (card) card.classList.add(v ? 'right' : 'left');
-        i++; setTimeout(show, D.reducedMotion() ? 50 : 380);
+        i++; persist(); setTimeout(show, D.reducedMotion() ? 50 : 380);
       }
       function end() {
         stage.innerHTML = '<div class="sm-card" style="animation:none"><span class="e" aria-hidden="true">' + (right >= 10 ? '🏆' : '🕵️') + '</span><p>Case closed! ' + right + ' / ' + cards.length + '</p><p style="font-weight:600;font-size:.95rem">Best streak: ' + best + '</p><button type="button" class="btn small" id="sm-again">↻ Sort again</button></div>';
-        D.$('#sm-again', el).addEventListener('click', function () { cards = D.shuffle(cards); i = 0; right = 0; streak = 0; bins = { 1: [], 0: [] }; D.$('#sm-b0', el).textContent = ''; D.$('#sm-b1', el).textContent = ''; why.textContent = ''; why.className = 'sm-why'; show(); });
+        D.$('#sm-again', el).addEventListener('click', function () { cards = D.shuffle(cards); i = 0; right = 0; streak = 0; bins = { 1: [], 0: [] }; persist(); D.$('#sm-b0', el).textContent = ''; D.$('#sm-b1', el).textContent = ''; why.textContent = ''; why.className = 'sm-why'; show(); });
         api.done();
       }
       function swipe(card) {
@@ -682,6 +705,8 @@ window.ACTIVITY=(function (el, api) {
       D.$('#sm-yes', el).addEventListener('click', function () { answer(1); });
       D.$('#sm-no', el).addEventListener('click', function () { answer(0); });
       el.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') { answer(1); e.preventDefault(); } if (e.key === 'ArrowLeft') { answer(0); e.preventDefault(); } });
+      D.$('#sm-b0', el).textContent = bins[0].join(' '); D.$('#sm-b1', el).textContent = bins[1].join(' ');
+      if (i > 0 && i < cards.length) { why.className = 'sm-why'; why.textContent = '💾 Welcome back! You’d sorted ' + i + ' cards.'; }
       show();
     });
 window.CHALLENGE=(function (el, api) {
@@ -694,8 +719,8 @@ window.CHALLENGE=(function (el, api) {
         ['🔎 A web search engine that ranks the best results', 'a', 'Modern search engines use machine learning to understand your question and rank pages.'],
       ];
       var done = 0, right = 0;
-      function render() {
-        done = 0; right = 0;
+      function render(fresh) {
+        done = 0; right = 0; if (fresh) api.save({ ans: {} });
         el.innerHTML = '<div class="gz">' + items.map(function (it, i) {
           return '<div class="gz-item" data-i="' + i + '"><p>' + it[0] + '</p><div class="row"><button type="button" class="btn small" data-v="a">🤖 AI</button><button type="button" class="btn small" data-v="n">🔧 Not AI</button><button type="button" class="btn small" data-v="d">🤔 It depends!</button></div><div class="gz-why" aria-live="polite"></div></div>';
         }).join('') + '</div><p class="feedback" id="gz-sum" aria-live="polite"></p>';
@@ -704,18 +729,21 @@ window.CHALLENGE=(function (el, api) {
             var box = b.closest('.gz-item'), it = items[+box.getAttribute('data-i')];
             if (box.classList.contains('ok') || box.classList.contains('no')) return;
             var ok = b.getAttribute('data-v') === it[1]; done++; if (ok) right++;
+            var A = api.load().ans || {}; A[box.getAttribute('data-i')] = b.getAttribute('data-v'); api.save({ ans: A });
             box.classList.add(ok ? 'ok' : 'no'); D.$all('button', box).forEach(function (x) { x.disabled = true; });
             box.querySelector('.gz-why').innerHTML = (ok ? '✅ ' : '❌ Best answer: <b>' + { a: 'AI', n: 'Not AI', d: 'It depends' }[it[1]] + '</b>. ') + it[2];
             D.sfx(ok ? 'good' : 'bad');
             if (done === items.length) {
               var s = D.$('#gz-sum', el);
               if (right >= 4) { s.className = 'feedback ok'; s.textContent = right + '/5 — you can handle the gray zone. That’s expert-level thinking.'; api.done(); }
-              else { s.className = 'feedback no'; s.innerHTML = right + '/5. Read the explanations and <button type="button" class="btn small" id="gz-again">try again</button>'; D.$('#gz-again', el).addEventListener('click', render); }
+              else { s.className = 'feedback no'; s.innerHTML = right + '/5. Read the explanations and <button type="button" class="btn small" id="gz-again">try again</button>'; D.$('#gz-again', el).addEventListener('click', function () { render(true); }); }
             }
           });
         });
       }
       render();
+      var A0 = api.load().ans || {};
+      Object.keys(A0).forEach(function (i) { var b = D.$('.gz-item[data-i="' + i + '"] button[data-v="' + A0[i] + '"]', el); if (b) b.click(); });
     });
 </script>
 <script>
@@ -771,10 +799,14 @@ window.CHALLENGE=(function (el, api) {
     var fired = false;
     return {
       T: T, D: D, nick: D.nick(), fill: function (s) { return D.fill(s, T); },
+      // autosave for in-progress work: save(obj) merges, load() returns {} when nothing is saved
+      save: function (obj) { var cur = D.saveGet(kind) || {}; for (var k in obj) cur[k] = obj[k]; D.saveSet(kind, cur); },
+      load: function () { return D.saveGet(kind) || {}; },
+      clear: function () { D.saveClear(kind); },
       done: function (msg) {
         if (fired) return; fired = true;
         var first = kind === 'act' ? D.markActivity(id) : D.markChallenge(id);
-        if (msg !== false) D.toast(kind === 'act' ? '🥋 Activity complete!' : '🔥 Challenge conquered!');
+        if (first && msg !== false) D.toast(kind === 'act' ? '🥋 Activity complete!' : '🔥 Challenge conquered!');
         if (first) D.confetti(kind === 'act' ? 30 : 50);
         refreshChecklist();
         if (kind === 'act') { var q = document.getElementById('quiz-sec'); if (q) q.classList.add('ready'); }
@@ -785,6 +817,8 @@ window.CHALLENGE=(function (el, api) {
 
   // ---- activity ----
   var actEl = document.getElementById('activity');
+  var prior = D.state().lessons[id] || {};
+  if (actEl && prior.act) actEl.insertAdjacentHTML('beforebegin', '<p class="saved-note">✅ You already beat this activity. Replay it any time!</p>');
   if (actEl && window.ACTIVITY) {
     try { window.ACTIVITY(actEl, api('act')); }
     catch (e) { actEl.innerHTML = '<p class="err">This activity hit a snag. Try reloading the page.</p>'; if (window.console) console.error(e); }
@@ -792,7 +826,7 @@ window.CHALLENGE=(function (el, api) {
 
   // ---- quiz ----
   var qEl = document.getElementById('quiz');
-  if (qEl) D.quiz(qEl, Lz.quiz, { T: T, onDone: function (sc, tot) { D.markQuiz(id, sc, tot); refreshChecklist(); } });
+  if (qEl) D.quiz(qEl, Lz.quiz, { T: T, saveKey: 'quiz', onDone: function (sc, tot) { D.markQuiz(id, sc, tot); refreshChecklist(); } });
 
   // ---- challenge (built on first open) ----
   var chBox = document.getElementById('challenge-box');
@@ -804,7 +838,8 @@ window.CHALLENGE=(function (el, api) {
     catch (e) { chEl.innerHTML = '<p class="err">This challenge hit a snag. Try reloading the page.</p>'; if (window.console) console.error(e); }
   }
   if (chBox) chBox.addEventListener('toggle', function () { if (chBox.open) buildChallenge(); });
-  if (chBox && chBox.open) buildChallenge();
+  if (chBox && (chBox.open || D.saveGet('ch'))) { chBox.open = true; buildChallenge(); }
+  if (chBox && prior.ch) chBox.querySelector('summary .tag').textContent = '✅ Beaten';
 
   // ---- profile nudge ----
   if (!D.profile()) {
@@ -812,6 +847,31 @@ window.CHALLENGE=(function (el, api) {
     if (n) { n.hidden = false; }
   }
   refreshChecklist();
+
+  // ---- remember where he is, and bring him back there next time ----
+  var here = { href: 'worlds/' + id + '.html', title: Lz.title, id: id, section: 'story' };
+  var last = D.state().last;
+  var resumeTo = last && last.id === id && last.section && last.section !== 'story' ? last.section : null;
+  if (last && last.id === id) here.section = last.section;
+  D.setLast(here);
+  var secs = { story: document.querySelector('.story-card'), activity: document.querySelector('.act-card'), quiz: document.getElementById('quiz-sec'), challenge: chBox };
+  if ('IntersectionObserver' in window) {
+    var t = null;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        for (var k in secs) if (secs[k] === e.target) { here.section = k; }
+        clearTimeout(t); t = setTimeout(function () { D.setLast(here); }, 400);
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    for (var k in secs) if (secs[k]) io.observe(secs[k]);
+  }
+  if (resumeTo && secs[resumeTo] && !(D.state().lessons[id] || {}).done) {
+    setTimeout(function () {
+      secs[resumeTo].scrollIntoView({ block: 'start' });
+      D.toast('💾 Welcome back! Picking up where you left off.');
+    }, 250);
+  }
 })();
 
 </script>

@@ -3,6 +3,8 @@ function makeGridGame(el, api, levels, opts) {
   var D = api.D;
   var DIRS = [[0, -1], [1, 0], [0, 1], [-1, 0]], ARROW = ['⬆', '➡', '⬇', '⬅'];
   var lv = 0, prog = [], running = false, beaten = {};
+  var SK = opts.saveKey || 'grid';
+  function persist() { if (api.save) { var o = {}; o[SK] = { lv: lv, beaten: beaten, prog: prog }; api.save(o); } }
   el.innerHTML = '<div class="gg"><div class="gg-head"><b data-g="title"></b><span class="pill" data-g="limit"></span></div>' +
     '<div class="gg-board" data-g="board" role="img"></div>' +
     '<div class="gg-pal" aria-label="Command blocks"></div>' +
@@ -22,6 +24,7 @@ function makeGridGame(el, api, levels, opts) {
     D.$all('button', p).forEach(function (b) { b.addEventListener('click', function () { if (running) return; prog.splice(+b.getAttribute('data-i'), 1); renderProg(); }); });
     var lim = L().limit; D.$('[data-g="limit"]', el).textContent = lim ? ('Blocks: ' + prog.length + ' / ' + lim) : ('Blocks: ' + prog.length);
     D.$('[data-g="limit"]', el).style.background = lim && prog.length > lim ? 'var(--bad-bg)' : '';
+    persist();
   }
   function draw(pos, dir, trail, crash) {
     var l = L(), n = l.size, h = '';
@@ -83,7 +86,7 @@ function makeGridGame(el, api, levels, opts) {
       draw(pos, dir, trail); setTimeout(next, delay);
     })();
     function win() {
-      beaten[lv] = true; fb.className = 'feedback ok';
+      beaten[lv] = true; persist(); fb.className = 'feedback ok';
       fb.innerHTML = '🎯 Goal reached with ' + prog.length + ' block' + (prog.length === 1 ? '' : 's') + '! ' + (l.win || '');
       D.sfx('win'); levelsBar();
       var all = levels.every(function (_, i) { return beaten[i]; });
@@ -91,7 +94,11 @@ function makeGridGame(el, api, levels, opts) {
       else if (lv + 1 < levels.length) { fb.innerHTML += ' <button type="button" class="btn small primary" data-g="next">Next level →</button>'; D.$('[data-g="next"]', el).addEventListener('click', function () { loadLevel(lv + 1); }); }
     }
   });
-  loadLevel(0);
+  var S0 = api.load ? (api.load()[SK] || null) : null;
+  if (S0 && levels[S0.lv]) {
+    beaten = S0.beaten || {}; loadLevel(S0.lv); prog = (S0.prog || []).slice(); renderProg();
+    if (prog.length || Object.keys(beaten).length) { var f0 = D.$('[data-g="fb"]', el); f0.innerHTML = '💾 Welcome back! Your level and blocks were saved. ' + (L().hint || ''); }
+  } else loadLevel(0);
 }
 
 const GRID_CSS = `
