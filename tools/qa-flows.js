@@ -31,6 +31,20 @@ const solveQuiz = async (pg, root) => {
 };
 const setRange = (pg, sel, v) => pg.$eval(sel, (r, val) => { r.value = val; r.dispatchEvent(new Event('input', { bubbles: true })); }, v);
 
+
+// Draw a polyline on a canvas (coords in the canvas's 240-unit space) with real mouse events.
+const drawPath = async (pg, sel, pts) => {
+  const h = await pg.$(sel); await h.scrollIntoViewIfNeeded(); await pg.waitForTimeout(600); const b = await h.boundingBox(); const m = (p) => [b.x + p[0] / 240 * b.width, b.y + p[1] / 240 * b.height];
+  await pg.mouse.move(...m(pts[0])); await pg.mouse.down();
+  for (const p of pts.slice(1)) await pg.mouse.move(...m(p), { steps: 4 });
+  await pg.mouse.up();
+};
+const SHAPE_PTS = {
+  circle: Array.from({ length: 33 }, (_, i) => [120 + 90 * Math.cos(i / 32 * 2 * Math.PI), 120 + 90 * Math.sin(i / 32 * 2 * Math.PI)]),
+  square: [[30, 30], [210, 30], [210, 210], [30, 210], [30, 30]],
+  triangle: [[120, 25], [215, 210], [25, 210], [120, 25]],
+};
+
 module.exports = {
   'white/rules-vs-learning': {
     activity: async (pg) => {
@@ -240,6 +254,57 @@ module.exports = {
   'test:green': async (pg) => {
     await setRange(pg, '#bt-proj [data-w="a"]', '1'); await setRange(pg, '#bt-proj [data-w="b"]', '-1'); await setRange(pg, '#bt-proj [data-w="c"]', '-2');
     await pg.click('#bt-proj [data-ok="1"]');
+  },
+
+  'blue/pixels': {
+    activity: async (pg) => {
+      await setRange(pg, '#pz-z', '8');
+      for (const x of [0, 4, 6]) await pg.click(`#pz-grid button[data-x="${x}"][data-y="5"]`);
+      await pg.click('#pz-m [data-ok="1"]');
+    },
+    challenge: async (pg) => {
+      const T = ['00000000', '01100110', '11111111', '11111111', '11111111', '01111110', '00111100', '00011000'];
+      for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) if (T[y][x] === '1') await pg.click(`#pn-g button[data-x="${x}"][data-y="${y}"]`);
+    },
+  },
+  'blue/color-numbers': {
+    activity: async (pg) => {
+      for (const t of [[255, 230, 0], [255, 120, 20], [90, 30, 160], [255, 255, 255]]) {
+        for (let i = 0; i < 3; i++) await setRange(pg, `.rg-sl input[data-i="${i}"]`, String(t[i]));
+        await pg.waitForTimeout(450);
+      }
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'blue/filters-and-edges': {
+    activity: async (pg) => { await pg.click('#fl-sample'); await pg.click('[data-f="edge"]'); await pg.click('[data-f="blur"]'); await pg.click('#fl-q [data-ok="1"]'); },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'blue/draw-and-guess': {
+    activity: async (pg) => {
+      for (const sh of ['circle', 'square', 'triangle']) {
+        const ask = await pg.textContent('#dg-ask');
+        if (!ask.toLowerCase().includes(sh)) throw new Error('unexpected prompt ' + ask);
+        await drawPath(pg, '#dg-c', SHAPE_PTS[sh]); await pg.click('#dg-go');
+        const fb = await pg.textContent('#dg-fb'); if (!/Correct/.test(fb)) throw new Error(sh + ': ' + fb);
+        await pg.waitForTimeout(1600);
+      }
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'blue/sound-to-numbers': {
+    activity: async (pg) => { await setRange(pg, '[data-k="f"]', '3'); await setRange(pg, '[data-k="a"]', '0.8'); await setRange(pg, '[data-k="s"]', '6'); await pg.click('#sw-m [data-ok="1"]'); },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'blue/how-ai-sees': {
+    activity: async (pg) => { for (let r = 0; r < 3; r++) { await pg.click('.hs-feat [data-i="0"]'); await pg.click('.hs-feat [data-i="1"]'); await pg.waitForTimeout(1900); } },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'test:blue': async (pg) => {
+    await setRange(pg, '#bt-proj [data-c="0"]', '255');
+    const P = ['000000', '001100', '011110', '011110', '001100', '000000'];
+    for (let y = 0; y < 6; y++) for (let x = 0; x < 6; x++) if (P[y][x] === '1') await pg.click(`#cl-g button[data-x="${x}"][data-y="${y}"]`);
+    await pg.click('#bt-proj [data-e="1"]'); await pg.click('#bt-proj [data-s="1"]');
   },
   'test:white': async (pg) => {
     const ans = ['r', 'n', 'p', 'c', 'n', 'r'];

@@ -114,9 +114,10 @@ const FLOWS = require('./qa-flows');
       const qs = await pg.evaluate(() => window.LESSON.quiz.length);
       for (let k = 0; k < qs; k++) {
         await pg.evaluate(() => {
-          const q = window.LESSON.quiz.find((x) => Dojo.fill(x.q) === document.querySelector('.qz-q').innerHTML);
-          const want = Dojo.fill(q.a[q.c]);
-          [...document.querySelectorAll('.qz-choice')].find((b) => b.innerHTML === want).click();
+          const txt = (h) => { const d = document.createElement('div'); d.innerHTML = h; return d.textContent; };
+          const q = window.LESSON.quiz.find((x) => txt(Dojo.fill(x.q)) === document.querySelector('.qz-q').textContent);
+          const want = txt(Dojo.fill(q.a[q.c]));
+          [...document.querySelectorAll('.qz-choice')].find((b) => b.textContent === want).click();
         });
         await pg.click('.qz-next');
       }
@@ -155,8 +156,9 @@ const FLOWS = require('./qa-flows');
       await pg.goto(base + 'worlds/' + w + '/belt-test.html');
       for (let k = 0; k < 10; k++) {
         await pg.evaluate(() => {
-          const q = window.TEST_QUIZ.find((x) => Dojo.fill(x.q) === document.querySelector('.qz-q').innerHTML);
-          [...document.querySelectorAll('.qz-choice')].find((b) => b.innerHTML === Dojo.fill(q.a[q.c])).click();
+          const txt = (h) => { const d = document.createElement('div'); d.innerHTML = h; return d.textContent; };
+          const q = window.TEST_QUIZ.find((x) => txt(Dojo.fill(x.q)) === document.querySelector('.qz-q').textContent);
+          [...document.querySelectorAll('.qz-choice')].find((b) => b.textContent === txt(Dojo.fill(q.a[q.c]))).click();
         });
         await pg.click('.qz-next');
       }

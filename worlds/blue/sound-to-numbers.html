@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Orange Belt Test · Yusuf's AI Dojo</title>
-<meta name="description" content="Earn your Orange Belt.">
+<title>Sound to Numbers · Blue Belt · Yusuf's AI Dojo</title>
+<meta name="description" content="Measuring a sound wave many times per second and storing each measurement as a number.">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%A5%8B%3C%2Ftext%3E%3C%2Fsvg%3E">
@@ -174,82 +174,102 @@ footer.site a{color:inherit}
 }
 
 
-:root{--bg:#fff3e6;--bg2:#ffe2c4;--ink:#2b1a0e;--muted:#6b4a33;--card:#fffaf4;--line:#2b1a0e24;
---accent:#e8590c;--accent-ink:#fff;--accent2:#1c5d99;--radius:14px;--band:#e8590c;--sensei:#fff4e8;
---font-head:"Trebuchet MS","Gill Sans","Segoe UI",sans-serif;--head-weight:800;
---shadow:0 5px 0 #b3470a55, 0 14px 28px #6b2d0a22}
-body{background-color:#fff3e6;background-image:linear-gradient(#1c5d9912 1px,transparent 1px),linear-gradient(90deg,#1c5d9912 1px,transparent 1px),linear-gradient(180deg,#ffd8a8 0,#fff3e6 420px);background-size:26px 26px,26px 26px,100% 100%}
-.card{border:2px solid #2b1a0e22;background-image:radial-gradient(circle at 12px 12px,#c2a38a 3px,transparent 3.5px),radial-gradient(circle at calc(100% - 12px) 12px,#c2a38a 3px,transparent 3.5px);background-repeat:no-repeat}
-.sec-title .ico{border-radius:50%;background:#1c5d99}
-.hero .kicker{background:#1c5d99}
-.gears{position:relative;width:150px;height:120px;margin-bottom:6px}
-.gears svg{position:absolute}
-.gears .g1{left:0;top:6px;width:96px;animation:spin 9s linear infinite}
-.gears .g2{left:78px;top:0;width:64px;animation:spin 6s linear infinite reverse}
-.gears .em{position:absolute;left:30px;top:36px;font-size:2.2rem}
-@keyframes spin{to{transform:rotate(360deg)}}
-.hanko{position:absolute;right:6px;top:26px;width:78px;height:78px;border-radius:50%;border:3px dashed #1c5d99;color:#1c5d99;display:grid;place-items:center;text-align:center;font:800 .72rem/1.1 var(--font-head);text-transform:uppercase;transform:rotate(-10deg)}
-details.challenge{background:repeating-linear-gradient(45deg,#fffaf4 0 14px,#ffe2c4 14px 16px)}
+:root{--bg:#e8f1ff;--bg2:#d6e6ff;--ink:#0a1a33;--muted:#3b4f70;--card:#ffffff;--line:#0a1a3326;
+--accent:#1f6feb;--accent-ink:#fff;--accent2:#0a4bb5;--radius:4px;--band:#3a86ff;--sensei:#eef5ff;
+--font-head:"SFMono-Regular",Menlo,Consolas,"Liberation Mono","Courier New",monospace;--head-weight:800;--head-track:-.01em;
+--shadow:6px 6px 0 #0a1a33}
+body{background-color:#e8f1ff;background-image:linear-gradient(#1f6feb14 2px,transparent 2px),linear-gradient(90deg,#1f6feb14 2px,transparent 2px);background-size:16px 16px}
+.card{border:3px solid #0a1a33;border-radius:4px}
+.sec-title .ico{border-radius:0;background:#0a1a33;color:#7fb2ff}
+.hero .kicker{border-radius:0;background:#0a1a33;color:#7fb2ff;font-family:var(--font-head)}
+.btn{border-radius:2px;box-shadow:4px 4px 0 var(--ink)}
+.viewfinder{position:relative;width:140px;height:120px;display:grid;place-items:center;margin-bottom:8px;background:repeating-linear-gradient(0deg,#0000 0 3px,#1f6feb10 3px 4px)}
+.viewfinder i{position:absolute;width:26px;height:26px;border:4px solid #1f6feb}
+.viewfinder i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}.viewfinder i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.viewfinder i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}.viewfinder i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+.viewfinder .em{font-size:3rem;image-rendering:pixelated;animation:focus 1.4s ease-out both}
+.viewfinder .rec{position:absolute;left:6px;bottom:-18px;font:700 .7rem var(--font-head);color:#b3261e}
+@keyframes focus{from{filter:blur(6px);transform:scale(1.2)}}
+.hanko{position:absolute;right:6px;top:26px;padding:6px 8px;border:3px solid #0a1a33;background:#fff;color:#0a1a33;font:800 .7rem/1.2 var(--font-head);text-transform:uppercase;text-align:center;box-shadow:4px 4px 0 #1f6feb}
+details.challenge{border-radius:4px;background:repeating-linear-gradient(0deg,#fff 0 8px,#eef5ff 8px 16px)}
 
 
-.mm-step{background:var(--bg2);border-radius:12px;padding:12px;margin-bottom:12px}
-.mm-step.done{background:#e3f6ea}
-.mm-step .row button{flex:1 1 160px;text-align:left}
-.mm-score{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
-.mm-score div{background:#fff;border-radius:10px;padding:8px;text-align:center;font-weight:800}
-.mm-score b{font-size:1.5rem;display:block}
+.sw-plot{background:#0a1a33;padding:6px;border:3px solid #0a1a33}
+.sw-plot svg{width:100%;height:auto;display:block}
+.sw-sl{display:grid;gap:6px;margin-top:10px}
+.sw-sl label{display:grid;grid-template-columns:150px 1fr 60px;gap:8px;align-items:center;font-weight:800;font-size:.9rem}
+@media(max-width:480px){.sw-sl label{grid-template-columns:1fr 60px}.sw-sl label input{grid-column:1/-1;grid-row:2}}
+.sw-sl input{width:100%;min-height:40px;accent-color:#1f6feb}
+.sw-nums{font:700 .8rem ui-monospace,Menlo,monospace;background:var(--bg2);padding:8px;margin-top:8px;overflow-x:auto;white-space:nowrap}
+.sw-m{background:var(--bg2);padding:10px 12px;margin-top:10px}
+.sw-m .row button{flex:1 1 90px}
+
 
 </style>
 </head>
-<body class="world-orange">
+<body class="world-blue">
 <a class="sr-only" href="#main">Skip to content</a>
 <header id="dojo-bar"><a class="db-home" href="../../index.html">🏯 Dojo</a></header>
 <noscript><div class="wrap"><p>This dojo needs JavaScript turned on to run its games and quizzes.</p></div></noscript>
 
-<main id="main" class="wrap belt-test">
+<main id="main" class="wrap lesson l-sound-to-numbers">
   <section class="hero">
-    <div class="hanko" aria-hidden="true">Orange<br>Belt</div>
-    <div class="gears" aria-hidden="true"><span class="g1"><svg viewBox="0 0 100 100"><path fill="#f76707" stroke="#2b1a0e" stroke-width="3" d="M50 8l7 0 3 12 9 4 11-6 5 5-6 11 4 9 12 3 0 7-12 3-4 9 6 11-5 5-11-6-9 4-3 12-7 0-3-12-9-4-11 6-5-5 6-11-4-9-12-3 0-7 12-3 4-9-6-11 5-5 11 6 9-4z"/><circle cx="50" cy="50" r="16" fill="#fffaf4" stroke="#2b1a0e" stroke-width="3"/></svg></span><span class="g2"><svg viewBox="0 0 100 100"><path fill="#1c5d99" stroke="#2b1a0e" stroke-width="3" d="M50 8l7 0 3 12 9 4 11-6 5 5-6 11 4 9 12 3 0 7-12 3-4 9 6 11-5 5-11-6-9 4-3 12-7 0-3-12-9-4-11 6-5-5 6-11-4-9-12-3 0-7 12-3 4-9-6-11 5-5 11 6 9-4z"/><circle cx="50" cy="50" r="16" fill="#fffaf4" stroke="#2b1a0e" stroke-width="3"/></svg></span><span class="em">🏆</span></div>
-    <span class="kicker">Orange Belt Test</span>
-    <h1>The Orange Belt Test</h1>
-    <p class="hook">Two trials stand between you and your Orange Belt: a <b>mixed challenge quiz</b> (score 7 of 10 or more) and a <b>mini project</b>. Breathe. Focus. Begin.</p>
-    <ul class="steps" aria-label="Test checklist">
-      <li data-t="quiz"><span class="ck" aria-hidden="true"></span>Trial 1: Quiz</li>
-      <li data-t="proj"><span class="ck" aria-hidden="true"></span>Trial 2: Model Maker</li>
-      <li data-t="belt"><span class="ck" aria-hidden="true"></span>Orange Belt</li>
+    <div class="hanko" aria-hidden="true">Blue<br>Belt</div>
+    <div class="viewfinder" aria-hidden="true"><i></i><i></i><i></i><i></i><span class="em">🔊</span><span class="rec">● REC 005</span></div>
+    <span class="kicker">Blue Belt · Lesson 5 of 6</span>
+    <h1>Sound to Numbers</h1>
+    <p class="hook fill">Every sound is a wave, and computers store waves as long lists of numbers. Shape a sound, then sample it like a microphone does.</p>
+    <ul class="steps" aria-label="Lesson checklist">
+      <li data-step="act"><span class="ck" aria-hidden="true"></span>Activity</li>
+      <li data-step="quiz"><span class="ck" aria-hidden="true"></span>Quiz</li>
+      <li data-step="ch"><span class="ck" aria-hidden="true"></span>Challenge <small>(bonus)</small></li>
     </ul>
+    <p class="nudge" id="nudge" hidden>👋 New here? <a href="../../index.html">Pick your ninja name and favorite themes</a> so the lessons can be all about you.</p>
   </section>
 
-  <section class="card" id="bt-locked" hidden>
-    <h2>🔒 Not yet, young ninja</h2>
-    <p id="bt-locked-msg"></p>
-    <a class="btn primary" href="index.html">Back to How Machines Learn</a>
+  <section class="card story-card" aria-labelledby="h-story">
+    <div class="sec-title"><span class="ico" aria-hidden="true">📜</span><h2 id="h-story">The Story</h2></div>
+    <div id="story"></div>
   </section>
 
-  <div id="bt-main">
-    <section class="card" aria-labelledby="h-t1">
-      <div class="sec-title"><span class="ico" aria-hidden="true">⚔️</span><h2 id="h-t1">Trial 1 · Mixed Challenge Quiz</h2></div>
-      <div id="bt-quiz"></div>
-    </section>
-    <section class="card" id="bt-proj-sec" aria-labelledby="h-t2">
-      <div class="sec-title"><span class="ico" aria-hidden="true">🛠️</span><h2 id="h-t2">Trial 2 · Model Maker</h2></div>
-      <p id="bt-proj-lock" class="instructions">🔒 Pass Trial 1 to unlock the mini project.</p>
-      <div id="bt-proj-wrap" hidden><p class="instructions fill">A fruit shop wants an AI that spots ripe mangoes. Lead the project from data to a trustworthy score.</p><div id="bt-proj"></div></div>
-    </section>
-    <section class="card complete" id="bt-done" hidden>
-      <h2>🥋 Orange Belt earned!</h2>
-      <p>Wear it with pride, {{name}}. A new world awaits: <b>Inside the AI Brain</b>.</p>
-      <div class="row" style="justify-content:center">
-        <a class="btn primary" href="../green/index.html">Enter Inside the AI Brain →</a>
-        <a class="btn" href="../../index.html">Dojo map</a>
-      </div>
-    </section>
-  </div>
+  <section class="card act-card" aria-labelledby="h-act">
+    <div class="sec-title"><span class="ico" aria-hidden="true">🥋</span><h2 id="h-act">Do It: Wave Workshop</h2></div>
+    <p class="instructions fill">Change the pitch and volume, and (if you like) press Play. Then turn the sample rate down and watch what happens. Complete the 4 missions.</p>
+    <div id="activity" class="activity"></div>
+  </section>
+
+  <section class="card" id="quiz-sec" aria-labelledby="h-quiz">
+    <div class="sec-title"><span class="ico" aria-hidden="true">🧠</span><h2 id="h-quiz">Quick Quiz</h2></div>
+    <p class="quiz-hint">Tip: do the activity first — the answers are hiding in there.</p>
+    <div id="quiz"></div>
+  </section>
+
+  <details class="challenge" id="challenge-box">
+    <summary><span class="flame" aria-hidden="true">🔥</span><span>Challenge Mode: Hearing Machines</span><span class="tag">+30 XP</span></summary>
+    <div class="challenge-body"><div><p class="fill">How do voice assistants understand you? Get 3 of 4.</p><div id="challenge"></div></div></div>
+  </details>
+
+  <section class="card" aria-labelledby="h-term">
+    <div class="sec-title"><span class="ico" aria-hidden="true">🔑</span><h2 id="h-term">Key Term</h2></div>
+    <div class="term"><span class="scroll" aria-hidden="true">📜</span><dl><dt>Sampling</dt><dd>Measuring a sound wave many times per second and storing each measurement as a number.</dd></dl></div>
+    <p><a href="../../scrolls.html">See all your Dojo Scrolls →</a></p>
+  </section>
+
+  <section class="card complete" id="complete" hidden>
+    <h2>🎉 Lesson complete!</h2>
+    <p>You earned this one. Keep the momentum going.</p>
+    <a class="btn primary" href="how-ai-sees.html">Next: How AI Sees →</a>
+  </section>
+
+  <nav class="lesson-nav" aria-label="Lesson navigation">
+    <a class="btn" href="draw-and-guess.html">← Draw &amp; Guess</a>
+    <a class="btn primary" href="how-ai-sees.html">Next: How AI Sees →</a>
+  </nav>
 </main>
 <footer class="site"><div class="wrap">Built for Yusuf with 🥋 · Progress is saved only on this device · <a href="../../parents.html">For parents</a></div></footer>
 <script>
 window.CURRIC={"worlds":[{"id":"white","name":"White Belt","world":"What Is AI?","color":"#f4f1ea","ink":"#1d1d1f","emoji":"🥋","blurb":"What AI really is, where it hides in your day, and where the word \"algorithm\" came from.","built":true,"lessons":[{"id":"rules-vs-learning","title":"Rules vs Learning","emoji":"🤖","min":12,"term":"Machine Learning","def":"When a computer finds patterns in examples, instead of only following rules a person wrote."},{"id":"ai-all-around","title":"AI All Around You","emoji":"📱","min":10,"term":"Artificial Intelligence (AI)","def":"Computer systems that do tasks that usually need human smarts — like recognizing, predicting, deciding, or creating."},{"id":"is-it-ai","title":"Is It AI?","emoji":"🗂️","min":10,"term":"Automation","def":"A machine doing a job by itself. Automatic is not the same as intelligent — a timer is automatic, but it is not AI."},{"id":"al-khwarizmi","title":"The Algorithm Scholar","emoji":"📜","min":15,"term":"Algorithm","def":"A precise, step-by-step set of instructions for solving a problem."},{"id":"turing-test","title":"You Be the Judge","emoji":"🕵️","min":12,"term":"Turing Test","def":"A test where a judge chats with a hidden human and a hidden machine and tries to tell which is which."},{"id":"ai-myths","title":"Myth Busters","emoji":"💥","min":10,"term":"Hype","def":"Claims that make something sound more amazing — or scarier — than it really is."}]},{"id":"yellow","name":"Yellow Belt","world":"Data Is Power","color":"#ffd23f","ink":"#1d1d1f","emoji":"📊","blurb":"Data is the fuel of AI. Collect it, label it, chart it, and learn why bad data makes bad AI.","built":true,"lessons":[{"id":"what-is-data","title":"What Is Data?","emoji":"🔢","min":10,"term":"Data","def":"Facts, numbers, words, pictures or sounds collected so they can be studied."},{"id":"collect-and-label","title":"Collect & Label","emoji":"🏷️","min":12,"term":"Label","def":"The correct answer attached to an example, like tagging a photo \"cat\". AI learns from labeled examples."},{"id":"stats-court","title":"Stats Court","emoji":"🏀","min":15,"term":"Correlation","def":"When two things tend to change together. It does NOT prove that one causes the other."},{"id":"averages-and-patterns","title":"Averages & Patterns","emoji":"📈","min":12,"term":"Average (Mean)","def":"Add up all the numbers, then divide by how many numbers there are."},{"id":"garbage-in-garbage-out","title":"Garbage In, Garbage Out","emoji":"🗑️","min":12,"term":"Garbage In, Garbage Out","def":"If the data going into a system is bad, the results coming out will be bad too."},{"id":"data-detective","title":"Data Detective","emoji":"🔍","min":12,"term":"Outlier","def":"A data point that is very different from the rest. It might be a mistake — or something really interesting."}]},{"id":"orange","name":"Orange Belt","world":"How Machines Learn","color":"#ff8c42","ink":"#1d1d1f","emoji":"⚙️","blurb":"Train your own classifier, test it fairly, and learn the difference between memorizing and understanding.","built":true,"lessons":[{"id":"train-a-classifier","title":"Train a Classifier","emoji":"🧺","min":15,"term":"Classifier","def":"A model that sorts things into groups (classes), like \"spam\" or \"not spam\"."},{"id":"train-vs-test","title":"Training vs Testing","emoji":"📝","min":12,"term":"Test Set","def":"Examples kept hidden during training, used afterward to check whether the model really learned."},{"id":"accuracy-score","title":"Accuracy Score","emoji":"🎯","min":10,"term":"Accuracy","def":"The share of answers a model gets right. 45 right out of 50 is 90% accuracy."},{"id":"overfitting","title":"Memorize or Understand?","emoji":"🧠","min":15,"term":"Overfitting","def":"When a model memorizes its training examples so closely that it fails on new ones."},{"id":"decision-trees","title":"Decision Trees","emoji":"🌳","min":15,"term":"Decision Tree","def":"A model that makes a decision by asking a series of yes/no questions."},{"id":"nearest-neighbor","title":"Nearest Neighbor","emoji":"📍","min":12,"term":"Nearest Neighbor","def":"A method that labels a new example by copying the label of the most similar examples it already knows."}]},{"id":"green","name":"Green Belt","world":"Inside the AI Brain","color":"#2ec27e","ink":"#0d2b1d","emoji":"🧠","blurb":"Neurons, weights, and networks — and how a computer \"learns\" by walking downhill.","built":true,"lessons":[{"id":"meet-the-neuron","title":"Meet the Neuron","emoji":"⚡","min":12,"term":"Artificial Neuron","def":"A tiny math unit: it multiplies inputs by weights, adds them up, and decides how strongly to \"fire\"."},{"id":"weights-and-bias","title":"Weights & Bias","emoji":"🎚️","min":15,"term":"Weight","def":"A number that sets how much one input matters. Training adjusts weights."},{"id":"activation-switch","title":"The Activation Switch","emoji":"🔌","min":12,"term":"Activation Function","def":"The rule a neuron uses to turn its total into an output, like \"fire only if the total is above zero\"."},{"id":"network-playground","title":"Network Playground","emoji":"🕸️","min":15,"term":"Neural Network","def":"Many artificial neurons connected in layers, passing numbers forward."},{"id":"walking-downhill","title":"Walking Downhill","emoji":"⛰️","min":15,"term":"Gradient Descent","def":"A way to improve a model by taking small steps in the direction that reduces error the fastest."},{"id":"how-networks-learn","title":"How Networks Learn","emoji":"🔁","min":15,"term":"Loss","def":"A score for how wrong a model's guesses are. Training tries to make the loss smaller."}]},{"id":"blue","name":"Blue Belt","world":"AI Senses","color":"#3a86ff","ink":"#0a1a33","emoji":"👁️","blurb":"How computers see and hear: pixels, colors, filters, edges, and sound turned into numbers.","built":true,"lessons":[{"id":"pixels","title":"Pixel Zoom","emoji":"🔬","min":10,"term":"Pixel","def":"One tiny square of color. Digital images are grids of pixels, and each pixel is stored as numbers."},{"id":"color-numbers","title":"Colors Are Numbers","emoji":"🎨","min":10,"term":"RGB","def":"Red, Green, Blue: screens make every color by mixing these three lights, each stored as a number from 0 to 255."},{"id":"filters-and-edges","title":"Filters & Edges","emoji":"✏️","min":15,"term":"Filter","def":"A small grid of numbers slid across an image to find or change things, like edges or blur."},{"id":"draw-and-guess","title":"Draw & Guess","emoji":"🖍️","min":15,"term":"Pattern Matching","def":"Comparing something new to stored examples to find the closest match."},{"id":"sound-to-numbers","title":"Sound to Numbers","emoji":"🔊","min":12,"term":"Sampling","def":"Measuring a sound wave many times per second and storing each measurement as a number."},{"id":"how-ai-sees","title":"How AI Sees","emoji":"👀","min":15,"term":"Feature","def":"A useful clue in data, like an edge, a corner, or a color patch, that helps a model recognize things."}]},{"id":"purple","name":"Purple Belt","world":"Game AI & Strategy","color":"#8e44ec","ink":"#ffffff","emoji":"♟️","blurb":"Think ahead like a chess engine, build an unbeatable tic-tac-toe AI, and train an agent by trial and error.","built":false,"lessons":[{"id":"search-trees","title":"Search Trees","emoji":"🌲","min":12,"term":"Game Tree","def":"A map of every possible move, then every reply, then every reply to that, branching like a tree."},{"id":"tic-tac-toe-minimax","title":"The Unbeatable Bot","emoji":"❌","min":18,"term":"Minimax","def":"A strategy that assumes your opponent plays their best, then picks the move that leaves you best off."},{"id":"chess-engine-thinking","title":"How Chess Engines Think","emoji":"♞","min":15,"term":"Evaluation Function","def":"A formula that scores a position, like counting material, when there is no time to search to the end."},{"id":"maze-sensei","title":"Maze Sensei","emoji":"🏯","min":15,"term":"Reinforcement Learning","def":"Learning by trial and error: an agent tries actions, gets rewards or penalties, and improves over time."},{"id":"explore-vs-exploit","title":"Explore or Exploit?","emoji":"🧭","min":12,"term":"Exploration","def":"Trying something new to learn more, instead of repeating what already works (exploitation)."},{"id":"game-character-ai","title":"Game Character AI","emoji":"👾","min":12,"term":"State Machine","def":"A set of modes (like patrol, chase, flee) and rules for switching between them."}]},{"id":"brown","name":"Brown Belt","world":"Talking Machines","color":"#9c6b3f","ink":"#ffffff","emoji":"💬","blurb":"How chatbots really work: tokens, next-word prediction, word maps, and why AI can be confidently wrong.","built":false,"lessons":[{"id":"tokens","title":"Tokens","emoji":"🧩","min":10,"term":"Token","def":"A chunk of text — a word or piece of a word — that a language model reads and writes one at a time."},{"id":"next-word","title":"Guess the Next Word","emoji":"🔮","min":12,"term":"Language Model","def":"An AI trained on lots of text to predict which token is likely to come next."},{"id":"word-maps","title":"Word Maps","emoji":"🗺️","min":15,"term":"Embedding","def":"A list of numbers that places a word on a \"meaning map\", so similar words end up close together."},{"id":"temperature","title":"The Creativity Dial","emoji":"🌡️","min":12,"term":"Temperature","def":"A setting that controls how random a model's word choices are. Low = safe and predictable, high = surprising."},{"id":"confidently-wrong","title":"Confidently Wrong","emoji":"🤥","min":15,"term":"Hallucination","def":"When an AI states something false or made-up as if it were true."},{"id":"prompt-puzzles","title":"Prompt Puzzles","emoji":"🗝️","min":15,"term":"Prompt","def":"The instructions and information you give an AI. Clear prompts get better results."}]},{"id":"black","name":"Black Belt","world":"Builder Lab & AI Citizen","color":"#1b1b1b","ink":"#f5c542","emoji":"🏆","blurb":"Build real apps with AI, and become a smart, fair, and safe AI citizen.","built":false,"lessons":[{"id":"how-app-builders-work","title":"How AI App Builders Work","emoji":"🏗️","min":12,"term":"AI App Builder","def":"A tool where you describe an app in words and AI writes the code, which you then test and improve."},{"id":"idea-to-spec","title":"From Idea to Spec","emoji":"📋","min":15,"term":"Spec","def":"Short for specification: a clear description of what an app should do, for whom, and how you know it works."},{"id":"spec-to-prompts","title":"Spec to Prompts","emoji":"✍️","min":15,"term":"Context","def":"The background information you give an AI so it understands your goal, your users and your limits."},{"id":"test-and-debug","title":"Test & Debug","emoji":"🐞","min":15,"term":"Bug","def":"A mistake in a program that makes it behave differently than it should."},{"id":"code-playground","title":"Code Playground","emoji":"💻","min":20,"term":"Code","def":"Instructions written in a programming language that a computer can run."},{"id":"app-blueprints","title":"App Blueprints","emoji":"📐","min":15,"term":"Prototype","def":"An early, simple version of an app built to test an idea quickly."},{"id":"bias-and-fairness","title":"Bias & Fairness","emoji":"⚖️","min":15,"term":"Bias (Fairness)","def":"When a system treats some people or groups unfairly — often because of unbalanced data. (Different from the \"bias\" number inside a neuron!)"},{"id":"privacy-shield","title":"Privacy Shield","emoji":"🛡️","min":12,"term":"Personal Information","def":"Details that can identify you, like your full name, address, school, photos, or passwords. Keep them private."},{"id":"spotting-fakes","title":"Spotting Fakes","emoji":"🎭","min":15,"term":"Deepfake","def":"Fake images, video or audio made with AI to look or sound real."},{"id":"learn-dont-skip","title":"Learn, Don't Skip","emoji":"🧗","min":12,"term":"Critical Thinking","def":"Checking ideas carefully — asking \"How do I know?\" — instead of just accepting them."},{"id":"trusted-adult","title":"Your Trusted Adult","emoji":"🤝","min":10,"term":"Trusted Adult","def":"A grown-up you know well and can go to when something online feels wrong, confusing, or scary."},{"id":"ai-careers","title":"Cool AI Careers","emoji":"🚀","min":12,"term":"Data Scientist","def":"Someone who collects, cleans and studies data to find answers — and often builds AI models."},{"id":"final-project","title":"Black Belt Project","emoji":"🏁","min":30,"term":"Iteration","def":"Improving something in repeated rounds: build, test, fix, repeat."}]}],"themes":{"chess":{"name":"Chess","emoji":"♟️","hero":"a grandmaster","place":"the chessboard","thing":"a knight","group":"the chess club","items":["♔","♕","♖","♗","♘","♙"]},"martial":{"name":"Martial Arts","emoji":"🥋","hero":"a black belt","place":"the dojo","thing":"a training dummy","group":"the dojo team","items":["🥋","🥊","🎯","🏆","🥇","🧘"]},"basketball":{"name":"Basketball","emoji":"🏀","hero":"a point guard","place":"the court","thing":"a basketball","group":"the team","items":["🏀","⛹️","👟","🏆","⏱️","🥇"]},"soccer":{"name":"Soccer","emoji":"⚽","hero":"a striker","place":"the pitch","thing":"a soccer ball","group":"the squad","items":["⚽","🥅","👟","🏆","🧤","🥇"]},"space":{"name":"Space Missions","emoji":"🚀","hero":"an astronaut","place":"the space station","thing":"a rocket","group":"mission control","items":["🚀","🛰️","🪐","🌙","☄️","👩‍🚀"]},"robots":{"name":"Robots","emoji":"🤖","hero":"a robot engineer","place":"the robot lab","thing":"a robot arm","group":"the robotics club","items":["🤖","🦾","🔋","⚙️","🔧","📡"]},"detective":{"name":"Detective Mysteries","emoji":"🕵️","hero":"a detective","place":"the crime lab","thing":"a magnifying glass","group":"the detective agency","items":["🔍","🕵️","🗝️","📁","🧩","👣"]},"gamedesign":{"name":"Video Game Design","emoji":"🎮","hero":"a game designer","place":"the game studio","thing":"a game controller","group":"the dev team","items":["🎮","👾","🕹️","💎","🏰","⭐"]},"inventions":{"name":"Inventions","emoji":"💡","hero":"an inventor","place":"the workshop","thing":"a gadget","group":"the inventors' club","items":["💡","🔧","⚙️","🧪","🔋","🛠️"]},"animals":{"name":"Animals","emoji":"🐯","hero":"a wildlife ranger","place":"the jungle","thing":"a tiger","group":"the ranger crew","items":["🐯","🦅","🐬","🦁","🐼","🦊"]},"music":{"name":"Music Beats","emoji":"🎧","hero":"a beat producer","place":"the studio","thing":"a drum machine","group":"the band","items":["🎧","🥁","🎹","🎸","🎤","🎵"]},"worlds":{"name":"Building Worlds","emoji":"🏰","hero":"a world builder","place":"your block world","thing":"a castle","group":"the build crew","items":["🏰","🌋","🌲","🏝️","⛏️","🧱"]}},"arcade":[]};
-window.PAGE={"root":"../../","type":"test","id":"orange/belt-test","world":"orange"};
+window.PAGE={"root":"../../","type":"lesson","id":"blue/sound-to-numbers","world":"blue"};
 /* Yusuf's AI Dojo — shared runtime. Inlined into every page so each file works on its own. */
 (function () {
   'use strict';
@@ -657,57 +677,182 @@ window.PAGE={"root":"../../","type":"test","id":"orange/belt-test","world":"oran
 
 </script>
 <script>
-
-window.TEST_QUIZ=[{"q":"What does a classifier do?","a":["Sorts examples into classes","Draws charts","Stores passwords","Makes music"],"c":0,"why":"Classifiers sort things into groups."},{"q":"What are features?","a":["The measurements a model uses to decide, like shine or size","The labels","The test set","Bugs"],"c":0,"why":"Features are the model’s clues."},{"q":"Why keep a hidden test set?","a":["To check the model on examples it has never seen","To train faster","To hide mistakes","It isn’t needed"],"c":0,"why":"Only unseen data gives an honest score."},{"q":"A model is tested on its own training data and scores 100%. This…","a":["Doesn’t prove it learned — it may have memorized","Proves it’s perfect","Means the test set is broken","Is impossible"],"c":0,"why":"Seen questions can’t measure learning."},{"q":"What is 36 right out of 40 as accuracy?","a":["90%","36%","40%","80%"],"c":0,"why":"36 ÷ 40 = 0.9."},{"q":"If only 2 of 100 cases are the rare, important class, a model that always says “not important” scores…","a":["98% accuracy, while catching none of the important cases","2%","50%","0%"],"c":0,"why":"Accuracy can hide total failure on rare cases."},{"q":"Overfitting means…","a":["Memorizing training data so the model fails on new data","A model that’s too simple","Too much test data","A broken computer"],"c":0,"why":"Memorizing ≠ understanding."},{"q":"Training score 99%, test score 60%. Diagnosis?","a":["Overfitting","Underfitting","A perfect model","A data type"],"c":0,"why":"A huge gap = overfitting."},{"q":"A decision tree decides by…","a":["Asking a series of yes/no questions","Rolling dice","Copying the last answer","Guessing colors"],"c":0,"why":"Questions lead down branches to a leaf."},{"q":"Why are decision trees easy to explain?","a":["You can follow each question to see why it decided","They are always right","They have no questions","They use no data"],"c":0,"why":"Their reasoning is visible."},{"q":"k-nearest neighbors labels a new example using…","a":["The labels of the most similar known examples","Random guesses","The biggest number","The last example added"],"c":0,"why":"Neighbors vote."},{"q":"Why might k = 5 be safer than k = 1?","a":["One unusual example can’t decide on its own","Five is lucky","It uses less data","It never makes mistakes"],"c":0,"why":"More voters smooth out weird examples."},{"q":"What is a data leak?","a":["When test answers sneak into training and make scores look too good","A spilled drink on a laptop","Missing data","A kind of chart"],"c":0,"why":"Leaks make models seem better than they are."}];
-window.TEST_PROJECT=(function (el, api) {
-      var D = api.D, S = api.load(), step = S.step || 0;
-      var STEPS = [
-        { q: '<b>1 · Split the data.</b> You have 100 labeled mango photos. How do you split them?', o: [['Train on 80, lock 20 away for the final test', 1], ['Train on all 100, then test on the same 100', 0], ['Test on 95, train on only 5', 0]], ok: 'Most data for learning, plus a hidden set for an honest test.', no: 'Think: honest test, AND enough data to learn from.' },
-        { q: '<b>2 · Choose features.</b> Which features should the model look at?', o: [['Skin color and softness', 1], ['The sticker brand on the mango', 0], ['The photo’s file name', 0]], ok: 'Color and softness really change as mangoes ripen.', no: 'Would that clue actually change when a mango ripens?' },
-        { q: '<b>3 · Diagnose.</b> Your first model scores <b>99% on training</b> but <b>61% on the hidden test</b>. What’s wrong, and what’s a good fix?', o: [['Overfitting — use a simpler model or more varied training photos', 1], ['Underfitting — make it way more complex', 0], ['Nothing — report 99%!', 0]], ok: 'A big train/test gap means memorizing. Simplify, or give it more varied data.', no: 'Compare the two scores. What does a huge gap mean?' },
-        { q: '<b>4 · Final score.</b> The improved model gets 17 of the 20 hidden test photos right. What accuracy do you report?', o: [['85%', 1], ['17%', 0], ['99%', 0], ['100%', 0]], ok: '17 ÷ 20 = 0.85 = 85%, an honest score from unseen data. Ship it (and keep testing)!', no: 'Divide the number right by the total.' },
-      ];
-      function render() {
-        var h = STEPS.map(function (s, i) {
-          if (i > step) return '';
-          var done = i < step;
-          return '<div class="mm-step' + (done ? ' done' : '') + '" data-s="' + i + '"><p>' + s.q + '</p>' + (done ? '<p class="feedback ok">✅ ' + s.ok + '</p>' : '<div class="row">' + D.shuffle(s.o.map(function (o, j) { return '<button type="button" class="btn small" data-ok="' + o[1] + '">' + o[0] + '</button>'; })).join('') + '</div><p class="feedback" aria-live="polite"></p>') + (i === 2 && step >= 2 ? '<div class="mm-score"><div>📚 Training<b>99%</b></div><div>🔒 Hidden test<b>61%</b></div></div>' : '') + '</div>';
-        }).join('');
-        el.innerHTML = h + (step >= STEPS.length ? '<p class="feedback ok">🏆 Project complete: fair split → smart features → overfitting fixed → honest score. That’s the real machine-learning workflow.</p>' : '');
-        D.$all('[data-ok]', el).forEach(function (b) {
-          b.addEventListener('click', function () {
-            var box = b.closest('.mm-step'), f = box.querySelector('.feedback');
-            if (b.getAttribute('data-ok') === '1') { D.sfx('good'); step++; api.save({ step: step }); render(); }
-            else { D.sfx('bad'); b.disabled = true; f.className = 'feedback no'; f.textContent = STEPS[+box.getAttribute('data-s')].no; }
-          });
-        });
-        if (step >= STEPS.length) api.done();
+window.LESSON={"id":"blue/sound-to-numbers","title":"Sound to Numbers","story":[["sensei","When you clap, {{nick}}, the air wiggles back and forth super fast. That wiggle is a \u003cb>sound wave\u003c/b>."],["sensei","A microphone measures the wave thousands of times every second and writes down a number each time. This is called \u003cb>sampling\u003c/b>. Music on a CD uses \u003cb>44,100\u003c/b> samples every second for each speaker!"],["you","So a song is a giant list of numbers too?"],["sensei","Yes! And voice assistants turn your speech into those numbers before their AI tries to understand the words. Let’s shape some waves."]],"quiz":[{"q":"What is sampling?","a":["Measuring a sound wave many times per second and storing each measurement as a number","Tasting food","Deleting sounds","Recording video"],"c":0,"why":"Each sample is one number."},{"q":"A higher-pitched sound has…","a":["More waves squeezed into the same time","Taller waves","No waves","Fewer samples"],"c":0,"why":"Pitch = how fast the wave wiggles (frequency)."},{"q":"A louder sound has…","a":["Taller waves","More waves per second","Fewer numbers","A different color"],"c":0,"why":"Loudness = wave height (amplitude)."},{"q":"How many samples per second does CD audio use for each speaker?","a":["44,100","10","1 million","12"],"c":0,"why":"44,100 samples per second, which captures sounds up to about 22,000 waves per second."}]};
+window.ACTIVITY=(function (el, api) {
+      var D = api.D, S = api.load(), P = S.p || { f: 2, a: 0.5, s: 40 }, m = S.m || 0, base = { f: P.f, a: P.a };
+      el.innerHTML = '<div class="sw-plot" id="sw-plot"></div><div class="sw-sl">' + [['f', '🎵 Pitch (waves)', 1, 6, 1], ['a', '🔊 Volume (height)', 0.1, 1, 0.1], ['s', '🎙️ Samples in the window', 4, 60, 1]].map(function (s) { return '<label><span>' + s[1] + '</span><input type="range" data-k="' + s[0] + '" min="' + s[2] + '" max="' + s[3] + '" step="' + s[4] + '" value="' + P[s[0]] + '"><b data-v="' + s[0] + '"></b></label>'; }).join('') +
+        '</div><div class="row" style="margin-top:8px"><button type="button" class="btn small" id="sw-play">▶ Play this tone</button></div><div class="sw-nums" id="sw-nums" aria-label="Sample numbers"></div><div class="sw-m" id="sw-m" aria-live="polite"></div>';
+      function draw() {
+        var W = 340, H = 170, mid = H / 2, X = function (t) { return 10 + t * (W - 20); }, Y = function (v) { return mid - v * (H / 2 - 12); };
+        var wave = ''; for (var i = 0; i <= 300; i++) { var t = i / 300; wave += (i ? 'L' : 'M') + X(t).toFixed(1) + ' ' + Y(P.a * Math.sin(2 * Math.PI * P.f * t)).toFixed(1); }
+        var dots = '', conn = '', nums = [];
+        for (var k = 0; k < P.s; k++) { var tt = k / (P.s - 1), v = P.a * Math.sin(2 * Math.PI * P.f * tt); nums.push(Math.round(v * 100)); dots += '<line x1="' + X(tt) + '" y1="' + mid + '" x2="' + X(tt) + '" y2="' + Y(v) + '" stroke="#ffd23f55"/><circle cx="' + X(tt) + '" cy="' + Y(v) + '" r="3.5" fill="#ffd23f"/>'; conn += (k ? 'L' : 'M') + X(tt).toFixed(1) + ' ' + Y(v).toFixed(1); }
+        D.$('#sw-plot', el).innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Sound wave with ' + P.f + ' waves, volume ' + P.a + ', sampled ' + P.s + ' times."><line x1="10" y1="' + mid + '" x2="' + (W - 10) + '" y2="' + mid + '" stroke="#7fb2ff44"/><path d="' + wave + '" fill="none" stroke="#7fb2ff" stroke-width="2.5" opacity=".7"/><path d="' + conn + '" fill="none" stroke="#ffd23f" stroke-width="1.5" stroke-dasharray="4 3"/>' + dots + '<text x="12" y="16" font-size="11" fill="#7fb2ff">— real wave   ● samples (what the computer keeps)</text></svg>';
+        D.$('#sw-nums', el).textContent = 'Stored numbers: ' + nums.join(', ');
+        ['f', 'a', 's'].forEach(function (k) { D.$('[data-v="' + k + '"]', el).textContent = P[k]; });
       }
-      render();
+      function mission() {
+        var box = D.$('#sw-m', el);
+        var M = ['<b>Mission 1:</b> Make the pitch HIGHER. More waves squeeze into the same time.', '<b>Mission 2:</b> Make it LOUDER. The waves get taller.', '<b>Mission 3:</b> Slide the samples down to 8 or fewer. Does the yellow dotted shape still look like the real wave?'];
+        if (m < 3) { box.innerHTML = '<p>' + M[m] + '</p>'; return; }
+        if (m === 3) {
+          box.innerHTML = '<p><b>Mission 4:</b> With too few samples, what happened?</p><div class="row">' + D.shuffle([[1, 'The stored shape lost the real wave, so the sound can’t be rebuilt correctly'], [0, 'Nothing changed'], [0, 'The sound got louder']]).map(function (o) { return '<button type="button" class="btn small" data-ok="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div><p class="feedback" aria-live="polite"></p>';
+          D.$all('[data-ok]', box).forEach(function (b) { b.addEventListener('click', function () { if (b.getAttribute('data-ok') === '1') { m = 4; api.save({ m: 4 }); D.sfx('win'); mission(); } else { D.sfx('bad'); b.disabled = true; box.querySelector('.feedback').className = 'feedback no'; box.querySelector('.feedback').textContent = 'Compare the yellow dots to the blue wave.'; } }); });
+          return;
+        }
+        box.innerHTML = '<p class="feedback ok">🏆 Sound engineer! Enough samples capture the wave. Too few, and details get lost. That’s why CDs use 44,100 samples per second: enough to capture sounds up to about 22,000 waves per second, around the top of human hearing.</p>'; api.done();
+      }
+      D.$all('[data-k]', el).forEach(function (r) {
+        r.addEventListener('input', function () {
+          P[r.getAttribute('data-k')] = +r.value; api.save({ p: P }); draw();
+          if (m === 0 && P.f > base.f) { m = 1; api.save({ m: 1 }); D.sfx('good'); mission(); }
+          else if (m === 1 && P.a > base.a) { m = 2; api.save({ m: 2 }); D.sfx('good'); mission(); }
+          else if (m === 2 && P.s <= 8) { m = 3; api.save({ m: 3 }); D.sfx('good'); mission(); }
+          if (m === 0) base.f = Math.min(base.f, P.f); if (m <= 1) base.a = Math.min(base.a, P.a);
+        });
+      });
+      D.$('#sw-play', el).addEventListener('click', function () {
+        try { var ac = new (window.AudioContext || window.webkitAudioContext)(), o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = 180 + P.f * 90; g.gain.value = 0.05 + P.a * 0.15; o.connect(g); g.connect(ac.destination); o.start(); g.gain.setValueAtTime(g.gain.value, ac.currentTime + 0.5); g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.8); o.stop(ac.currentTime + 0.85); } catch (e) { /* no audio */ }
+      });
+      draw(); mission();
     });
-(function(){var D=window.Dojo,w=D.worldById("orange"),T=D.theme('test');
-D.$all('.fill').forEach(function(e){e.innerHTML=D.fill(e.innerHTML,T);});
-var done=document.getElementById('bt-done');done.innerHTML=D.fill(done.innerHTML,T);
-var st=D.state(); var rec=st.tests[w.id]||(st.tests[w.id]={});
-function ck(k,on){var li=document.querySelector('[data-t="'+k+'"]');li.classList.toggle('on',!!on);li.querySelector('.ck').textContent=on?'✓':'';}
-function refresh(){ck('quiz',rec.quiz);ck('proj',rec.proj);ck('belt',st.belts[w.id]);done.hidden=!st.belts[w.id];}
-if(!D.testReady(w)&&!st.belts[w.id]){var p=D.worldProgress(w);document.getElementById('bt-locked').hidden=false;document.getElementById('bt-main').hidden=true;
- document.getElementById('bt-locked-msg').innerHTML='Finish every lesson in <b>'+D.esc(w.world)+'</b> first. You have completed <b>'+p.done+' of '+p.total+'</b>. (A lesson counts as done when you finish its activity and pass its quiz.)';refresh();return;}
-var projBuilt=false;
-function openProject(){document.getElementById('bt-proj-lock').hidden=true;document.getElementById('bt-proj-wrap').hidden=false;
- if(projBuilt)return;projBuilt=true;
- window.TEST_PROJECT(document.getElementById('bt-proj'),{T:T,D:D,nick:D.nick(),fill:function(s){return D.fill(s,T);},
- save:function(o){var c=D.saveGet('proj')||{};for(var k in o)c[k]=o[k];D.saveSet('proj',c);},load:function(){return D.saveGet('proj')||{};},done:function(){
-   if(rec.proj&&st.belts[w.id])return; rec.proj=true;D.save();tryBelt();}});}
-function tryBelt(){refresh();if(rec.quiz&&rec.proj&&!st.belts[w.id]){var q=rec.score||0;D.earnBelt(w.id,q,10);rec=st.tests[w.id];rec.quiz=true;rec.proj=true;D.save();
- D.ceremony(w,function(){refresh();done.scrollIntoView({behavior:D.reducedMotion()?'auto':'smooth'});});refresh();}}
-D.quiz(document.getElementById('bt-quiz'),window.TEST_QUIZ,{T:T,pass:0.7,count:10,reshuffle:true,saveKey:'quiz',onDone:function(sc,tot,pass){
-  if(pass){if(!rec.quiz||sc>(rec.score||0)){rec.score=sc;}rec.quiz=true;D.save();D.toast('⚔️ Trial 1 passed!');openProject();tryBelt();
-   setTimeout(function(){document.getElementById('bt-proj-sec').scrollIntoView({behavior:D.reducedMotion()?'auto':'smooth'});},600);}
-  else D.toast('You need 7 of 10. Review and try again!');}});
-if(rec.quiz)openProject();
-refresh();
+window.CHALLENGE=(function (el, api) {
+      api.D.quiz(el, [
+        { q: 'What is the FIRST thing a voice assistant does with your voice?', a: ['Turns the sound into numbers by sampling it', 'Understands the meaning', 'Replies', 'Translates it'], c: 0, why: 'Sound → numbers first. Everything else is math on those numbers.' },
+        { q: 'Speech-recognition AI learns to turn sound numbers into words by…', a: ['Training on huge amounts of recorded speech paired with the correct text', 'Guessing', 'Reading dictionaries only', 'Listening to one person once'], c: 0, why: 'Recordings + correct transcripts = labeled training data.' },
+        { q: 'Why might a voice assistant struggle in a noisy stadium?', a: ['The noise mixes into the numbers, making the speech pattern harder to find', 'It gets scared', 'Stadiums block electricity', 'It never struggles'], c: 0, why: 'Noise = messy input numbers.' },
+        { q: 'Why might a voice assistant understand some accents better than others?', a: ['Its training data had more examples of some accents than others', 'Some accents are wrong', 'Microphones prefer some voices', 'Accents aren’t sounds'], c: 0, why: 'This is a real fairness issue: unbalanced training data. More in the Black Belt!' },
+      ], { saveKey: 'chquiz', onDone: function (s) { if (s >= 3) api.done(); } });
+    });
+</script>
+<script>
+(function(){var D=window.Dojo,T=D.theme('lesson');D.$all('.fill').forEach(function(e){e.innerHTML=D.fill(e.innerHTML,T);});})();
+</script>
+<script>
+/* Lesson page controller: story → activity → quiz → challenge. */
+(function () {
+  'use strict';
+  var D = window.Dojo, Lz = window.LESSON;
+  if (!D || !Lz) return;
+  var T = D.theme('lesson');
+  var id = Lz.id;
+
+  function senseiSVG(size) {
+    return '<svg class="sensei-svg" width="' + size + '" height="' + size + '" viewBox="0 0 64 64" aria-hidden="true">' +
+      '<rect x="8" y="12" width="48" height="44" rx="14" fill="var(--sensei, #e9eef5)" stroke="#1d1d1f" stroke-width="3"/>' +
+      '<rect x="6" y="20" width="52" height="9" rx="3" fill="var(--band, #d62828)" stroke="#1d1d1f" stroke-width="2"/>' +
+      '<path d="M56 24 l7 -5 l-1 9 z" fill="var(--band, #d62828)" stroke="#1d1d1f" stroke-width="2"/>' +
+      '<circle cx="24" cy="38" r="5" fill="#1d1d1f"/><circle cx="40" cy="38" r="5" fill="#1d1d1f"/>' +
+      '<circle cx="26" cy="36" r="1.6" fill="#fff"/><circle cx="42" cy="36" r="1.6" fill="#fff"/>' +
+      '<path d="M26 48 q6 5 12 0" fill="none" stroke="#1d1d1f" stroke-width="3" stroke-linecap="round"/>' +
+      '<line x1="32" y1="12" x2="32" y2="4" stroke="#1d1d1f" stroke-width="3"/><circle cx="32" cy="4" r="3" fill="var(--band, #d62828)"/></svg>';
+  }
+  D.senseiSVG = senseiSVG;
+
+  // ---- story ----
+  var storyEl = document.getElementById('story');
+  if (storyEl) {
+    storyEl.innerHTML = Lz.story.map(function (line) {
+      var who = line[0], text = D.fill(line[1], T);
+      if (who === 'narr') return '<p class="st-narr">' + text + '</p>';
+      var isYou = who === 'you';
+      var face = isYou ? '<span class="st-face you" aria-hidden="true">' + D.esc(D.avatar()) + '</span>' : '<span class="st-face">' + senseiSVG(46) + '</span>';
+      var name = isYou ? D.esc(D.nick()) : 'Sensei Byte';
+      return '<div class="st-line ' + (isYou ? 'st-you' : 'st-sensei') + '">' + face + '<div class="st-bubble"><span class="st-name">' + name + '</span>' + text + '</div></div>';
+    }).join('');
+  }
+
+  // ---- checklist ----
+  function refreshChecklist() {
+    var s = D.state().lessons[id] || {};
+    var map = { act: !!s.act, quiz: !!(s.quiz && s.quiz.best / s.quiz.total >= 0.6), ch: !!s.ch };
+    D.$all('[data-step]').forEach(function (li) {
+      var k = li.getAttribute('data-step'); var on = map[k];
+      li.classList.toggle('on', on); var m = li.querySelector('.ck'); if (m) m.textContent = on ? '✓' : '';
+    });
+    var banner = document.getElementById('complete');
+    if (banner) banner.hidden = !s.done;
+  }
+
+  function api(kind) {
+    var fired = false;
+    return {
+      T: T, D: D, nick: D.nick(), fill: function (s) { return D.fill(s, T); },
+      // autosave for in-progress work: save(obj) merges, load() returns {} when nothing is saved
+      save: function (obj) { var cur = D.saveGet(kind) || {}; for (var k in obj) cur[k] = obj[k]; D.saveSet(kind, cur); },
+      load: function () { return D.saveGet(kind) || {}; },
+      clear: function () { D.saveClear(kind); },
+      done: function (msg) {
+        if (fired) return; fired = true;
+        var first = kind === 'act' ? D.markActivity(id) : D.markChallenge(id);
+        if (first && msg !== false) D.toast(kind === 'act' ? '🥋 Activity complete!' : '🔥 Challenge conquered!');
+        if (first) D.confetti(kind === 'act' ? 30 : 50);
+        refreshChecklist();
+        if (kind === 'act') { var q = document.getElementById('quiz-sec'); if (q) q.classList.add('ready'); }
+      },
+      isDone: function () { var s = D.state().lessons[id] || {}; return kind === 'act' ? !!s.act : !!s.ch; },
+    };
+  }
+
+  // ---- activity ----
+  var actEl = document.getElementById('activity');
+  var prior = D.state().lessons[id] || {};
+  if (actEl && prior.act) actEl.insertAdjacentHTML('beforebegin', '<p class="saved-note">✅ You already beat this activity. Replay it any time!</p>');
+  if (actEl && window.ACTIVITY) {
+    try { window.ACTIVITY(actEl, api('act')); }
+    catch (e) { actEl.innerHTML = '<p class="err">This activity hit a snag. Try reloading the page.</p>'; if (window.console) console.error(e); }
+  }
+
+  // ---- quiz ----
+  var qEl = document.getElementById('quiz');
+  if (qEl) D.quiz(qEl, Lz.quiz, { T: T, saveKey: 'quiz', onDone: function (sc, tot) { D.markQuiz(id, sc, tot); refreshChecklist(); } });
+
+  // ---- challenge (built on first open) ----
+  var chBox = document.getElementById('challenge-box');
+  var chEl = document.getElementById('challenge');
+  var chBuilt = false;
+  function buildChallenge() {
+    if (chBuilt || !chEl || !window.CHALLENGE) return; chBuilt = true;
+    try { window.CHALLENGE(chEl, api('ch')); }
+    catch (e) { chEl.innerHTML = '<p class="err">This challenge hit a snag. Try reloading the page.</p>'; if (window.console) console.error(e); }
+  }
+  if (chBox) chBox.addEventListener('toggle', function () { if (chBox.open) buildChallenge(); });
+  if (chBox && (chBox.open || D.saveGet('ch'))) { chBox.open = true; buildChallenge(); }
+  if (chBox && prior.ch) chBox.querySelector('summary .tag').textContent = '✅ Beaten';
+
+  // ---- profile nudge ----
+  if (!D.profile()) {
+    var n = document.getElementById('nudge');
+    if (n) { n.hidden = false; }
+  }
+  refreshChecklist();
+
+  // ---- remember where he is, and bring him back there next time ----
+  var here = { href: 'worlds/' + id + '.html', title: Lz.title, id: id, section: 'story' };
+  var last = D.state().last;
+  var resumeTo = last && last.id === id && last.section && last.section !== 'story' ? last.section : null;
+  if (last && last.id === id) here.section = last.section;
+  D.setLast(here);
+  var secs = { story: document.querySelector('.story-card'), activity: document.querySelector('.act-card'), quiz: document.getElementById('quiz-sec'), challenge: chBox };
+  if ('IntersectionObserver' in window) {
+    var t = null;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        for (var k in secs) if (secs[k] === e.target) { here.section = k; }
+        clearTimeout(t); t = setTimeout(function () { D.setLast(here); }, 400);
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    for (var k in secs) if (secs[k]) io.observe(secs[k]);
+  }
+  if (resumeTo && secs[resumeTo] && !(D.state().lessons[id] || {}).done) {
+    setTimeout(function () {
+      secs[resumeTo].scrollIntoView({ block: 'start' });
+      D.toast('💾 Welcome back! Picking up where you left off.');
+    }, 250);
+  }
 })();
+
 </script>
 </body>
 </html>

@@ -61,7 +61,7 @@ const worlds = [
     id: 'blue', name: 'Blue Belt', world: 'AI Senses', color: '#3a86ff', ink: '#0a1a33', emoji: '👁️',
     blurb: 'How computers see and hear: pixels, colors, filters, edges, and sound turned into numbers.',
     parents: 'Images as grids of pixels, RGB color numbers, filters and edge detection, a draw-and-guess pattern matcher, how sound is sampled into numbers, and how vision systems build up features.',
-    built: false,
+    built: true,
     lessons: [
       { id: 'pixels', title: 'Pixel Zoom', emoji: '🔬', min: 10, term: 'Pixel', def: 'One tiny square of color. Digital images are grids of pixels, and each pixel is stored as numbers.' },
       { id: 'color-numbers', title: 'Colors Are Numbers', emoji: '🎨', min: 10, term: 'RGB', def: 'Red, Green, Blue: screens make every color by mixing these three lights, each stored as a number from 0 to 255.' },
