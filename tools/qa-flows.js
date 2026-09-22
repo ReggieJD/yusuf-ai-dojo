@@ -368,6 +368,48 @@ module.exports = {
     }
     await pg.click('#bt-proj [data-sq="2"]'); await pg.click('#bt-proj [data-rw="1"]');
   },
+
+  'brown/tokens': {
+    activity: async (pg) => { await pg.click('[data-a="1"][data-ok="1"]'); await pg.click('[data-a="2"][data-ok="1"]'); },
+    challenge: (pg) => solveSorter(pg, '#challenge'),
+  },
+  'brown/next-word': {
+    activity: async (pg) => {
+      for (let k = 0; k < 5; k++) { await pg.click('#activity [data-g] >> nth=0'); await pg.click('#nw-next'); }
+      for (const w of ['the', 'ninja', 'learned', 'from', 'the', 'sensei', '</s>']) await pg.click(`button.nw-bar[data-w="${w}"]`);
+      await pg.click('.nw-q [data-ok="1"]');
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'brown/word-maps': {
+    activity: async (pg) => {
+      for (const w of ['dog', 'king', 'apple']) await pg.click(`.wm-w[data-w="${w}"]`);
+      await pg.click('#wm-m [data-i="0"]'); await pg.waitForTimeout(1900);
+      await pg.click('#wm-m [data-i="0"]'); await pg.waitForTimeout(1900);
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'brown/temperature': {
+    activity: async (pg) => { await setRange(pg, '#tp-t', '0'); await pg.click('#tp-go'); await setRange(pg, '#tp-t', '1.9'); await pg.click('#tp-go'); await pg.click('#tp-m [data-ok="1"]'); },
+    challenge: (pg) => solveSorter(pg, '#challenge'),
+  },
+  'brown/confidently-wrong': {
+    activity: async (pg) => { const t = [1, 1, 0, 1, 0, 0]; for (let i = 0; i < 6; i++) await pg.click(`.fc-claim[data-i="${i}"] [data-v="${t[i]}"]`); },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'brown/prompt-puzzles': {
+    activity: async (pg) => {
+      for (const [i, ks] of [[0, ['aud', 'len', 'fmt']], [1, ['genre', 'hero', 'len']], [2, ['role', 'fmt', 'rule']]]) {
+        for (const k of ks) await pg.click(`.pp-pieces [data-k="${k}"]`);
+        if (i < 2) await pg.click('#pp-next');
+      }
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'test:brown': async (pg) => {
+    for (const [f, v] of [['role', 'Act as a coach'], ['task', 'Make a practice plan'], ['aud', 'For kids aged 11'], ['fmt', 'A numbered list'], ['lim', 'Thirty minutes total']]) await pg.fill(`[data-f="${f}"]`, v);
+    for (const s of ['1', '2', '3']) await pg.click(`#bt-proj [data-s="${s}"][data-ok="1"]`);
+  },
   'test:white': async (pg) => {
     const ans = ['r', 'n', 'p', 'c', 'n', 'r'];
     for (let i = 0; i < 6; i++) await pg.click(`.gi-item[data-i="${i}"] button[data-v="${ans[i]}"]`);

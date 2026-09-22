@@ -89,7 +89,7 @@ const worlds = [
     id: 'brown', name: 'Brown Belt', world: 'Talking Machines', color: '#9c6b3f', ink: '#ffffff', emoji: '💬',
     blurb: 'How chatbots really work: tokens, next-word prediction, word maps, and why AI can be confidently wrong.',
     parents: 'Tokens, next-word prediction, word embeddings ("word maps"), the temperature setting, why language models can state false things confidently and how to fact-check, and prompt engineering.',
-    built: false,
+    built: true,
     lessons: [
       { id: 'tokens', title: 'Tokens', emoji: '🧩', min: 10, term: 'Token', def: 'A chunk of text — a word or piece of a word — that a language model reads and writes one at a time.' },
       { id: 'next-word', title: 'Guess the Next Word', emoji: '🔮', min: 12, term: 'Language Model', def: 'An AI trained on lots of text to predict which token is likely to come next.' },

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Nearest Neighbor · Orange Belt · Yusuf's AI Dojo</title>
-<meta name="description" content="A method that labels a new example by copying the label of the most similar examples it already knows.">
+<title>Guess the Next Word · Brown Belt · Yusuf's AI Dojo</title>
+<meta name="description" content="An AI trained on lots of text to predict which token is likely to come next.">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%A5%8B%3C%2Ftext%3E%3C%2Fsvg%3E">
@@ -174,48 +174,49 @@ footer.site a{color:inherit}
 }
 
 
-:root{--bg:#fff3e6;--bg2:#ffe2c4;--ink:#2b1a0e;--muted:#6b4a33;--card:#fffaf4;--line:#2b1a0e24;
---accent:#e8590c;--accent-ink:#fff;--accent2:#1c5d99;--radius:14px;--band:#e8590c;--sensei:#fff4e8;
---font-head:"Trebuchet MS","Gill Sans","Segoe UI",sans-serif;--head-weight:800;
---shadow:0 5px 0 #b3470a55, 0 14px 28px #6b2d0a22}
-body{background-color:#fff3e6;background-image:linear-gradient(#1c5d9912 1px,transparent 1px),linear-gradient(90deg,#1c5d9912 1px,transparent 1px),linear-gradient(180deg,#ffd8a8 0,#fff3e6 420px);background-size:26px 26px,26px 26px,100% 100%}
-.card{border:2px solid #2b1a0e22;background-image:radial-gradient(circle at 12px 12px,#c2a38a 3px,transparent 3.5px),radial-gradient(circle at calc(100% - 12px) 12px,#c2a38a 3px,transparent 3.5px);background-repeat:no-repeat}
-.sec-title .ico{border-radius:50%;background:#1c5d99}
-.hero .kicker{background:#1c5d99}
-.gears{position:relative;width:150px;height:120px;margin-bottom:6px}
-.gears svg{position:absolute}
-.gears .g1{left:0;top:6px;width:96px;animation:spin 9s linear infinite}
-.gears .g2{left:78px;top:0;width:64px;animation:spin 6s linear infinite reverse}
-.gears .em{position:absolute;left:30px;top:36px;font-size:2.2rem}
-@keyframes spin{to{transform:rotate(360deg)}}
-.hanko{position:absolute;right:6px;top:26px;width:78px;height:78px;border-radius:50%;border:3px dashed #1c5d99;color:#1c5d99;display:grid;place-items:center;text-align:center;font:800 .72rem/1.1 var(--font-head);text-transform:uppercase;transform:rotate(-10deg)}
-details.challenge{background:repeating-linear-gradient(45deg,#fffaf4 0 14px,#ffe2c4 14px 16px)}
+:root{--bg:#efe2c6;--bg2:#e4d2ab;--ink:#2d1f12;--muted:#5e4a33;--card:#fbf5e6;--line:#2d1f1226;
+--accent:#8b5a2b;--accent-ink:#fff;--accent2:#6b3f14;--radius:8px;--band:#8b5a2b;--sensei:#fbf1dc;
+--font-head:Georgia,"Book Antiqua","Palatino Linotype",serif;--head-weight:700;
+--shadow:0 2px 0 #2d1f1233, 0 14px 30px #5e4a3326}
+body{background-color:#efe2c6;background-image:radial-gradient(circle at 30% 20%,#fff8e855,transparent 50%),repeating-linear-gradient(90deg,#8b5a2b0d 0 2px,transparent 2px 60px)}
+.card{border:1px solid #8b5a2b55;background-image:repeating-linear-gradient(180deg,transparent 0 31px,#8b5a2b12 31px 32px)}
+.sec-title .ico{border-radius:4px;background:#6b3f14}
+.hero .kicker{border-radius:2px;font-family:var(--font-head);font-style:italic;letter-spacing:.06em}
+.book{width:170px;height:118px;position:relative;margin-bottom:8px}
+.book svg{position:absolute;inset:0}
+.book .em{position:absolute;left:62px;top:24px;font-size:2.6rem;animation:float 3s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px)}}
+.hanko{position:absolute;right:6px;top:26px;width:76px;height:76px;border-radius:50%;background:#8b1e1e;color:#fbe9c9;display:grid;place-items:center;text-align:center;font:700 .7rem/1.1 var(--font-head);text-transform:uppercase;box-shadow:inset 0 0 0 3px #5c1010,0 3px 0 #0003}
+details.challenge{background:linear-gradient(#fbf5e6,#f3e5c4)}
 
 
-.nn-plot{background:#fff;border-radius:12px;border:2px solid #2b1a0e22;padding:6px;touch-action:manipulation}
-.nn-plot svg{width:100%;height:auto;display:block;cursor:crosshair}
-.nn-k{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:10px 0}
-.nn-k button{min-width:56px;min-height:44px;border-radius:10px;border:2px solid #2b1a0e;background:#fff;font:800 1rem var(--font-body);cursor:pointer;color:#2b1a0e}
-.nn-k button[aria-pressed="true"]{background:#e8590c;color:#fff}
-.nn-pred{font-weight:800;font-size:1.05rem}
-.nn-task{background:var(--bg2);border-radius:12px;padding:12px;margin-top:10px}
-.nn-task .row button{flex:1 1 130px}
+.nw-sent{font:700 1.25rem/1.4 Georgia,serif;background:#fffdf7;border:2px solid #8b5a2b44;border-radius:10px;padding:12px;min-height:3em}
+.nw-sent .blank{display:inline-block;min-width:70px;border-bottom:3px dashed #8b5a2b;margin-left:4px}
+.nw-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.nw-opts button{min-height:50px;border-radius:10px;border:2px solid #2d1f12;background:#fff;font:700 1rem var(--font-body);cursor:pointer;color:#2d1f12}
+.nw-bars{display:grid;gap:5px;margin:8px 0}
+.nw-bar{display:grid;grid-template-columns:110px 1fr 46px;gap:8px;align-items:center;font-weight:700;font-size:.92rem;cursor:pointer;background:none;border:0;padding:4px;text-align:left;border-radius:8px;min-height:40px;color:inherit;font-family:inherit}
+.nw-bar:hover,.nw-bar:focus{background:#f3e5c4}
+.nw-bar .meter>i{background:#8b5a2b}
+.nw-score{font-weight:800}
+.nw-q{background:var(--bg2);border-radius:10px;padding:10px 12px;margin-top:10px}
+.nw-q .row button{flex:1 1 150px}
 
 
 </style>
 </head>
-<body class="world-orange">
+<body class="world-brown">
 <a class="sr-only" href="#main">Skip to content</a>
 <header id="dojo-bar"><a class="db-home" href="../../index.html">🏯 Dojo</a></header>
 <noscript><div class="wrap"><p>This dojo needs JavaScript turned on to run its games and quizzes.</p></div></noscript>
 
-<main id="main" class="wrap lesson l-nearest-neighbor">
+<main id="main" class="wrap lesson l-next-word">
   <section class="hero">
-    <div class="hanko" aria-hidden="true">Orange<br>Belt</div>
-    <div class="gears" aria-hidden="true"><span class="g1"><svg viewBox="0 0 100 100"><path fill="#fd7e14" stroke="#2b1a0e" stroke-width="3" d="M50 8l7 0 3 12 9 4 11-6 5 5-6 11 4 9 12 3 0 7-12 3-4 9 6 11-5 5-11-6-9 4-3 12-7 0-3-12-9-4-11 6-5-5 6-11-4-9-12-3 0-7 12-3 4-9-6-11 5-5 11 6 9-4z"/><circle cx="50" cy="50" r="16" fill="#fffaf4" stroke="#2b1a0e" stroke-width="3"/></svg></span><span class="g2"><svg viewBox="0 0 100 100"><path fill="#1c5d99" stroke="#2b1a0e" stroke-width="3" d="M50 8l7 0 3 12 9 4 11-6 5 5-6 11 4 9 12 3 0 7-12 3-4 9 6 11-5 5-11-6-9 4-3 12-7 0-3-12-9-4-11 6-5-5 6-11-4-9-12-3 0-7 12-3 4-9-6-11 5-5 11 6 9-4z"/><circle cx="50" cy="50" r="16" fill="#fffaf4" stroke="#2b1a0e" stroke-width="3"/></svg></span><span class="em">📍</span></div>
-    <span class="kicker">Orange Belt · Lesson 6 of 6</span>
-    <h1>Nearest Neighbor</h1>
-    <p class="hook fill">“Tell me who your neighbors are, and I’ll tell you who you are.” Classify soccer players by looking at the players most similar to them.</p>
+    <div class="hanko" aria-hidden="true">Brown<br>Belt</div>
+    <div class="book" aria-hidden="true"><svg viewBox="0 0 170 118"><path d="M85 30 C60 18 30 16 8 22 L8 108 C30 102 60 104 85 116 Z" fill="#fbf5e6" stroke="#2d1f12" stroke-width="3"/><path d="M85 30 C110 18 140 16 162 22 L162 108 C140 102 110 104 85 116 Z" fill="#fbf5e6" stroke="#2d1f12" stroke-width="3"/><path d="M20 44 h50 M20 58 h44 M20 72 h50 M100 44 h50 M106 58 h44 M100 72 h50" stroke="#8b5a2b55" stroke-width="3"/></svg><span class="em">🔮</span></div>
+    <span class="kicker">Brown Belt · Lesson 2 of 6</span>
+    <h1>Guess the Next Word</h1>
+    <p class="hook fill">A chatbot writes by guessing the next word, again and again. Race a tiny language model at guessing, then build a sentence with it.</p>
     <ul class="steps" aria-label="Lesson checklist">
       <li data-step="act"><span class="ck" aria-hidden="true"></span>Activity</li>
       <li data-step="quiz"><span class="ck" aria-hidden="true"></span>Quiz</li>
@@ -230,8 +231,8 @@ details.challenge{background:repeating-linear-gradient(45deg,#fffaf4 0 14px,#ffe
   </section>
 
   <section class="card act-card" aria-labelledby="h-act">
-    <div class="sec-title"><span class="ico" aria-hidden="true">🥋</span><h2 id="h-act">Do It: The Scout’s Map</h2></div>
-    <p class="instructions fill">Three missions: predict mystery player A, find a spot where k = 1 and k = 5 disagree, then explain why.</p>
+    <div class="sec-title"><span class="ico" aria-hidden="true">🥋</span><h2 id="h-act">Do It: Guess the Next Word</h2></div>
+    <p class="instructions fill">Round 1: guess the next word 5 times and compare with the model. Round 2: build a 6+ word sentence by tapping the model’s suggestions.</p>
     <div id="activity" class="activity"></div>
   </section>
 
@@ -242,31 +243,31 @@ details.challenge{background:repeating-linear-gradient(45deg,#fffaf4 0 14px,#ffe
   </section>
 
   <details class="challenge" id="challenge-box">
-    <summary><span class="flame" aria-hidden="true">🔥</span><span>Challenge Mode: Similarity Everywhere</span><span class="tag">+30 XP</span></summary>
-    <div class="challenge-body"><div><p class="fill">“Find the most similar” powers lots of real AI. Match each app to how it uses similarity. Get 3 of 4.</p><div id="challenge"></div></div></div>
+    <summary><span class="flame" aria-hidden="true">🔥</span><span>Challenge Mode: Be the Language Model</span><span class="tag">+30 XP</span></summary>
+    <div class="challenge-body"><div><p class="fill">You are the model. Pick the most likely next word! Get 4 of 5.</p><div id="challenge"></div></div></div>
   </details>
 
   <section class="card" aria-labelledby="h-term">
     <div class="sec-title"><span class="ico" aria-hidden="true">🔑</span><h2 id="h-term">Key Term</h2></div>
-    <div class="term"><span class="scroll" aria-hidden="true">📜</span><dl><dt>Nearest Neighbor</dt><dd>A method that labels a new example by copying the label of the most similar examples it already knows.</dd></dl></div>
+    <div class="term"><span class="scroll" aria-hidden="true">📜</span><dl><dt>Language Model</dt><dd>An AI trained on lots of text to predict which token is likely to come next.</dd></dl></div>
     <p><a href="../../scrolls.html">See all your Dojo Scrolls →</a></p>
   </section>
 
   <section class="card complete" id="complete" hidden>
     <h2>🎉 Lesson complete!</h2>
     <p>You earned this one. Keep the momentum going.</p>
-    <a class="btn primary" href="belt-test.html">Orange Belt Test →</a>
+    <a class="btn primary" href="word-maps.html">Next: Word Maps →</a>
   </section>
 
   <nav class="lesson-nav" aria-label="Lesson navigation">
-    <a class="btn" href="decision-trees.html">← Decision Trees</a>
-    <a class="btn primary" href="belt-test.html">Orange Belt Test →</a>
+    <a class="btn" href="tokens.html">← Tokens</a>
+    <a class="btn primary" href="word-maps.html">Next: Word Maps →</a>
   </nav>
 </main>
 <footer class="site"><div class="wrap">Built for Yusuf with 🥋 · Progress is saved only on this device · <a href="../../parents.html">For parents</a></div></footer>
 <script>
 window.CURRIC={"worlds":[{"id":"white","name":"White Belt","world":"What Is AI?","color":"#f4f1ea","ink":"#1d1d1f","emoji":"🥋","blurb":"What AI really is, where it hides in your day, and where the word \"algorithm\" came from.","built":true,"lessons":[{"id":"rules-vs-learning","title":"Rules vs Learning","emoji":"🤖","min":12,"term":"Machine Learning","def":"When a computer finds patterns in examples, instead of only following rules a person wrote."},{"id":"ai-all-around","title":"AI All Around You","emoji":"📱","min":10,"term":"Artificial Intelligence (AI)","def":"Computer systems that do tasks that usually need human smarts — like recognizing, predicting, deciding, or creating."},{"id":"is-it-ai","title":"Is It AI?","emoji":"🗂️","min":10,"term":"Automation","def":"A machine doing a job by itself. Automatic is not the same as intelligent — a timer is automatic, but it is not AI."},{"id":"al-khwarizmi","title":"The Algorithm Scholar","emoji":"📜","min":15,"term":"Algorithm","def":"A precise, step-by-step set of instructions for solving a problem."},{"id":"turing-test","title":"You Be the Judge","emoji":"🕵️","min":12,"term":"Turing Test","def":"A test where a judge chats with a hidden human and a hidden machine and tries to tell which is which."},{"id":"ai-myths","title":"Myth Busters","emoji":"💥","min":10,"term":"Hype","def":"Claims that make something sound more amazing — or scarier — than it really is."}]},{"id":"yellow","name":"Yellow Belt","world":"Data Is Power","color":"#ffd23f","ink":"#1d1d1f","emoji":"📊","blurb":"Data is the fuel of AI. Collect it, label it, chart it, and learn why bad data makes bad AI.","built":true,"lessons":[{"id":"what-is-data","title":"What Is Data?","emoji":"🔢","min":10,"term":"Data","def":"Facts, numbers, words, pictures or sounds collected so they can be studied."},{"id":"collect-and-label","title":"Collect & Label","emoji":"🏷️","min":12,"term":"Label","def":"The correct answer attached to an example, like tagging a photo \"cat\". AI learns from labeled examples."},{"id":"stats-court","title":"Stats Court","emoji":"🏀","min":15,"term":"Correlation","def":"When two things tend to change together. It does NOT prove that one causes the other."},{"id":"averages-and-patterns","title":"Averages & Patterns","emoji":"📈","min":12,"term":"Average (Mean)","def":"Add up all the numbers, then divide by how many numbers there are."},{"id":"garbage-in-garbage-out","title":"Garbage In, Garbage Out","emoji":"🗑️","min":12,"term":"Garbage In, Garbage Out","def":"If the data going into a system is bad, the results coming out will be bad too."},{"id":"data-detective","title":"Data Detective","emoji":"🔍","min":12,"term":"Outlier","def":"A data point that is very different from the rest. It might be a mistake — or something really interesting."}]},{"id":"orange","name":"Orange Belt","world":"How Machines Learn","color":"#ff8c42","ink":"#1d1d1f","emoji":"⚙️","blurb":"Train your own classifier, test it fairly, and learn the difference between memorizing and understanding.","built":true,"lessons":[{"id":"train-a-classifier","title":"Train a Classifier","emoji":"🧺","min":15,"term":"Classifier","def":"A model that sorts things into groups (classes), like \"spam\" or \"not spam\"."},{"id":"train-vs-test","title":"Training vs Testing","emoji":"📝","min":12,"term":"Test Set","def":"Examples kept hidden during training, used afterward to check whether the model really learned."},{"id":"accuracy-score","title":"Accuracy Score","emoji":"🎯","min":10,"term":"Accuracy","def":"The share of answers a model gets right. 45 right out of 50 is 90% accuracy."},{"id":"overfitting","title":"Memorize or Understand?","emoji":"🧠","min":15,"term":"Overfitting","def":"When a model memorizes its training examples so closely that it fails on new ones."},{"id":"decision-trees","title":"Decision Trees","emoji":"🌳","min":15,"term":"Decision Tree","def":"A model that makes a decision by asking a series of yes/no questions."},{"id":"nearest-neighbor","title":"Nearest Neighbor","emoji":"📍","min":12,"term":"Nearest Neighbor","def":"A method that labels a new example by copying the label of the most similar examples it already knows."}]},{"id":"green","name":"Green Belt","world":"Inside the AI Brain","color":"#2ec27e","ink":"#0d2b1d","emoji":"🧠","blurb":"Neurons, weights, and networks — and how a computer \"learns\" by walking downhill.","built":true,"lessons":[{"id":"meet-the-neuron","title":"Meet the Neuron","emoji":"⚡","min":12,"term":"Artificial Neuron","def":"A tiny math unit: it multiplies inputs by weights, adds them up, and decides how strongly to \"fire\"."},{"id":"weights-and-bias","title":"Weights & Bias","emoji":"🎚️","min":15,"term":"Weight","def":"A number that sets how much one input matters. Training adjusts weights."},{"id":"activation-switch","title":"The Activation Switch","emoji":"🔌","min":12,"term":"Activation Function","def":"The rule a neuron uses to turn its total into an output, like \"fire only if the total is above zero\"."},{"id":"network-playground","title":"Network Playground","emoji":"🕸️","min":15,"term":"Neural Network","def":"Many artificial neurons connected in layers, passing numbers forward."},{"id":"walking-downhill","title":"Walking Downhill","emoji":"⛰️","min":15,"term":"Gradient Descent","def":"A way to improve a model by taking small steps in the direction that reduces error the fastest."},{"id":"how-networks-learn","title":"How Networks Learn","emoji":"🔁","min":15,"term":"Loss","def":"A score for how wrong a model's guesses are. Training tries to make the loss smaller."}]},{"id":"blue","name":"Blue Belt","world":"AI Senses","color":"#3a86ff","ink":"#0a1a33","emoji":"👁️","blurb":"How computers see and hear: pixels, colors, filters, edges, and sound turned into numbers.","built":true,"lessons":[{"id":"pixels","title":"Pixel Zoom","emoji":"🔬","min":10,"term":"Pixel","def":"One tiny square of color. Digital images are grids of pixels, and each pixel is stored as numbers."},{"id":"color-numbers","title":"Colors Are Numbers","emoji":"🎨","min":10,"term":"RGB","def":"Red, Green, Blue: screens make every color by mixing these three lights, each stored as a number from 0 to 255."},{"id":"filters-and-edges","title":"Filters & Edges","emoji":"✏️","min":15,"term":"Filter","def":"A small grid of numbers slid across an image to find or change things, like edges or blur."},{"id":"draw-and-guess","title":"Draw & Guess","emoji":"🖍️","min":15,"term":"Pattern Matching","def":"Comparing something new to stored examples to find the closest match."},{"id":"sound-to-numbers","title":"Sound to Numbers","emoji":"🔊","min":12,"term":"Sampling","def":"Measuring a sound wave many times per second and storing each measurement as a number."},{"id":"how-ai-sees","title":"How AI Sees","emoji":"👀","min":15,"term":"Feature","def":"A useful clue in data, like an edge, a corner, or a color patch, that helps a model recognize things."}]},{"id":"purple","name":"Purple Belt","world":"Game AI & Strategy","color":"#8e44ec","ink":"#ffffff","emoji":"♟️","blurb":"Think ahead like a chess engine, build an unbeatable tic-tac-toe AI, and train an agent by trial and error.","built":true,"lessons":[{"id":"search-trees","title":"Search Trees","emoji":"🌲","min":12,"term":"Game Tree","def":"A map of every possible move, then every reply, then every reply to that, branching like a tree."},{"id":"tic-tac-toe-minimax","title":"The Unbeatable Bot","emoji":"❌","min":18,"term":"Minimax","def":"A strategy that assumes your opponent plays their best, then picks the move that leaves you best off."},{"id":"chess-engine-thinking","title":"How Chess Engines Think","emoji":"♞","min":15,"term":"Evaluation Function","def":"A formula that scores a position, like counting material, when there is no time to search to the end."},{"id":"maze-sensei","title":"Maze Sensei","emoji":"🏯","min":15,"term":"Reinforcement Learning","def":"Learning by trial and error: an agent tries actions, gets rewards or penalties, and improves over time."},{"id":"explore-vs-exploit","title":"Explore or Exploit?","emoji":"🧭","min":12,"term":"Exploration","def":"Trying something new to learn more, instead of repeating what already works (exploitation)."},{"id":"game-character-ai","title":"Game Character AI","emoji":"👾","min":12,"term":"State Machine","def":"A set of modes (like patrol, chase, flee) and rules for switching between them."}]},{"id":"brown","name":"Brown Belt","world":"Talking Machines","color":"#9c6b3f","ink":"#ffffff","emoji":"💬","blurb":"How chatbots really work: tokens, next-word prediction, word maps, and why AI can be confidently wrong.","built":true,"lessons":[{"id":"tokens","title":"Tokens","emoji":"🧩","min":10,"term":"Token","def":"A chunk of text — a word or piece of a word — that a language model reads and writes one at a time."},{"id":"next-word","title":"Guess the Next Word","emoji":"🔮","min":12,"term":"Language Model","def":"An AI trained on lots of text to predict which token is likely to come next."},{"id":"word-maps","title":"Word Maps","emoji":"🗺️","min":15,"term":"Embedding","def":"A list of numbers that places a word on a \"meaning map\", so similar words end up close together."},{"id":"temperature","title":"The Creativity Dial","emoji":"🌡️","min":12,"term":"Temperature","def":"A setting that controls how random a model's word choices are. Low = safe and predictable, high = surprising."},{"id":"confidently-wrong","title":"Confidently Wrong","emoji":"🤥","min":15,"term":"Hallucination","def":"When an AI states something false or made-up as if it were true."},{"id":"prompt-puzzles","title":"Prompt Puzzles","emoji":"🗝️","min":15,"term":"Prompt","def":"The instructions and information you give an AI. Clear prompts get better results."}]},{"id":"black","name":"Black Belt","world":"Builder Lab & AI Citizen","color":"#1b1b1b","ink":"#f5c542","emoji":"🏆","blurb":"Build real apps with AI, and become a smart, fair, and safe AI citizen.","built":false,"lessons":[{"id":"how-app-builders-work","title":"How AI App Builders Work","emoji":"🏗️","min":12,"term":"AI App Builder","def":"A tool where you describe an app in words and AI writes the code, which you then test and improve."},{"id":"idea-to-spec","title":"From Idea to Spec","emoji":"📋","min":15,"term":"Spec","def":"Short for specification: a clear description of what an app should do, for whom, and how you know it works."},{"id":"spec-to-prompts","title":"Spec to Prompts","emoji":"✍️","min":15,"term":"Context","def":"The background information you give an AI so it understands your goal, your users and your limits."},{"id":"test-and-debug","title":"Test & Debug","emoji":"🐞","min":15,"term":"Bug","def":"A mistake in a program that makes it behave differently than it should."},{"id":"code-playground","title":"Code Playground","emoji":"💻","min":20,"term":"Code","def":"Instructions written in a programming language that a computer can run."},{"id":"app-blueprints","title":"App Blueprints","emoji":"📐","min":15,"term":"Prototype","def":"An early, simple version of an app built to test an idea quickly."},{"id":"bias-and-fairness","title":"Bias & Fairness","emoji":"⚖️","min":15,"term":"Bias (Fairness)","def":"When a system treats some people or groups unfairly — often because of unbalanced data. (Different from the \"bias\" number inside a neuron!)"},{"id":"privacy-shield","title":"Privacy Shield","emoji":"🛡️","min":12,"term":"Personal Information","def":"Details that can identify you, like your full name, address, school, photos, or passwords. Keep them private."},{"id":"spotting-fakes","title":"Spotting Fakes","emoji":"🎭","min":15,"term":"Deepfake","def":"Fake images, video or audio made with AI to look or sound real."},{"id":"learn-dont-skip","title":"Learn, Don't Skip","emoji":"🧗","min":12,"term":"Critical Thinking","def":"Checking ideas carefully — asking \"How do I know?\" — instead of just accepting them."},{"id":"trusted-adult","title":"Your Trusted Adult","emoji":"🤝","min":10,"term":"Trusted Adult","def":"A grown-up you know well and can go to when something online feels wrong, confusing, or scary."},{"id":"ai-careers","title":"Cool AI Careers","emoji":"🚀","min":12,"term":"Data Scientist","def":"Someone who collects, cleans and studies data to find answers — and often builds AI models."},{"id":"final-project","title":"Black Belt Project","emoji":"🏁","min":30,"term":"Iteration","def":"Improving something in repeated rounds: build, test, fix, repeat."}]}],"themes":{"chess":{"name":"Chess","emoji":"♟️","hero":"a grandmaster","place":"the chessboard","thing":"a knight","group":"the chess club","items":["♔","♕","♖","♗","♘","♙"]},"martial":{"name":"Martial Arts","emoji":"🥋","hero":"a black belt","place":"the dojo","thing":"a training dummy","group":"the dojo team","items":["🥋","🥊","🎯","🏆","🥇","🧘"]},"basketball":{"name":"Basketball","emoji":"🏀","hero":"a point guard","place":"the court","thing":"a basketball","group":"the team","items":["🏀","⛹️","👟","🏆","⏱️","🥇"]},"soccer":{"name":"Soccer","emoji":"⚽","hero":"a striker","place":"the pitch","thing":"a soccer ball","group":"the squad","items":["⚽","🥅","👟","🏆","🧤","🥇"]},"space":{"name":"Space Missions","emoji":"🚀","hero":"an astronaut","place":"the space station","thing":"a rocket","group":"mission control","items":["🚀","🛰️","🪐","🌙","☄️","👩‍🚀"]},"robots":{"name":"Robots","emoji":"🤖","hero":"a robot engineer","place":"the robot lab","thing":"a robot arm","group":"the robotics club","items":["🤖","🦾","🔋","⚙️","🔧","📡"]},"detective":{"name":"Detective Mysteries","emoji":"🕵️","hero":"a detective","place":"the crime lab","thing":"a magnifying glass","group":"the detective agency","items":["🔍","🕵️","🗝️","📁","🧩","👣"]},"gamedesign":{"name":"Video Game Design","emoji":"🎮","hero":"a game designer","place":"the game studio","thing":"a game controller","group":"the dev team","items":["🎮","👾","🕹️","💎","🏰","⭐"]},"inventions":{"name":"Inventions","emoji":"💡","hero":"an inventor","place":"the workshop","thing":"a gadget","group":"the inventors' club","items":["💡","🔧","⚙️","🧪","🔋","🛠️"]},"animals":{"name":"Animals","emoji":"🐯","hero":"a wildlife ranger","place":"the jungle","thing":"a tiger","group":"the ranger crew","items":["🐯","🦅","🐬","🦁","🐼","🦊"]},"music":{"name":"Music Beats","emoji":"🎧","hero":"a beat producer","place":"the studio","thing":"a drum machine","group":"the band","items":["🎧","🥁","🎹","🎸","🎤","🎵"]},"worlds":{"name":"Building Worlds","emoji":"🏰","hero":"a world builder","place":"your block world","thing":"a castle","group":"the build crew","items":["🏰","🌋","🌲","🏝️","⛏️","🧱"]}},"arcade":[]};
-window.PAGE={"root":"../../","type":"lesson","id":"orange/nearest-neighbor","world":"orange"};
+window.PAGE={"root":"../../","type":"lesson","id":"brown/next-word","world":"brown"};
 /* Yusuf's AI Dojo — shared runtime. Inlined into every page so each file works on its own. */
 (function () {
   'use strict';
@@ -674,65 +675,56 @@ window.PAGE={"root":"../../","type":"lesson","id":"orange/nearest-neighbor","wor
 
 </script>
 <script>
-window.LESSON={"id":"orange/nearest-neighbor","title":"Nearest Neighbor","story":[["sensei","A soccer scout sees a new player, {{nick}}. Striker or defender? The scout thinks: “Who does this player remind me of?”"],["sensei","That’s the \u003cb>nearest-neighbor\u003c/b> method. Put every known player on a map using their stats. A new player gets the same label as the players \u003cb>closest\u003c/b> to them."],["you","What’s the k for, in “k-nearest neighbors”?"],["sensei","k is \u003cb>how many neighbors vote\u003c/b>. With k = 1, the single closest player decides. With k = 5, the five closest vote. Watch how that changes things!"]],"quiz":[{"q":"How does nearest neighbor label a new example?","a":["It copies the label of the most similar known examples","It picks a random label","It asks a human every time","It always says the most common label"],"c":0,"why":"Similar examples usually share a label."},{"q":"What does k mean in k-nearest neighbors?","a":["How many nearby examples get to vote","How many features there are","The speed of the computer","The number of classes"],"c":0,"why":"k = 1: the single closest decides. k = 5: the five closest vote."},{"q":"A striker who makes lots of tackles sits among the defenders. With k = 1, a new player right next to them is labeled…","a":["Striker, even though most neighbors are defenders","Defender, always","Both","Nothing"],"c":0,"why":"With k = 1, one unusual example decides alone."},{"q":"What did the two axes on the map stand for?","a":["Two features: shots and tackles per game","Time and date","Name and age","Color and size"],"c":0,"why":"Each feature becomes a direction on the map. Distance = how different two players are."}]};
+window.LESSON={"id":"brown/next-word","title":"Guess the Next Word","story":[["sensei","Here’s the biggest secret of chatbots, {{nick}}: at their core, they’re \u003cb>next-word predictors\u003c/b>. Well, next-\u003ci>token\u003c/i> predictors!"],["sensei","A \u003cb>language model\u003c/b> is trained on enormous amounts of text. It learns which tokens tend to follow which. Then it writes one token at a time, each time asking: “What’s likely to come next?”"],["you","That’s it? Just guessing the next word?"],["sensei","Just that, done by a gigantic neural network with billions of weights, trained on a huge library of text. Our mini model only learned from 30 dojo sentences, so you can see exactly how it works."]],"quiz":[{"q":"At their core, chatbots work by…","a":["Predicting the next token, over and over","Looking up every answer in a giant list","Copying one website","Reading your mind"],"c":0,"why":"One likely token at a time: that’s how text gets generated."},{"q":"Where does a language model learn which words tend to follow which?","a":["From the huge amounts of text it was trained on","From a dictionary only","From your feelings","It is born knowing"],"c":0,"why":"Patterns in training text → predictions."},{"q":"Our mini model only looked at the ONE previous word. Big models…","a":["Look at much more of the conversation, which helps them sound more sensible","Look at zero words","Only look at the last letter","Work exactly the same"],"c":0,"why":"More context = better predictions."},{"q":"Does predicting likely words mean the model always tells the truth?","a":["No — a likely-sounding sentence can still be false","Yes, always","Only on weekends","Only for short answers"],"c":0,"why":"Likely ≠ true. That’s the heart of the “confidently wrong” lesson."}]};
 window.ACTIVITY=(function (el, api) {
       var D = api.D;
-      var PTS = [[5, 1, 'S'], [4.5, 0.5, 'S'], [4, 1.5, 'S'], [5.5, 2, 'S'], [3.5, 1, 'S'], [4.8, 2.6, 'S'], [2.2, 3.6, 'S'],
-        [1, 5, 'D'], [0.5, 4, 'D'], [1.5, 5.5, 'D'], [2, 4.5, 'D'], [1, 3.5, 'D'], [2.5, 5, 'D'], [1.6, 2.9, 'D']];
-      var S = api.load(), step = S.step || 0, k = S.k || 1, M = S.m || [4.2, 1.2];
-      var W = 320, H = 270, X = function (v) { return 34 + v / 6 * (W - 48); }, Y = function (v) { return H - 32 - v / 6 * (H - 48); };
-      function near(p, kk) { return PTS.map(function (q, i) { return { i: i, d: Math.hypot(q[0] - p[0], q[1] - p[1]), c: q[2] }; }).sort(function (a, b) { return a.d - b.d; }).slice(0, kk); }
-      function vote(p, kk) { var n = near(p, kk), s = n.filter(function (x) { return x.c === 'S'; }).length; return s * 2 > n.length ? 'S' : 'D'; }
-      var NAME = { S: '⚽ Striker', D: '🛡️ Defender' };
-      el.innerHTML = '<div class="nn-plot" id="nn-plot"></div><div class="nn-k" role="group" aria-label="How many neighbors vote">k = ' + [1, 3, 5].map(function (v) { return '<button type="button" data-k="' + v + '" aria-pressed="' + (v === k) + '">' + v + '</button>'; }).join('') + '<span class="nn-pred" id="nn-pred" aria-live="polite"></span></div><div class="nn-task" id="nn-task" aria-live="polite"></div>';
-      function draw() {
-        var n = near(M, k);
-        var lines = n.map(function (x) { var q = PTS[x.i]; return '<line x1="' + X(M[0]) + '" y1="' + Y(M[1]) + '" x2="' + X(q[0]) + '" y2="' + Y(q[1]) + '" stroke="#e8590c" stroke-width="2" stroke-dasharray="4 3"/>'; }).join('');
-        var dots = PTS.map(function (q) { return q[2] === 'S' ? '<circle cx="' + X(q[0]) + '" cy="' + Y(q[1]) + '" r="8" fill="#1c5d99"/><text x="' + X(q[0]) + '" y="' + (Y(q[1]) + 4) + '" font-size="10" text-anchor="middle" fill="#fff">S</text>' : '<rect x="' + (X(q[0]) - 8) + '" y="' + (Y(q[1]) - 8) + '" width="16" height="16" rx="3" fill="#6b4a33"/><text x="' + X(q[0]) + '" y="' + (Y(q[1]) + 4) + '" font-size="10" text-anchor="middle" fill="#fff">D</text>'; }).join('');
-        var ticks = [0, 2, 4, 6].map(function (v) { return '<text x="' + X(v) + '" y="' + (H - 16) + '" font-size="10" text-anchor="middle" fill="#6b4a33">' + v + '</text><text x="26" y="' + (Y(v) + 3) + '" font-size="10" text-anchor="end" fill="#6b4a33">' + v + '</text>'; }).join('');
-        D.$('#nn-plot', el).innerHTML = '<svg id="nn-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Map of players: shots per game across, tackles per game up. Blue circles are strikers, brown squares are defenders. The mystery player is at ' + M[0].toFixed(1) + ' shots, ' + M[1].toFixed(1) + ' tackles."><rect x="' + X(0) + '" y="' + Y(6) + '" width="' + (X(6) - X(0)) + '" height="' + (Y(0) - Y(6)) + '" fill="#fffaf4" stroke="#2b1a0e22"/>' + ticks + lines + dots +
-          '<g><circle cx="' + X(M[0]) + '" cy="' + Y(M[1]) + '" r="11" fill="#ffd23f" stroke="#2b1a0e" stroke-width="2"/><text x="' + X(M[0]) + '" y="' + (Y(M[1]) + 5) + '" font-size="13" text-anchor="middle" font-weight="900">?</text></g>' +
-          '<text x="' + (W / 2 + 10) + '" y="' + (H - 2) + '" font-size="11" text-anchor="middle" font-weight="700" fill="#2b1a0e">⚽ Shots per game →</text><text x="10" y="' + (H / 2) + '" font-size="11" text-anchor="middle" font-weight="700" fill="#2b1a0e" transform="rotate(-90 10 ' + (H / 2) + ')">🛡️ Tackles per game →</text></svg>';
-        D.$('#nn-pred', el).textContent = (step >= 1 ? 'Prediction with k=' + k + ': ' + NAME[vote(M, k)] : '');
-        D.$('#nn-svg', el).addEventListener('click', function (e) {
-          if (step < 1) return;
-          var r = e.currentTarget.getBoundingClientRect(), sx = (e.clientX - r.left) / r.width * W, sy = (e.clientY - r.top) / r.height * H;
-          M = [Math.max(0, Math.min(6, (sx - 34) / (W - 48) * 6)), Math.max(0, Math.min(6, (H - 32 - sy) / (H - 48) * 6))];
-          api.save({ m: M }); draw(); if (step === 1) checkDisagree();
+      var CORPUS = ['the ninja practiced every morning', 'the ninja kicked the ball', 'the ninja kicked the bag', 'the ninja bowed to the sensei', 'the sensei smiled at the ninja', 'the sensei taught the class', 'the class practiced every morning', 'the class bowed to the sensei', 'the robot kicked the ball', 'the robot learned from data', 'the robot learned every day', 'the ninja learned from the sensei', 'the ball flew into the goal', 'the ball flew over the wall', 'the team scored a goal', 'the team won the game', 'the team practiced every day', 'every morning the ninja trained', 'every day the robot learned', 'a ninja never gives up', 'a robot never sleeps', 'the sensei never gives up', 'the ninja trained with the team', 'the robot played with the team', 'the team cheered for the ninja', 'the ninja scored a goal', 'the goal was amazing', 'the game was amazing', 'the sensei was proud', 'the ninja was ready'];
+      var BI = {};
+      CORPUS.forEach(function (s) { var w = ('<s> ' + s + ' </s>').split(' '); for (var i = 0; i < w.length - 1; i++) { BI[w[i]] = BI[w[i]] || {}; BI[w[i]][w[i + 1]] = (BI[w[i]][w[i + 1]] || 0) + 1; } });
+      function probs(w) { var n = BI[w] || {}, t = 0; for (var k in n) t += n[k]; return Object.keys(n).map(function (k) { return [k, n[k] / t]; }).sort(function (a, b) { return b[1] - a[1]; }); }
+      var ROUND1 = [['the ninja'], ['the ball flew'], ['the team'], ['the sensei'], ['the robot learned']];
+      var S = api.load(), r1 = S.r1 || 0, match = S.match || 0, built = S.built || ['<s>'], asked = !!S.asked;
+      function render() {
+        var h = '';
+        if (r1 < ROUND1.length) {
+          var ctx = ROUND1[r1][0], last = ctx.split(' ').pop(), P = probs(last), opts = D.shuffle(P.slice(0, 2).map(function (p) { return p[0]; }).concat(['banana', 'purple'].filter(function (x) { return !P.some(function (p) { return p[0] === x; }); })).slice(0, 4));
+          h += '<p class="nw-score">Round 1 · Guess ' + (r1 + 1) + ' of 5 · You matched the model ' + match + ' time' + (match === 1 ? '' : 's') + '</p><div class="nw-sent">' + ctx + ' <span class="blank"></span></div><div class="nw-opts">' + opts.map(function (o) { return '<button type="button" data-g="' + o + '">' + (o === '</s>' ? '(end)' : o) + '</button>'; }).join('') + '</div><div id="nw-reveal" aria-live="polite"></div>';
+        } else {
+          var lastW = built[built.length - 1], P2 = probs(lastW), words = built.filter(function (w) { return w !== '<s>' && w !== '</s>'; });
+          h += '<p class="nw-score">Round 2 · Build a sentence (6+ words). Tap a word to add it. The bars are the model’s probabilities.</p><div class="nw-sent">' + (words.join(' ') || '…') + (lastW === '</s>' ? ' <b>.</b>' : ' <span class="blank"></span>') + '</div>';
+          if (lastW !== '</s>') h += '<div class="nw-bars">' + P2.map(function (p) { return '<button type="button" class="nw-bar" data-w="' + p[0] + '"><span>' + (p[0] === '</s>' ? '⏹ (end)' : p[0]) + '</span><span class="meter"><i style="width:' + Math.round(p[1] * 100) + '%"></i></span><span>' + Math.round(p[1] * 100) + '%</span></button>'; }).join('') + '</div>';
+          h += '<div class="row"><button type="button" class="btn small" id="nw-reset">↺ Start a new sentence</button></div>';
+          if (lastW === '</s>' && words.length >= 6) {
+            if (!asked) h += '<div class="nw-q"><p><b>Does the model understand what a ninja or a goal is?</b></p><div class="row">' + D.shuffle([[1, 'No — it only learned which words tend to follow which'], [0, 'Yes — it has watched ninjas play soccer'], [0, 'Yes — it feels excited about goals']]).map(function (o) { return '<button type="button" class="btn small" data-ok="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div><p class="feedback" aria-live="polite"></p></div>';
+            else h += '<p class="feedback ok">🏆 You just generated text the way a language model does: one likely word at a time. Big models look at far more context than one word, which is why they sound so much smarter. But the core idea is the same.</p>';
+          } else if (lastW === '</s>') h += '<p class="feedback no">That sentence has only ' + words.length + ' words. Start a new one and make it 6 or more!</p>';
+        }
+        el.innerHTML = h;
+        D.$all('[data-g]', el).forEach(function (b) {
+          b.addEventListener('click', function () {
+            var ctx = ROUND1[r1][0], P = probs(ctx.split(' ').pop()), top = P[0][0], g = b.getAttribute('data-g'), ok = g === top;
+            if (ok) match++; D.sfx(ok ? 'good' : 'click');
+            D.$all('[data-g]', el).forEach(function (x) { x.disabled = true; });
+            D.$('#nw-reveal', el).innerHTML = '<p>' + (ok ? '✅ You matched the model!' : 'The model’s top guess was <b>“' + top + '”</b>.') + '</p><div class="nw-bars">' + P.map(function (p) { return '<div class="nw-bar"><span>' + (p[0] === '</s>' ? '(end)' : p[0]) + '</span><span class="meter"><i style="width:' + Math.round(p[1] * 100) + '%"></i></span><span>' + Math.round(p[1] * 100) + '%</span></div>'; }).join('') + '</div><button type="button" class="btn small primary" id="nw-next">Next →</button>';
+            r1++; api.save({ r1: r1, match: match });
+            D.$('#nw-next', el).addEventListener('click', render);
+          });
         });
+        D.$all('button.nw-bar[data-w]', el).forEach(function (b) { b.addEventListener('click', function () { built.push(b.getAttribute('data-w')); api.save({ built: built }); D.sfx('click'); render(); }); });
+        var rs = D.$('#nw-reset', el); if (rs) rs.addEventListener('click', function () { built = ['<s>']; api.save({ built: built }); render(); });
+        D.$all('[data-ok]', el).forEach(function (b) { b.addEventListener('click', function () { if (b.getAttribute('data-ok') === '1') { asked = true; api.save({ asked: true }); D.sfx('win'); render(); } else { D.sfx('bad'); b.disabled = true; var f = el.querySelector('.nw-q .feedback'); f.className = 'feedback no'; f.textContent = 'Think about what the model learned from: 30 sentences, and nothing else.'; } }); });
+        if (asked) api.done();
       }
-      function checkDisagree() {
-        var a = vote(M, 1), b = vote(M, 5), box = D.$('#nn-task', el);
-        var f = box.querySelector('.feedback');
-        if (a !== b) { D.sfx('win'); step = 2; api.save({ step: 2 }); f.className = 'feedback ok'; f.innerHTML = '✅ Found one! k=1 says ' + NAME[a] + ' but k=5 says ' + NAME[b] + '. One unusual player nearby swings k=1, while five voters outvote it.'; setTimeout(task, 1800); }
-        else { f.className = 'feedback'; f.textContent = 'Here, k=1 and k=5 both say ' + NAME[a] + '. Keep hunting — try near the odd striker hiding among the defenders.'; }
-      }
-      function task() {
-        var box = D.$('#nn-task', el);
-        if (step === 0) {
-          box.innerHTML = '<p><b>Mission 1:</b> Mystery player A takes <b>4.2 shots</b> and makes <b>1.2 tackles</b> per game (the yellow “?”). Look at the neighbors. What are they?</p><div class="row">' + D.shuffle(['S', 'D']).map(function (c) { return '<button type="button" class="btn small" data-c="' + c + '">' + NAME[c] + '</button>'; }).join('') + '</div><p class="feedback" aria-live="polite"></p>';
-          D.$all('[data-c]', box).forEach(function (b) { b.addEventListener('click', function () { var f = box.querySelector('.feedback'); if (b.getAttribute('data-c') === 'S') { D.sfx('good'); f.className = 'feedback ok'; f.textContent = '✅ All the closest players are strikers, so A is labeled a striker.'; step = 1; api.save({ step: 1 }); draw(); setTimeout(task, 1500); } else { D.sfx('bad'); b.disabled = true; f.className = 'feedback no'; f.textContent = 'Look at the dashed line: who is closest to the “?”'; } }); });
-        } else if (step === 1) {
-          box.innerHTML = '<p><b>Mission 2:</b> Tap anywhere on the map to move the mystery player. Switch between k=1 and k=5. Find a spot where they give <b>different</b> answers!</p><p class="feedback" aria-live="polite"></p>';
-        } else if (step === 2) {
-          box.innerHTML = '<p><b>Mission 3:</b> Why is k=5 often safer than k=1?</p><div class="row">' + D.shuffle([[1, 'One weird example can’t decide everything by itself'], [0, 'Bigger numbers are always better'], [0, 'k=5 is faster to calculate']]).map(function (o) { return '<button type="button" class="btn small" data-ok="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div><p class="feedback" aria-live="polite"></p>';
-          D.$all('[data-ok]', box).forEach(function (b) { b.addEventListener('click', function () { var f = box.querySelector('.feedback'); if (b.getAttribute('data-ok') === '1') { D.sfx('win'); step = 3; api.save({ step: 3 }); task(); } else { D.sfx('bad'); b.disabled = true; f.className = 'feedback no'; f.textContent = 'Think about that odd striker hiding among the defenders.'; } }); });
-        } else { box.innerHTML = '<p class="feedback ok">🏆 Scout certified! With more voters, one unusual example can’t fool the model as easily. (But make k too big and far-away players get a vote too. Balance again!)</p>'; api.done(); }
-      }
-      D.$all('.nn-k button', el).forEach(function (b) { b.addEventListener('click', function () { k = +b.getAttribute('data-k'); api.save({ k: k }); D.$all('.nn-k button', el).forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); draw(); if (step === 1) checkDisagree(); }); });
-      draw(); task();
+      render();
     });
 window.CHALLENGE=(function (el, api) {
-      api.D.sorter(el, api, {
-        choices: [['y', '✅ Uses similarity'], ['n', '❌ Doesn’t']],
-        items: [
-          ['A music app: “People who liked this song also liked…”', 'y', 'It finds listeners similar to you and recommends what they enjoyed.'],
-          ['A photo app that finds pictures that look like the one you picked', 'y', 'It compares images to find the closest matches.'],
-          ['A calculator adding 2 + 2', 'n', 'Pure arithmetic rules, no comparing examples.'],
-          ['A shopping site showing items similar to the one you’re viewing', 'y', 'Items are placed on a “map,” and neighbors get recommended.'],
-        ],
-        need: 3, win: 'Similarity is one of the simplest and most powerful ideas in AI. You’ll see it again with word maps in the Brown Belt!',
-      });
+      api.D.quiz(el, [
+        { q: '“Once upon a …”', a: ['time', 'banana', 'robot', 'Tuesday'], c: 0, why: 'This phrase appears constantly in stories.' },
+        { q: '“The capital of France is …”', a: ['Paris', 'pizza', 'blue', 'running'], c: 0, why: 'A pattern seen countless times in text.' },
+        { q: '“Peanut butter and …”', a: ['jelly', 'gravel', 'homework', 'Mars'], c: 0, why: 'A super common pairing in English text.' },
+        { q: '“The goalkeeper dove and caught the …”', a: ['ball', 'sandwich', 'cloud', 'keyboard'], c: 0, why: 'Context words like “goalkeeper” make “ball” very likely.' },
+        { q: 'Why can a model guess “Paris” without “knowing” geography the way you do?', a: ['That pattern appeared many times in its training text', 'It visited Paris', 'It has a built-in atlas', 'Luck'], c: 0, why: 'Statistical patterns can look like knowledge, and often they’re right. But not always!' },
+      ], { saveKey: 'chquiz', onDone: function (s) { if (s >= 4) api.done(); } });
     });
 </script>
 <script>
