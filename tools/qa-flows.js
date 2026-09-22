@@ -45,6 +45,16 @@ const SHAPE_PTS = {
   triangle: [[120, 25], [215, 210], [25, 210], [120, 25]],
 };
 
+
+// Tic-tac-toe helper: win if possible, else block, else center/corner/first free.
+const tttMove = (pg) => pg.evaluate(() => {
+  const cells = [...document.querySelectorAll('#tt-b button')], b = cells.map((c) => c.textContent.includes('❌') ? 'X' : c.textContent.includes('⭕') ? 'O' : '');
+  const L = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  const find = (who) => { for (const l of L) { const v = l.map((i) => b[i]); if (v.filter((x) => x === who).length === 2 && v.includes('')) return l[v.indexOf('')]; } return -1; };
+  let m = find('X'); if (m < 0) m = find('O'); if (m < 0) m = [4, 0, 2, 6, 8, 1, 3, 5, 7].find((i) => !b[i]);
+  if (m == null || m < 0 || cells[m].disabled) return false; cells[m].click(); return true;
+});
+
 module.exports = {
   'white/rules-vs-learning': {
     activity: async (pg) => {
@@ -305,6 +315,58 @@ module.exports = {
     const P = ['000000', '001100', '011110', '011110', '001100', '000000'];
     for (let y = 0; y < 6; y++) for (let x = 0; x < 6; x++) if (P[y][x] === '1') await pg.click(`#cl-g button[data-x="${x}"][data-y="${y}"]`);
     await pg.click('#bt-proj [data-e="1"]'); await pg.click('#bt-proj [data-s="1"]');
+  },
+
+  'purple/search-trees': {
+    activity: async (pg) => {
+      for (const id of ['r', 'r1', 'r2', 'r11']) await pg.click(`[data-id="${id}"]`);
+      await pg.click('[data-ok="1"]');
+      for (let k = 0; k < 10; k++) {
+        if (await pg.$('#st-again')) break;
+        const n = await pg.$eval('.st-sticks', (e) => (e.textContent.match(/🥢/g) || []).length);
+        await pg.click(`[data-take="${n % 3 || 1}"]`); await pg.waitForTimeout(900);
+      }
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'purple/tic-tac-toe-minimax': {
+    activity: async (pg) => {
+      await pg.click('[data-br="random"]');
+      for (let g = 0; g < 40 && !(await pg.textContent('#tt-m')).includes('Mission 2'); g++) { while (await tttMove(pg)); await pg.click('#tt-new'); }
+      await pg.click('[data-br="minimax"]');
+      for (let g = 0; g < 2; g++) { while (await tttMove(pg)); await pg.click('#tt-new'); }
+      await pg.click('#tt-m [data-ok="1"]');
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'purple/chess-engine-thinking': {
+    activity: async (pg) => { for (let k = 0; k < 3; k++) await pg.click('#activity [data-ok="1"]'); },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'purple/maze-sensei': {
+    activity: async (pg) => {
+      for (let k = 0; k < 30 && !(await pg.$('#mz-q [data-ok]')); k++) await pg.click('#mz-50');
+      await pg.click('#mz-q [data-ok="1"]');
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'purple/explore-vs-exploit': {
+    activity: async (pg) => { for (let k = 0; k < 20; k++) await pg.click(`[data-d="${k % 3}"]`); await pg.click('#ee-run'); await pg.click('.ee-sim [data-ok="1"]'); },
+    challenge: (pg) => solveSorter(pg, '#challenge'),
+  },
+  'purple/game-character-ai': {
+    activity: async (pg) => {
+      for (const [r, v] of [['see', 'chase'], ['lose', 'search'], ['timer', 'patrol'], ['spot', 'chase'], ['hurt', 'flee']]) await pg.selectOption(`select[data-r="${r}"]`, v);
+      await pg.click('#sm-run'); await pg.waitForTimeout(6500);
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'test:purple': async (pg) => {
+    for (let k = 0; k < 10 && (await pg.$('#bt-proj [data-t="1"]')); k++) {
+      const n = await pg.$eval('.tn-sticks', (e) => (e.textContent.match(/🥢/g) || []).length);
+      await pg.click(`#bt-proj [data-t="${n % 3 || 1}"]`);
+    }
+    await pg.click('#bt-proj [data-sq="2"]'); await pg.click('#bt-proj [data-rw="1"]');
   },
   'test:white': async (pg) => {
     const ans = ['r', 'n', 'p', 'c', 'n', 'r'];

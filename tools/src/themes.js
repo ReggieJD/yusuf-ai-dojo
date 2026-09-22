@@ -136,12 +136,12 @@ body{background-color:#e8f1ff;background-image:linear-gradient(#1f6feb14 2px,tra
 .sec-title .ico{border-radius:0;background:#0a1a33;color:#7fb2ff}
 .hero .kicker{border-radius:0;background:#0a1a33;color:#7fb2ff;font-family:var(--font-head)}
 .btn{border-radius:2px;box-shadow:4px 4px 0 var(--ink)}
-.viewfinder{position:relative;width:140px;height:120px;display:grid;place-items:center;margin-bottom:8px;background:repeating-linear-gradient(0deg,#0000 0 3px,#1f6feb10 3px 4px)}
+.viewfinder{position:relative;width:140px;height:120px;display:grid;place-items:center;margin-bottom:12px;background:repeating-linear-gradient(0deg,#0000 0 3px,#1f6feb10 3px 4px)}
 .viewfinder i{position:absolute;width:26px;height:26px;border:4px solid #1f6feb}
 .viewfinder i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}.viewfinder i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
 .viewfinder i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}.viewfinder i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
 .viewfinder .em{font-size:3rem;image-rendering:pixelated;animation:focus 1.4s ease-out both}
-.viewfinder .rec{position:absolute;left:6px;bottom:-18px;font:700 .7rem var(--font-head);color:#b3261e}
+.viewfinder .rec{position:absolute;left:34px;bottom:4px;font:700 .7rem var(--font-head);color:#b3261e}
 @keyframes focus{from{filter:blur(6px);transform:scale(1.2)}}
 .hanko{position:absolute;right:6px;top:26px;padding:6px 8px;border:3px solid #0a1a33;background:#fff;color:#0a1a33;font:800 .7rem/1.2 var(--font-head);text-transform:uppercase;text-align:center;box-shadow:4px 4px 0 #1f6feb}
 details.challenge{border-radius:4px;background:repeating-linear-gradient(0deg,#fff 0 8px,#eef5ff 8px 16px)}

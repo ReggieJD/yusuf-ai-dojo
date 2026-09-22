@@ -75,7 +75,7 @@ const worlds = [
     id: 'purple', name: 'Purple Belt', world: 'Game AI & Strategy', color: '#8e44ec', ink: '#ffffff', emoji: '♟️',
     blurb: 'Think ahead like a chess engine, build an unbeatable tic-tac-toe AI, and train an agent by trial and error.',
     parents: 'Search trees, the minimax algorithm (building a tic-tac-toe AI that cannot lose), how chess engines evaluate positions and look ahead, reinforcement learning with a maze agent, exploration vs. exploitation, and state machines in video-game characters.',
-    built: false,
+    built: true,
     lessons: [
       { id: 'search-trees', title: 'Search Trees', emoji: '🌲', min: 12, term: 'Game Tree', def: 'A map of every possible move, then every reply, then every reply to that, branching like a tree.' },
       { id: 'tic-tac-toe-minimax', title: 'The Unbeatable Bot', emoji: '❌', min: 18, term: 'Minimax', def: 'A strategy that assumes your opponent plays their best, then picks the move that leaves you best off.' },
