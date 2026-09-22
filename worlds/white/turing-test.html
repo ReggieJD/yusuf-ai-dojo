@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>You Be the Judge · White Belt · Yusuf's AI Dojo</title>
+<meta name="description" content="A test where a judge chats with a hidden human and a hidden machine and tries to tell which is which.">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%A5%8B%3C%2Ftext%3E%3C%2Fsvg%3E">
+<style>
+/* ===== Yusuf's AI Dojo — base styles (every world overrides the tokens) ===== */
+:root{
+  --bg:#f6f3ec; --bg2:#ece6d8; --ink:#1d1d1f; --muted:#55524b; --card:#ffffff; --line:#1d1d1f22;
+  --accent:#d62828; --accent-ink:#ffffff; --accent2:#1d3557; --good:#1b7f4b; --good-bg:#e3f6ea; --bad:#b3261e; --bad-bg:#fde7e4;
+  --radius:18px; --shadow:0 6px 0 #1d1d1f18, 0 12px 30px #1d1d1f14;
+  --font-head: "Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+  --font-body: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --head-weight:800; --head-case:none; --head-track:0;
+  --sensei:#e9eef5; --band:#d62828;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important} }
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 var(--font-body);min-height:100vh;overflow-x:hidden}
+img,svg{max-width:100%}
+a{color:var(--accent2);text-underline-offset:3px}
+h1,h2,h3{font-family:var(--font-head);font-weight:var(--head-weight);text-transform:var(--head-case);letter-spacing:var(--head-track);line-height:1.15;margin:0 0 .5em}
+h1{font-size:clamp(1.9rem,6vw,3rem)} h2{font-size:clamp(1.35rem,4vw,1.8rem)} h3{font-size:1.15rem}
+p{margin:0 0 .8em}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid var(--accent2);outline-offset:3px;border-radius:6px}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px}
+
+/* ---- top bar ---- */
+#dojo-bar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:8px;padding:8px 12px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+#dojo-bar a,#dojo-bar button{min-height:44px}
+.db-home{display:inline-flex;align-items:center;gap:6px;font-weight:800;text-decoration:none;color:var(--ink);padding:0 12px;border-radius:999px;background:var(--card);border:2px solid var(--line)}
+.db-me{display:inline-flex;align-items:center;gap:6px;font-weight:700;margin-right:auto;min-width:0}
+.db-nick{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:9.5em}
+.db-av{font-size:1.5rem}
+.db-pill{display:inline-flex;align-items:center;gap:4px;padding:0 12px;min-height:44px;border-radius:999px;background:var(--card);border:2px solid var(--line);font-weight:800;color:var(--ink);text-decoration:none}
+.db-sound{font-size:1.2rem;width:44px;border-radius:50%;border:2px solid var(--line);background:var(--card);cursor:pointer}
+@media (max-width:480px){ #dojo-bar{flex-wrap:nowrap;gap:6px;padding:8px} .db-home span:last-child,.db-xp>span[aria-hidden]:last-child{display:none} .db-home{padding:0 10px} .db-pill{padding:0 10px} .db-nick{max-width:5.5em} .db-av{font-size:1.3rem} }
+
+/* ---- buttons ---- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 20px;border-radius:14px;border:2px solid var(--ink);background:var(--card);color:var(--ink);font:700 1rem/1.2 var(--font-body);cursor:pointer;text-decoration:none;box-shadow:0 4px 0 var(--ink);transition:transform .08s, box-shadow .08s;touch-action:manipulation}
+.btn:hover{transform:translateY(-1px)} .btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.small{min-height:40px;padding:6px 14px;font-size:.92rem}
+.btn:disabled,.btn[aria-disabled="true"]{opacity:.45;cursor:not-allowed;transform:none;box-shadow:0 4px 0 var(--ink)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* ---- hero ---- */
+.hero{position:relative;padding:28px 0 18px}
+.hero .kicker{display:inline-block;font-weight:800;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:999px;background:var(--accent);color:var(--accent-ink);margin-bottom:10px}
+.hero .hook{font-size:1.12rem;color:var(--muted);max-width:40em}
+.hero-art{font-size:3.4rem;line-height:1;margin-bottom:6px}
+.steps{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:14px 0 0;list-style:none}
+.steps li{display:flex;align-items:center;gap:6px;padding:6px 12px 6px 6px;border-radius:999px;background:var(--card);border:2px solid var(--line);font-weight:700;font-size:.9rem}
+.steps .ck{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;border:2px solid var(--line);font-size:.8rem}
+.steps li.on .ck{background:var(--good);color:#fff;border-color:var(--good)}
+.nudge{background:var(--card);border:2px dashed var(--accent);border-radius:14px;padding:10px 14px;margin:10px 0 0}
+
+/* ---- section cards ---- */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 18px;margin:18px 0;border:2px solid var(--line);position:relative}
+@media (min-width:640px){ .card{padding:28px} }
+.sec-title{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sec-title .ico{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-size:1.3rem;flex:none}
+.sec-title h2{margin:0}
+.instructions{background:var(--bg2);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-weight:600}
+
+/* ---- story ---- */
+.st-line{display:flex;gap:10px;align-items:flex-end;margin:0 0 12px}
+.st-you{flex-direction:row-reverse}
+.st-face{flex:none;width:50px;height:50px;display:grid;place-items:center;border-radius:50%;background:var(--bg2);font-size:1.8rem}
+.st-bubble{background:var(--bg2);padding:10px 14px;border-radius:16px 16px 16px 4px;max-width:78%}
+.st-you .st-bubble{background:var(--accent);color:var(--accent-ink);border-radius:16px 16px 4px 16px}
+.st-name{display:block;font-size:.78rem;font-weight:800;opacity:.75;text-transform:uppercase;letter-spacing:.05em}
+.st-narr{font-style:italic;color:var(--muted);text-align:center;margin:6px 0 14px}
+
+/* ---- quiz ---- */
+#quiz-sec:not(.ready) .quiz-hint{display:block}
+.quiz-hint{display:none;font-size:.9rem;color:var(--muted)}
+.qz-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;font-weight:700;color:var(--muted);font-size:.9rem}
+.qz-dots{display:flex;gap:5px}
+.qz-dot{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.qz-dot.done{background:var(--good)} .qz-dot.now{background:var(--accent)}
+.qz-q{font-size:1.2rem;font-weight:700}
+.qz-choices{display:grid;gap:10px}
+.qz-choice{text-align:left;min-height:52px;padding:12px 16px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:600 1rem/1.35 var(--font-body);cursor:pointer}
+.qz-choice:hover:not(:disabled){border-color:var(--accent)}
+.qz-choice.right{background:var(--good-bg);border-color:var(--good);color:#0d3b22}
+.qz-choice.right::after{content:"  ✓";font-weight:900}
+.qz-choice.wrong{background:var(--bad-bg);border-color:var(--bad);color:#5c130e}
+.qz-choice:disabled{cursor:default}
+.qz-feedback{margin-top:12px}
+.qz-feedback p{padding:12px 14px;border-radius:12px}
+.qz-feedback.ok p{background:var(--good-bg);color:#0d3b22} .qz-feedback.no p{background:var(--bad-bg);color:#5c130e}
+.qz-end{text-align:center;padding:10px}
+.qz-stars{font-size:2.4rem} .qz-score{font-size:1.4rem}
+
+/* ---- challenge ---- */
+details.challenge{border:3px solid var(--ink);border-radius:var(--radius);background:repeating-linear-gradient(135deg,var(--card) 0 18px,var(--bg2) 18px 20px);margin:18px 0;box-shadow:var(--shadow)}
+details.challenge>summary{list-style:none;cursor:pointer;padding:18px;display:flex;align-items:center;gap:12px;font:800 1.2rem/1.2 var(--font-head);min-height:56px}
+details.challenge>summary::-webkit-details-marker{display:none}
+details.challenge>summary .flame{font-size:1.8rem}
+details.challenge>summary .tag{margin-left:auto;font:700 .8rem var(--font-body);padding:4px 10px;border-radius:999px;background:var(--ink);color:var(--bg)}
+details.challenge[open]>summary .tag::after{content:" ▲"} details.challenge:not([open])>summary .tag::after{content:" ▼"}
+.challenge-body{padding:0 18px 20px;background:transparent}
+.challenge-body>div{background:var(--card);border-radius:14px;padding:16px;border:2px solid var(--line)}
+
+/* ---- key term ---- */
+.term{display:flex;gap:14px;align-items:flex-start}
+.term .scroll{font-size:2.2rem}
+.term dt{font:800 1.3rem/1.2 var(--font-head)} .term dd{margin:4px 0 0}
+
+/* ---- complete banner + nav ---- */
+.complete{text-align:center;background:var(--good-bg);border-color:var(--good);color:#0d3b22}
+.complete h2{color:#0d3b22}
+.lesson-nav{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;margin:24px 0 40px}
+footer.site{padding:26px 0 40px;color:var(--muted);font-size:.85rem;text-align:center}
+footer.site a{color:inherit}
+
+/* ---- toasts ---- */
+.toasts{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:calc(100% - 32px);max-width:420px}
+.toast{background:#1d1d1f;color:#fff;padding:10px 18px;border-radius:999px;font-weight:700;box-shadow:0 8px 24px #0005;animation:toastIn .3s ease-out;text-align:center}
+.toast.badge{background:linear-gradient(90deg,#7b2ff7,#d62828);}
+.toast.xp{background:#1b7f4b}
+.toast.out{opacity:0;transform:translateY(8px);transition:.35s}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ---- confetti ---- */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:300;overflow:hidden}
+.confetti i{position:absolute;top:-20px;width:10px;height:14px;border-radius:2px;animation:fall 3s ease-in forwards;opacity:.95}
+@keyframes fall{to{top:105vh;transform:translateX(40px) rotate(540deg)}}
+
+/* ---- ceremony ---- */
+.ceremony{position:fixed;inset:0;z-index:250;background:#0b0b10e6;display:grid;place-items:center;padding:16px;animation:toastIn .4s}
+.cer-card{background:#fffdf7;color:#1d1d1f;border-radius:24px;padding:26px 20px;max-width:480px;width:100%;text-align:center;border:4px solid #1d1d1f;box-shadow:0 20px 60px #0008}
+.cer-belt{width:240px;height:120px}
+.cer-l{animation:slideL 1s ease-out both} .cer-r{animation:slideR 1s ease-out both}
+.cer-knot{animation:pop .5s .9s ease-out both;transform-origin:120px 58px} .cer-tail1,.cer-tail2{animation:drop .6s 1.2s ease-out both}
+@keyframes slideL{from{transform:translateX(-60px);opacity:0}} @keyframes slideR{from{transform:translateX(60px);opacity:0}}
+@keyframes pop{from{transform:scale(0)}} @keyframes drop{from{opacity:0;transform:translateY(-14px)}}
+.cer-kicker{text-transform:uppercase;letter-spacing:.2em;font-weight:800;color:#8a6d1a;margin:6px 0}
+.cer-card h2{font-size:1.6rem}
+
+/* ---- generic interactive helpers used by activities ---- */
+.tap{min-height:48px;min-width:48px;cursor:pointer;touch-action:manipulation}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--bg2);font-weight:700;font-size:.85rem}
+.meter{height:14px;border-radius:999px;background:var(--bg2);overflow:hidden;border:2px solid var(--line)}
+.meter>i{display:block;height:100%;background:var(--accent);width:0;transition:width .5s}
+.feedback{min-height:1.5em;font-weight:700;margin-top:10px}
+.feedback.ok{color:var(--good)} .feedback.no{color:var(--bad)}
+.err{color:var(--bad);font-weight:700}
+.grid2{display:grid;gap:14px} @media (min-width:640px){ .grid2{grid-template-columns:1fr 1fr} }
+
+@media print{
+  #dojo-bar,.toasts,.confetti,.no-print{display:none!important}
+  body{background:#fff!important;color:#000!important}
+}
+
+
+:root{--bg:#f7f2e6;--bg2:#ece3cf;--ink:#1b1b1b;--muted:#5a5247;--card:#fffdf6;--line:#1b1b1b26;
+--accent:#b8241b;--accent-ink:#fff;--accent2:#1f3a60;--radius:6px;--band:#b8241b;--sensei:#fbf7ec;
+--font-head:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;--head-weight:700;
+--shadow:0 1px 0 #1b1b1b30, 0 10px 24px #3b2a1014}
+body{background-color:var(--bg);background-image:
+ radial-gradient(circle at 20% 10%,#ffffff80 0,transparent 40%),
+ radial-gradient(circle at 85% 70%,#e9dcc0 0,transparent 45%),
+ url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.8%22%20numOctaves%3D%222%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.45%200%200%200%200%20.38%200%200%200%200%20.25%200%200%200%20.07%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22160%22%20height%3D%22160%22%20filter%3D%22url(%23n)%22%2F%3E%3C%2Fsvg%3E")}
+.card{border:none;border-left:6px solid var(--ink);border-radius:4px 14px 14px 4px}
+.sec-title .ico{border-radius:50%;background:var(--accent);box-shadow:inset 0 0 0 3px #fff6}
+.sec-title h2{position:relative;padding-bottom:6px}
+.sec-title h2::after{content:"";position:absolute;left:0;bottom:-4px;width:120px;height:10px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%2010%22%3E%3Cpath%20d%3D%22M2%206%20C30%201%2060%209%20118%203%22%20stroke%3D%22%231b1b1b%22%20stroke-width%3D%224%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.75%22%2F%3E%3C%2Fsvg%3E") no-repeat;background-size:contain}
+.hero-enso{width:150px;height:150px;position:relative;display:grid;place-items:center;margin:0 0 6px -8px}
+.hero-enso svg{position:absolute;inset:0}
+.hero-enso path{stroke-dasharray:420;stroke-dashoffset:420;animation:brush 1.6s .2s ease-out forwards}
+.hero-enso .em{font-size:3.6rem;animation:inkIn .8s 1.2s both}
+@keyframes brush{to{stroke-dashoffset:0}}
+@keyframes inkIn{from{opacity:0;transform:scale(.7)}}
+.hero .kicker{border-radius:3px;font-family:var(--font-head);letter-spacing:.12em}
+.hanko{position:absolute;right:6px;top:28px;width:74px;height:74px;border:3px solid var(--accent);color:var(--accent);border-radius:10px;display:grid;place-items:center;font:700 .72rem/1.1 var(--font-head);text-align:center;transform:rotate(8deg);opacity:.85;padding:4px;text-transform:uppercase;letter-spacing:.06em}
+@media (max-width:520px){.hanko{width:58px;height:58px;font-size:.6rem;top:20px}}
+details.challenge{background:repeating-linear-gradient(90deg,var(--card) 0 22px,#f1e8d3 22px 23px);border-radius:6px}
+.btn{border-radius:6px}
+
+
+.tt-q{background:#1f3a60;color:#fff;border-radius:16px 16px 16px 4px;padding:12px 14px;font-weight:700;margin-bottom:12px}
+.tt-ans{display:grid;gap:10px}
+@media(min-width:640px){.tt-ans{grid-template-columns:1fr 1fr}}
+.tt-a{border:2px solid var(--line);border-radius:4px 16px 16px 16px;padding:12px 14px;background:var(--bg);min-height:96px}
+.tt-a b{display:block;font-size:.8rem;letter-spacing:.1em;color:var(--muted)}
+.tt-a.bot{border-color:var(--accent);background:#fde7e4}
+.tt-pick{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.tt-pick .btn{padding:8px;font-size:.95rem}
+.tt-clue{margin-top:12px;padding:12px;border-radius:12px;background:var(--bg2)}
+.tt-round{font-weight:800;color:var(--muted);margin-bottom:6px}
+
+
+</style>
+</head>
+<body class="world-white">
+<a class="sr-only" href="#main">Skip to content</a>
+<header id="dojo-bar"><a class="db-home" href="../../index.html">🏯 Dojo</a></header>
+<noscript><div class="wrap"><p>This dojo needs JavaScript turned on to run its games and quizzes.</p></div></noscript>
+
+<main id="main" class="wrap lesson l-turing-test">
+  <section class="hero">
+    <div class="hanko" aria-hidden="true">White<br>Belt</div>
+    <div class="hero-enso" aria-hidden="true"><svg viewBox="0 0 150 150"><path d="M112 30 C 80 6, 24 22, 20 72 C 16 122, 76 146, 116 118 C 146 96, 140 52, 118 38" fill="none" stroke="#2f5d3a" stroke-width="11" stroke-linecap="round" opacity=".88"/></svg><span class="em">🕵️</span></div>
+    <span class="kicker">White Belt · Lesson 5 of 6</span>
+    <h1>You Be the Judge</h1>
+    <p class="hook fill">In 1950, Alan Turing asked: “Can machines think?” Then he invented a game to test it. Today, you are the judge.</p>
+    <ul class="steps" aria-label="Lesson checklist">
+      <li data-step="act"><span class="ck" aria-hidden="true"></span>Activity</li>
+      <li data-step="quiz"><span class="ck" aria-hidden="true"></span>Quiz</li>
+      <li data-step="ch"><span class="ck" aria-hidden="true"></span>Challenge <small>(bonus)</small></li>
+    </ul>
+    <p class="nudge" id="nudge" hidden>👋 New here? <a href="../../index.html">Pick your ninja name and favorite themes</a> so the lessons can be all about you.</p>
+  </section>
+
+  <section class="card story-card" aria-labelledby="h-story">
+    <div class="sec-title"><span class="ico" aria-hidden="true">📜</span><h2 id="h-story">The Story</h2></div>
+    <div id="story"></div>
+  </section>
+
+  <section class="card act-card" aria-labelledby="h-act">
+    <div class="sec-title"><span class="ico" aria-hidden="true">🥋</span><h2 id="h-act">Do It: Judge the Chat</h2></div>
+    <p class="instructions fill">Each round, the judge asks a question and two hidden players answer. Pick <b>A</b>, <b>B</b>, or <b>Can’t tell</b>, then read the clue.</p>
+    <div id="activity" class="activity"></div>
+  </section>
+
+  <section class="card" id="quiz-sec" aria-labelledby="h-quiz">
+    <div class="sec-title"><span class="ico" aria-hidden="true">🧠</span><h2 id="h-quiz">Quick Quiz</h2></div>
+    <p class="quiz-hint">Tip: do the activity first — the answers are hiding in there.</p>
+    <div id="quiz"></div>
+  </section>
+
+  <details class="challenge" id="challenge-box">
+    <summary><span class="flame" aria-hidden="true">🔥</span><span>Challenge Mode: The Judge’s Toolkit</span><span class="tag">+30 XP</span></summary>
+    <div class="challenge-body"><div><p class="fill">Expert judges need strategy. Answer these tough questions (3 of 4 to win).</p><div id="challenge"></div></div></div>
+  </details>
+
+  <section class="card" aria-labelledby="h-term">
+    <div class="sec-title"><span class="ico" aria-hidden="true">🔑</span><h2 id="h-term">Key Term</h2></div>
+    <div class="term"><span class="scroll" aria-hidden="true">📜</span><dl><dt>Turing Test</dt><dd>A test where a judge chats with a hidden human and a hidden machine and tries to tell which is which.</dd></dl></div>
+    <p><a href="../../scrolls.html">See all your Dojo Scrolls →</a></p>
+  </section>
+
+  <section class="card complete" id="complete" hidden>
+    <h2>🎉 Lesson complete!</h2>
+    <p>You earned this one. Keep the momentum going.</p>
+    <a class="btn primary" href="ai-myths.html">Next: Myth Busters →</a>
+  </section>
+
+  <nav class="lesson-nav" aria-label="Lesson navigation">
+    <a class="btn" href="al-khwarizmi.html">← The Algorithm Scholar</a>
+    <a class="btn primary" href="ai-myths.html">Next: Myth Busters →</a>
+  </nav>
+</main>
+<footer class="site"><div class="wrap">Built for Yusuf with 🥋 · Progress is saved only on this device · <a href="../../parents.html">For parents</a></div></footer>
+<script>
+window.CURRIC={"worlds":[{"id":"white","name":"White Belt","world":"What Is AI?","color":"#f4f1ea","ink":"#1d1d1f","emoji":"🥋","blurb":"What AI really is, where it hides in your day, and where the word \"algorithm\" came from.","built":true,"lessons":[{"id":"rules-vs-learning","title":"Rules vs Learning","emoji":"🤖","min":12,"term":"Machine Learning","def":"When a computer finds patterns in examples, instead of only following rules a person wrote."},{"id":"ai-all-around","title":"AI All Around You","emoji":"📱","min":10,"term":"Artificial Intelligence (AI)","def":"Computer systems that do tasks that usually need human smarts — like recognizing, predicting, deciding, or creating."},{"id":"is-it-ai","title":"Is It AI?","emoji":"🗂️","min":10,"term":"Automation","def":"A machine doing a job by itself. Automatic is not the same as intelligent — a timer is automatic, but it is not AI."},{"id":"al-khwarizmi","title":"The Algorithm Scholar","emoji":"📜","min":15,"term":"Algorithm","def":"A precise, step-by-step set of instructions for solving a problem."},{"id":"turing-test","title":"You Be the Judge","emoji":"🕵️","min":12,"term":"Turing Test","def":"A test where a judge chats with a hidden human and a hidden machine and tries to tell which is which."},{"id":"ai-myths","title":"Myth Busters","emoji":"💥","min":10,"term":"Hype","def":"Claims that make something sound more amazing — or scarier — than it really is."}]},{"id":"yellow","name":"Yellow Belt","world":"Data Is Power","color":"#ffd23f","ink":"#1d1d1f","emoji":"📊","blurb":"Data is the fuel of AI. Collect it, label it, chart it, and learn why bad data makes bad AI.","built":false,"lessons":[{"id":"what-is-data","title":"What Is Data?","emoji":"🔢","min":10,"term":"Data","def":"Facts, numbers, words, pictures or sounds collected so they can be studied."},{"id":"collect-and-label","title":"Collect & Label","emoji":"🏷️","min":12,"term":"Label","def":"The correct answer attached to an example, like tagging a photo \"cat\". AI learns from labeled examples."},{"id":"stats-court","title":"Stats Court","emoji":"🏀","min":15,"term":"Correlation","def":"When two things tend to change together. It does NOT prove that one causes the other."},{"id":"averages-and-patterns","title":"Averages & Patterns","emoji":"📈","min":12,"term":"Average (Mean)","def":"Add up all the numbers, then divide by how many numbers there are."},{"id":"garbage-in-garbage-out","title":"Garbage In, Garbage Out","emoji":"🗑️","min":12,"term":"Garbage In, Garbage Out","def":"If the data going into a system is bad, the results coming out will be bad too."},{"id":"data-detective","title":"Data Detective","emoji":"🔍","min":12,"term":"Outlier","def":"A data point that is very different from the rest. It might be a mistake — or something really interesting."}]},{"id":"orange","name":"Orange Belt","world":"How Machines Learn","color":"#ff8c42","ink":"#1d1d1f","emoji":"⚙️","blurb":"Train your own classifier, test it fairly, and learn the difference between memorizing and understanding.","built":false,"lessons":[{"id":"train-a-classifier","title":"Train a Classifier","emoji":"🧺","min":15,"term":"Classifier","def":"A model that sorts things into groups (classes), like \"spam\" or \"not spam\"."},{"id":"train-vs-test","title":"Training vs Testing","emoji":"📝","min":12,"term":"Test Set","def":"Examples kept hidden during training, used afterward to check whether the model really learned."},{"id":"accuracy-score","title":"Accuracy Score","emoji":"🎯","min":10,"term":"Accuracy","def":"The share of answers a model gets right. 45 right out of 50 is 90% accuracy."},{"id":"overfitting","title":"Memorize or Understand?","emoji":"🧠","min":15,"term":"Overfitting","def":"When a model memorizes its training examples so closely that it fails on new ones."},{"id":"decision-trees","title":"Decision Trees","emoji":"🌳","min":15,"term":"Decision Tree","def":"A model that makes a decision by asking a series of yes/no questions."},{"id":"nearest-neighbor","title":"Nearest Neighbor","emoji":"📍","min":12,"term":"Nearest Neighbor","def":"A method that labels a new example by copying the label of the most similar examples it already knows."}]},{"id":"green","name":"Green Belt","world":"Inside the AI Brain","color":"#2ec27e","ink":"#0d2b1d","emoji":"🧠","blurb":"Neurons, weights, and networks — and how a computer \"learns\" by walking downhill.","built":false,"lessons":[{"id":"meet-the-neuron","title":"Meet the Neuron","emoji":"⚡","min":12,"term":"Artificial Neuron","def":"A tiny math unit: it multiplies inputs by weights, adds them up, and decides how strongly to \"fire\"."},{"id":"weights-and-bias","title":"Weights & Bias","emoji":"🎚️","min":15,"term":"Weight","def":"A number that sets how much one input matters. Training adjusts weights."},{"id":"activation-switch","title":"The Activation Switch","emoji":"🔌","min":12,"term":"Activation Function","def":"The rule a neuron uses to turn its total into an output, like \"fire only if the total is above zero\"."},{"id":"network-playground","title":"Network Playground","emoji":"🕸️","min":15,"term":"Neural Network","def":"Many artificial neurons connected in layers, passing numbers forward."},{"id":"walking-downhill","title":"Walking Downhill","emoji":"⛰️","min":15,"term":"Gradient Descent","def":"A way to improve a model by taking small steps in the direction that reduces error the fastest."},{"id":"how-networks-learn","title":"How Networks Learn","emoji":"🔁","min":15,"term":"Loss","def":"A score for how wrong a model's guesses are. Training tries to make the loss smaller."}]},{"id":"blue","name":"Blue Belt","world":"AI Senses","color":"#3a86ff","ink":"#0a1a33","emoji":"👁️","blurb":"How computers see and hear: pixels, colors, filters, edges, and sound turned into numbers.","built":false,"lessons":[{"id":"pixels","title":"Pixel Zoom","emoji":"🔬","min":10,"term":"Pixel","def":"One tiny square of color. Digital images are grids of pixels, and each pixel is stored as numbers."},{"id":"color-numbers","title":"Colors Are Numbers","emoji":"🎨","min":10,"term":"RGB","def":"Red, Green, Blue: screens make every color by mixing these three lights, each stored as a number from 0 to 255."},{"id":"filters-and-edges","title":"Filters & Edges","emoji":"✏️","min":15,"term":"Filter","def":"A small grid of numbers slid across an image to find or change things, like edges or blur."},{"id":"draw-and-guess","title":"Draw & Guess","emoji":"🖍️","min":15,"term":"Pattern Matching","def":"Comparing something new to stored examples to find the closest match."},{"id":"sound-to-numbers","title":"Sound to Numbers","emoji":"🔊","min":12,"term":"Sampling","def":"Measuring a sound wave many times per second and storing each measurement as a number."},{"id":"how-ai-sees","title":"How AI Sees","emoji":"👀","min":15,"term":"Feature","def":"A useful clue in data, like an edge, a corner, or a color patch, that helps a model recognize things."}]},{"id":"purple","name":"Purple Belt","world":"Game AI & Strategy","color":"#8e44ec","ink":"#ffffff","emoji":"♟️","blurb":"Think ahead like a chess engine, build an unbeatable tic-tac-toe AI, and train an agent by trial and error.","built":false,"lessons":[{"id":"search-trees","title":"Search Trees","emoji":"🌲","min":12,"term":"Game Tree","def":"A map of every possible move, then every reply, then every reply to that, branching like a tree."},{"id":"tic-tac-toe-minimax","title":"The Unbeatable Bot","emoji":"❌","min":18,"term":"Minimax","def":"A strategy that assumes your opponent plays their best, then picks the move that leaves you best off."},{"id":"chess-engine-thinking","title":"How Chess Engines Think","emoji":"♞","min":15,"term":"Evaluation Function","def":"A formula that scores a position, like counting material, when there is no time to search to the end."},{"id":"maze-sensei","title":"Maze Sensei","emoji":"🏯","min":15,"term":"Reinforcement Learning","def":"Learning by trial and error: an agent tries actions, gets rewards or penalties, and improves over time."},{"id":"explore-vs-exploit","title":"Explore or Exploit?","emoji":"🧭","min":12,"term":"Exploration","def":"Trying something new to learn more, instead of repeating what already works (exploitation)."},{"id":"game-character-ai","title":"Game Character AI","emoji":"👾","min":12,"term":"State Machine","def":"A set of modes (like patrol, chase, flee) and rules for switching between them."}]},{"id":"brown","name":"Brown Belt","world":"Talking Machines","color":"#9c6b3f","ink":"#ffffff","emoji":"💬","blurb":"How chatbots really work: tokens, next-word prediction, word maps, and why AI can be confidently wrong.","built":false,"lessons":[{"id":"tokens","title":"Tokens","emoji":"🧩","min":10,"term":"Token","def":"A chunk of text — a word or piece of a word — that a language model reads and writes one at a time."},{"id":"next-word","title":"Guess the Next Word","emoji":"🔮","min":12,"term":"Language Model","def":"An AI trained on lots of text to predict which token is likely to come next."},{"id":"word-maps","title":"Word Maps","emoji":"🗺️","min":15,"term":"Embedding","def":"A list of numbers that places a word on a \"meaning map\", so similar words end up close together."},{"id":"temperature","title":"The Creativity Dial","emoji":"🌡️","min":12,"term":"Temperature","def":"A setting that controls how random a model's word choices are. Low = safe and predictable, high = surprising."},{"id":"confidently-wrong","title":"Confidently Wrong","emoji":"🤥","min":15,"term":"Hallucination","def":"When an AI states something false or made-up as if it were true."},{"id":"prompt-puzzles","title":"Prompt Puzzles","emoji":"🗝️","min":15,"term":"Prompt","def":"The instructions and information you give an AI. Clear prompts get better results."}]},{"id":"black","name":"Black Belt","world":"Builder Lab & AI Citizen","color":"#1b1b1b","ink":"#f5c542","emoji":"🏆","blurb":"Build real apps with AI, and become a smart, fair, and safe AI citizen.","built":false,"lessons":[{"id":"how-app-builders-work","title":"How AI App Builders Work","emoji":"🏗️","min":12,"term":"AI App Builder","def":"A tool where you describe an app in words and AI writes the code, which you then test and improve."},{"id":"idea-to-spec","title":"From Idea to Spec","emoji":"📋","min":15,"term":"Spec","def":"Short for specification: a clear description of what an app should do, for whom, and how you know it works."},{"id":"spec-to-prompts","title":"Spec to Prompts","emoji":"✍️","min":15,"term":"Context","def":"The background information you give an AI so it understands your goal, your users and your limits."},{"id":"test-and-debug","title":"Test & Debug","emoji":"🐞","min":15,"term":"Bug","def":"A mistake in a program that makes it behave differently than it should."},{"id":"code-playground","title":"Code Playground","emoji":"💻","min":20,"term":"Code","def":"Instructions written in a programming language that a computer can run."},{"id":"app-blueprints","title":"App Blueprints","emoji":"📐","min":15,"term":"Prototype","def":"An early, simple version of an app built to test an idea quickly."},{"id":"bias-and-fairness","title":"Bias & Fairness","emoji":"⚖️","min":15,"term":"Bias (Fairness)","def":"When a system treats some people or groups unfairly — often because of unbalanced data. (Different from the \"bias\" number inside a neuron!)"},{"id":"privacy-shield","title":"Privacy Shield","emoji":"🛡️","min":12,"term":"Personal Information","def":"Details that can identify you, like your full name, address, school, photos, or passwords. Keep them private."},{"id":"spotting-fakes","title":"Spotting Fakes","emoji":"🎭","min":15,"term":"Deepfake","def":"Fake images, video or audio made with AI to look or sound real."},{"id":"learn-dont-skip","title":"Learn, Don't Skip","emoji":"🧗","min":12,"term":"Critical Thinking","def":"Checking ideas carefully — asking \"How do I know?\" — instead of just accepting them."},{"id":"trusted-adult","title":"Your Trusted Adult","emoji":"🤝","min":10,"term":"Trusted Adult","def":"A grown-up you know well and can go to when something online feels wrong, confusing, or scary."},{"id":"ai-careers","title":"Cool AI Careers","emoji":"🚀","min":12,"term":"Data Scientist","def":"Someone who collects, cleans and studies data to find answers — and often builds AI models."},{"id":"final-project","title":"Black Belt Project","emoji":"🏁","min":30,"term":"Iteration","def":"Improving something in repeated rounds: build, test, fix, repeat."}]}],"themes":{"chess":{"name":"Chess","emoji":"♟️","hero":"a grandmaster","place":"the chessboard","thing":"a knight","group":"the chess club","items":["♔","♕","♖","♗","♘","♙"]},"martial":{"name":"Martial Arts","emoji":"🥋","hero":"a black belt","place":"the dojo","thing":"a training dummy","group":"the dojo team","items":["🥋","🥊","🎯","🏆","🥇","🧘"]},"basketball":{"name":"Basketball","emoji":"🏀","hero":"a point guard","place":"the court","thing":"a basketball","group":"the team","items":["🏀","⛹️","👟","🏆","⏱️","🥇"]},"soccer":{"name":"Soccer","emoji":"⚽","hero":"a striker","place":"the pitch","thing":"a soccer ball","group":"the squad","items":["⚽","🥅","👟","🏆","🧤","🥇"]},"space":{"name":"Space Missions","emoji":"🚀","hero":"an astronaut","place":"the space station","thing":"a rocket","group":"mission control","items":["🚀","🛰️","🪐","🌙","☄️","👩‍🚀"]},"robots":{"name":"Robots","emoji":"🤖","hero":"a robot engineer","place":"the robot lab","thing":"a robot arm","group":"the robotics club","items":["🤖","🦾","🔋","⚙️","🔧","📡"]},"detective":{"name":"Detective Mysteries","emoji":"🕵️","hero":"a detective","place":"the crime lab","thing":"a magnifying glass","group":"the detective agency","items":["🔍","🕵️","🗝️","📁","🧩","👣"]},"gamedesign":{"name":"Video Game Design","emoji":"🎮","hero":"a game designer","place":"the game studio","thing":"a game controller","group":"the dev team","items":["🎮","👾","🕹️","💎","🏰","⭐"]},"inventions":{"name":"Inventions","emoji":"💡","hero":"an inventor","place":"the workshop","thing":"a gadget","group":"the inventors' club","items":["💡","🔧","⚙️","🧪","🔋","🛠️"]},"animals":{"name":"Animals","emoji":"🐯","hero":"a wildlife ranger","place":"the jungle","thing":"a tiger","group":"the ranger crew","items":["🐯","🦅","🐬","🦁","🐼","🦊"]},"music":{"name":"Music Beats","emoji":"🎧","hero":"a beat producer","place":"the studio","thing":"a drum machine","group":"the band","items":["🎧","🥁","🎹","🎸","🎤","🎵"]},"worlds":{"name":"Building Worlds","emoji":"🏰","hero":"a world builder","place":"your block world","thing":"a castle","group":"the build crew","items":["🏰","🌋","🌲","🏝️","⛏️","🧱"]}},"arcade":[]};
+window.PAGE={"root":"../../","type":"lesson","id":"white/turing-test","world":"white"};
+/* Yusuf's AI Dojo — shared runtime. Inlined into every page so each file works on its own. */
+(function () {
+  'use strict';
+  var KEY = 'yusufDojo.v1';
+  var C = window.CURRIC || { worlds: [], themes: {}, arcade: [] };
+  var P = window.PAGE || {};
+  var ROOT = P.root || './';
+  var STUDENT = 'Yusuf';
+
+  // ---------- storage (always wrapped: private windows and file:// can block it) ----------
+  function blank() {
+    return { v: 1, profile: null, xp: 0, lessons: {}, tests: {}, belts: {}, badges: {},
+      streak: { count: 0, best: 0, last: null }, sound: false, daily: {}, arcade: {},
+      unlockAll: false, project: null };
+  }
+  var storageOK = (function () {
+    try { var t = '__dojo_test'; window.localStorage.setItem(t, '1'); window.localStorage.removeItem(t); return true; }
+    catch (e) { return false; }
+  })();
+  function load() {
+    var s = blank(), raw = null;
+    if (storageOK) { try { raw = window.localStorage.getItem(KEY); } catch (e) { raw = null; } }
+    if (raw) {
+      try {
+        var o = JSON.parse(raw);
+        if (o && typeof o === 'object') for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k) && o[k] !== undefined) s[k] = o[k];
+      } catch (e) { /* corrupted data: start fresh */ }
+    }
+    if (!s.streak || typeof s.streak !== 'object') s.streak = { count: 0, best: 0, last: null };
+    ['lessons', 'tests', 'belts', 'badges', 'daily', 'arcade'].forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
+    if (typeof s.xp !== 'number' || !isFinite(s.xp)) s.xp = 0;
+    return s;
+  }
+  var st = load();
+  function save() {
+    if (!storageOK) return false;
+    try { window.localStorage.setItem(KEY, JSON.stringify(st)); return true; } catch (e) { return false; }
+  }
+  function reset() { st = blank(); save(); }
+
+  // ---------- small helpers ----------
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function $(sel, el) { return (el || document).querySelector(sel); }
+  function $all(sel, el) { return Array.prototype.slice.call((el || document).querySelectorAll(sel)); }
+  function today(d) { d = d || new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function dayDiff(a, b) { // whole days from date string a to b
+    var pa = a.split('-'), pb = b.split('-');
+    var da = Date.UTC(+pa[0], +pa[1] - 1, +pa[2]), db = Date.UTC(+pb[0], +pb[1] - 1, +pb[2]);
+    return Math.round((db - da) / 86400000);
+  }
+  function hash(s) { var h = 2166136261; s = String(s); for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function shuffle(a, rnd) { a = a.slice(); rnd = rnd || Math.random; for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function reducedMotion() { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } }
+
+  // ---------- profile & themes ----------
+  var DEFAULT_THEMES = ['chess', 'martial', 'basketball', 'soccer'];
+  function profile() { return st.profile; }
+  function nick() { return (st.profile && st.profile.nick) || 'Ninja'; }
+  function avatar() { return (st.profile && st.profile.avatar) || '🥷'; }
+  function favs() {
+    var f = (st.profile && st.profile.themes && st.profile.themes.length) ? st.profile.themes : DEFAULT_THEMES;
+    f = f.filter(function (id) { return C.themes[id]; });
+    return f.length ? f : DEFAULT_THEMES;
+  }
+  function theme(salt) {
+    var f = favs();
+    var id = f[hash((P.id || P.type || '') + '|' + (salt || '')) % f.length];
+    var t = {}; var src = C.themes[id]; for (var k in src) t[k] = src[k]; t.id = id; return t;
+  }
+  function cap(s) { s = String(s); return s.charAt(0).toUpperCase() + s.slice(1); }
+  // Fill {{nick}}, {{name}}, {{avatar}}, {{T.hero}}, {{T.Hero}} (capitalized) tokens.
+  function fill(str, T) {
+    T = T || theme();
+    return String(str).replace(/\{\{(\w+)(?:\.(\w+))?\}\}/g, function (m, a, b) {
+      if (a === 'nick') return esc(nick());
+      if (a === 'name') return STUDENT;
+      if (a === 'avatar') return avatar();
+      if (a === 'T' && b) {
+        var key = b.charAt(0).toLowerCase() + b.slice(1);
+        var v = T[key]; if (v == null) return m;
+        return b.charAt(0) === b.charAt(0).toUpperCase() ? cap(v) : v;
+      }
+      return m;
+    });
+  }
+
+  // ---------- curriculum helpers ----------
+  function allLessons() {
+    var out = [];
+    C.worlds.forEach(function (w, wi) { w.lessons.forEach(function (l, li) { out.push({ world: w, wi: wi, li: li, lesson: l, id: w.id + '/' + l.id }); }); });
+    return out;
+  }
+  function worldById(id) { for (var i = 0; i < C.worlds.length; i++) if (C.worlds[i].id === id) return C.worlds[i]; return null; }
+  function worldUnlocked(w) {
+    if (!w || !w.built) return false;
+    var i = C.worlds.indexOf(w);
+    if (i <= 0 || st.unlockAll) return true;
+    return !!st.belts[C.worlds[i - 1].id];
+  }
+  function lessonDone(id) { var l = st.lessons[id]; return !!(l && l.done); }
+  function worldProgress(w) { var d = 0; w.lessons.forEach(function (l) { if (lessonDone(w.id + '/' + l.id)) d++; }); return { done: d, total: w.lessons.length }; }
+  function testReady(w) { var p = worldProgress(w); return st.unlockAll || p.done === p.total; }
+  function lessonHref(wid, lid) { return ROOT + 'worlds/' + wid + '/' + lid + '.html'; }
+  function nextStep() {
+    for (var i = 0; i < C.worlds.length; i++) {
+      var w = C.worlds[i];
+      if (!worldUnlocked(w)) break;
+      for (var j = 0; j < w.lessons.length; j++) {
+        var l = w.lessons[j];
+        if (!lessonDone(w.id + '/' + l.id)) return { href: lessonHref(w.id, l.id), label: l.title, sub: w.name + ' · Lesson ' + (j + 1), world: w };
+      }
+      if (!st.belts[w.id]) return { href: ROOT + 'worlds/' + w.id + '/belt-test.html', label: w.name + ' Test', sub: 'Earn your ' + w.name, world: w };
+    }
+    return null;
+  }
+  function countDone() { var n = 0; for (var k in st.lessons) if (st.lessons[k] && st.lessons[k].done) n++; return n; }
+  function countBelts() { var n = 0; for (var k in st.belts) if (st.belts[k]) n++; return n; }
+
+  // ---------- badges ----------
+  var BADGES = [
+    { id: 'first-step', icon: '👣', name: 'First Step', how: 'Finish your first lesson.', test: function () { return countDone() >= 1; } },
+    { id: 'five-lessons', icon: '🖐️', name: 'High Five', how: 'Finish 5 lessons.', test: function () { return countDone() >= 5; } },
+    { id: 'ten-lessons', icon: '🔟', name: 'Perfect Ten', how: 'Finish 10 lessons.', test: function () { return countDone() >= 10; } },
+    { id: 'twenty-five', icon: '🌟', name: 'Quarter Century', how: 'Finish 25 lessons.', test: function () { return countDone() >= 25; } },
+    { id: 'all-lessons', icon: '🐉', name: 'Dragon Scholar', how: 'Finish every lesson in the Dojo.', test: function () { return countDone() >= allLessons().length && allLessons().length > 0; } },
+    { id: 'perfect-quiz', icon: '💯', name: 'Flawless', how: 'Get every question right on a lesson quiz.', test: function () { for (var k in st.lessons) { var q = st.lessons[k].quiz; if (q && q.best === q.total) return true; } return false; } },
+    { id: 'five-perfect', icon: '🎯', name: 'Sharpshooter', how: 'Get 5 perfect lesson quizzes.', test: function () { var n = 0; for (var k in st.lessons) { var q = st.lessons[k].quiz; if (q && q.best === q.total) n++; } return n >= 5; } },
+    { id: 'challenger', icon: '🔥', name: 'Challenger', how: 'Beat your first Challenge Mode.', test: function () { for (var k in st.lessons) if (st.lessons[k].ch) return true; return false; } },
+    { id: 'challenge-master', icon: '🌋', name: 'Challenge Master', how: 'Beat 10 Challenge Modes.', test: function () { var n = 0; for (var k in st.lessons) if (st.lessons[k].ch) n++; return n >= 10; } },
+    { id: 'daily-first', icon: '🌅', name: 'Early Riser', how: 'Finish your first Daily Dojo.', test: function () { return Object.keys(st.daily).length >= 1; } },
+    { id: 'streak-3', icon: '🔥', name: 'On Fire', how: 'Keep a 3-day Daily Dojo streak.', test: function () { return (st.streak.best || 0) >= 3; } },
+    { id: 'streak-7', icon: '☄️', name: 'Unstoppable', how: 'Keep a 7-day Daily Dojo streak.', test: function () { return (st.streak.best || 0) >= 7; } },
+    { id: 'streak-30', icon: '🌞', name: 'Iron Will', how: 'Keep a 30-day Daily Dojo streak.', test: function () { return (st.streak.best || 0) >= 30; } },
+    { id: 'xp-500', icon: '⭐', name: 'Rising Star', how: 'Earn 500 XP.', test: function () { return st.xp >= 500; } },
+    { id: 'xp-2000', icon: '🌠', name: 'Shooting Star', how: 'Earn 2,000 XP.', test: function () { return st.xp >= 2000; } },
+    { id: 'xp-5000', icon: '🌌', name: 'Galaxy Brain', how: 'Earn 5,000 XP.', test: function () { return st.xp >= 5000; } },
+    { id: 'arcade-player', icon: '🕹️', name: 'Arcade Rookie', how: 'Play any Arcade game.', test: function () { return Object.keys(st.arcade).length >= 1; } },
+    { id: 'arcade-champ', icon: '👑', name: 'Arcade Champ', how: 'Win 5 Arcade games.', test: function () { var n = 0; for (var k in st.arcade) n += (st.arcade[k].wins || 0); return n >= 5; } },
+    { id: 'builder', icon: '🛠️', name: 'Master Builder', how: 'Save your Black Belt project.', test: function () { return !!(st.project && st.project.saved); } },
+  ];
+  C.worlds.forEach(function (w) {
+    BADGES.push({ id: 'belt-' + w.id, icon: '🥋', color: w.color, name: w.name, how: 'Pass the ' + w.name + ' Test.', test: function () { return !!st.belts[w.id]; } });
+  });
+  function badgeCount() { var n = 0; for (var k in st.badges) if (st.badges[k]) n++; return n; }
+  function checkBadges(quiet) {
+    var got = [];
+    BADGES.forEach(function (b) {
+      if (!st.badges[b.id] && b.test()) { st.badges[b.id] = today(); got.push(b); }
+    });
+    if (got.length) { save(); if (!quiet) got.forEach(function (b, i) { setTimeout(function () { toast(b.icon + ' Badge unlocked: ' + b.name, 'badge'); sfx('win'); }, 700 * (i + 1)); }); }
+    return got;
+  }
+
+  // ---------- XP, lessons, streak ----------
+  function addXP(n, why) {
+    if (!n) return;
+    st.xp += n; save(); refreshBar();
+    toast('+' + n + ' XP' + (why ? ' · ' + why : ''), 'xp'); sfx('xp');
+    checkBadges();
+  }
+  function L(id) { if (!st.lessons[id]) st.lessons[id] = {}; return st.lessons[id]; }
+  function finishCheck(id) {
+    var l = L(id);
+    if (!l.done && l.act && l.quiz && l.quiz.best / l.quiz.total >= 0.6) {
+      l.done = today(); save(); addXP(25, 'Lesson complete'); return true;
+    }
+    return false;
+  }
+  function markActivity(id) { var l = L(id); if (l.act) return false; l.act = true; save(); addXP(20, 'Activity done'); finishCheck(id); return true; }
+  function markQuiz(id, score, total) {
+    var l = L(id); var prev = l.quiz ? l.quiz.best : 0;
+    if (!l.quiz || score > l.quiz.best) { l.quiz = { best: score, total: total }; save(); }
+    if (score > prev) addXP(10 * (score - prev), 'Quiz');
+    finishCheck(id); checkBadges();
+  }
+  function markChallenge(id) { var l = L(id); if (l.ch) return false; l.ch = true; save(); addXP(30, 'Challenge Mode'); return true; }
+  function markDaily() {
+    var t = today();
+    if (st.daily[t]) return false;
+    st.daily[t] = true;
+    var s = st.streak;
+    if (s.last && dayDiff(s.last, t) === 1) s.count += 1; else if (s.last !== t) s.count = 1;
+    s.last = t; s.best = Math.max(s.best || 0, s.count);
+    save(); addXP(25, 'Daily Dojo'); return true;
+  }
+  function streakNow() { // a streak only counts if you trained today or yesterday
+    var s = st.streak; if (!s.last) return 0;
+    var d = dayDiff(s.last, today()); return d <= 1 ? s.count : 0;
+  }
+  function earnBelt(wid, score, total) {
+    st.tests[wid] = { passed: true, score: score, total: total, at: today() };
+    var first = !st.belts[wid];
+    st.belts[wid] = today(); save();
+    if (first) addXP(200, 'Belt earned');
+    checkBadges(); return first;
+  }
+  function recordArcade(game, score, won) {
+    var a = st.arcade[game] || (st.arcade[game] = { plays: 0, wins: 0, best: 0 });
+    a.plays++; if (won) a.wins++; var best = score > a.best; if (best) a.best = score; save(); checkBadges(); return best;
+  }
+
+  // ---------- sound (off by default; WebAudio beeps, no files) ----------
+  var actx = null;
+  function sfx(kind) {
+    if (!st.sound) return;
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      var notes = { click: [660], good: [660, 880], bad: [300, 220], xp: [880, 1175], win: [523, 659, 784, 1047], step: [440] }[kind] || [600];
+      notes.forEach(function (f, i) {
+        var o = actx.createOscillator(), g = actx.createGain(), t0 = actx.currentTime + i * 0.09;
+        o.type = kind === 'bad' ? 'sawtooth' : 'triangle'; o.frequency.value = f;
+        g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.12, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.16);
+        o.connect(g); g.connect(actx.destination); o.start(t0); o.stop(t0 + 0.18);
+      });
+    } catch (e) { /* audio unavailable */ }
+  }
+  function setSound(on) { st.sound = !!on; save(); refreshBar(); if (on) sfx('good'); }
+
+  // ---------- UI: top bar, toasts ----------
+  function refreshBar() {
+    var bar = document.getElementById('dojo-bar'); if (!bar) return;
+    var xp = $('.db-xp b', bar), sk = $('.db-streak b', bar), me = $('.db-me', bar), snd = $('.db-sound', bar);
+    if (xp) xp.textContent = st.xp.toLocaleString();
+    if (sk) sk.textContent = streakNow();
+    if (me) me.innerHTML = '<span class="db-av" aria-hidden="true">' + esc(avatar()) + '</span><span class="db-nick">' + esc(nick()) + '</span>';
+    if (snd) { snd.setAttribute('aria-pressed', st.sound ? 'true' : 'false'); snd.textContent = st.sound ? '🔊' : '🔇'; snd.setAttribute('aria-label', st.sound ? 'Sound on. Tap to mute.' : 'Sound off. Tap to turn on.'); }
+  }
+  function buildBar() {
+    var bar = document.getElementById('dojo-bar'); if (!bar) return;
+    bar.innerHTML =
+      '<a class="db-home" href="' + ROOT + 'index.html" aria-label="Back to the Dojo map"><span aria-hidden="true">🏯</span> <span>Dojo</span></a>' +
+      '<span class="db-me"></span>' +
+      '<span class="db-pill db-xp" title="Experience points"><span aria-hidden="true">⭐</span> <b>0</b><span class="sr-only"> XP</span><span aria-hidden="true"> XP</span></span>' +
+      '<a class="db-pill db-streak" href="' + ROOT + 'daily.html" title="Daily Dojo streak"><span aria-hidden="true">🔥</span> <b>0</b><span class="sr-only"> day streak</span></a>' +
+      '<button type="button" class="db-sound" aria-pressed="false">🔇</button>';
+    $('.db-sound', bar).addEventListener('click', function () { setSound(!st.sound); });
+    refreshBar();
+  }
+  var toastBox;
+  function toast(msg, kind) {
+    if (!toastBox) {
+      toastBox = document.createElement('div'); toastBox.className = 'toasts'; toastBox.setAttribute('role', 'status'); toastBox.setAttribute('aria-live', 'polite');
+      document.body.appendChild(toastBox);
+    }
+    var t = document.createElement('div'); t.className = 'toast ' + (kind || ''); t.textContent = msg;
+    toastBox.appendChild(t);
+    setTimeout(function () { t.classList.add('out'); setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 400); }, 2600);
+  }
+
+  // Gentle falling confetti (no flashing). Skipped for reduced motion.
+  function confetti(n) {
+    if (reducedMotion()) return;
+    var box = document.createElement('div'); box.className = 'confetti'; box.setAttribute('aria-hidden', 'true');
+    var colors = ['#ff5d5d', '#ffd23f', '#3a86ff', '#2ec27e', '#8e44ec', '#ff8c42'];
+    for (var i = 0; i < (n || 60); i++) {
+      var p = document.createElement('i');
+      p.style.left = (Math.random() * 100) + '%';
+      p.style.background = colors[i % colors.length];
+      p.style.animationDelay = (Math.random() * 0.8) + 's';
+      p.style.animationDuration = (2.4 + Math.random() * 1.6) + 's';
+      p.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+      box.appendChild(p);
+    }
+    document.body.appendChild(box);
+    setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); }, 4800);
+  }
+
+  // ---------- Quiz engine ----------
+  // q = { q: 'question', a: ['choice', ...], c: correctIndex, why: 'explanation', wrong: {index: 'specific hint'} }
+  function quiz(el, qs, opts) {
+    opts = opts || {};
+    var T = opts.T || theme('quiz');
+    var i = 0, score = 0;
+    function sample() { return opts.count ? shuffle(qs).slice(0, opts.count) : qs; }
+    var order = sample();
+    function render() {
+      if (i >= order.length) return finish();
+      var q = order[i];
+      var idx = q.a.map(function (_, k) { return k; });
+      if (opts.shuffle !== false && !q.keep) idx = shuffle(idx);
+      var dots = order.map(function (_, k) { return '<span class="qz-dot' + (k < i ? ' done' : k === i ? ' now' : '') + '"></span>'; }).join('');
+      el.innerHTML =
+        '<div class="qz-top"><span class="qz-count">Question ' + (i + 1) + ' of ' + order.length + '</span><span class="qz-dots" aria-hidden="true">' + dots + '</span></div>' +
+        '<p class="qz-q" id="qz-q-' + i + '">' + fill(q.q, T) + '</p>' +
+        '<div class="qz-choices" role="group" aria-labelledby="qz-q-' + i + '">' +
+        idx.map(function (k) { return '<button type="button" class="qz-choice" data-k="' + k + '">' + fill(q.a[k], T) + '</button>'; }).join('') +
+        '</div><div class="qz-feedback" aria-live="polite"></div>';
+      $all('.qz-choice', el).forEach(function (b) { b.addEventListener('click', function () { pick(+b.getAttribute('data-k'), b); }); });
+    }
+    function pick(k, btn) {
+      var q = order[i];
+      $all('.qz-choice', el).forEach(function (b) { b.disabled = true; if (+b.getAttribute('data-k') === q.c) b.classList.add('right'); });
+      var fb = $('.qz-feedback', el), ok = k === q.c;
+      if (ok) { score++; sfx('good'); } else { btn.classList.add('wrong'); sfx('bad'); }
+      var msg = ok ? ('<b>✅ Correct!</b> ' + fill(q.yes || q.why || '', T))
+        : ('<b>❌ Not quite.</b> ' + fill((q.wrong && q.wrong[k]) || q.why || '', T));
+      fb.className = 'qz-feedback ' + (ok ? 'ok' : 'no');
+      fb.innerHTML = '<p>' + msg + '</p><button type="button" class="btn primary qz-next">' + (i + 1 < order.length ? 'Next question →' : 'See my score') + '</button>';
+      var nx = $('.qz-next', el); nx.addEventListener('click', function () { i++; render(); var h = el.querySelector('.qz-q'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } });
+      nx.focus({ preventScroll: true });
+    }
+    function finish() {
+      var pass = score / order.length >= (opts.pass || 0.6);
+      var stars = score === order.length ? '🌟🌟🌟' : pass ? '🌟🌟' : '🌟';
+      el.innerHTML = '<div class="qz-end ' + (pass ? 'pass' : 'fail') + '"><div class="qz-stars" aria-hidden="true">' + stars + '</div>' +
+        '<p class="qz-score">You got <b>' + score + ' / ' + order.length + '</b></p>' +
+        '<p>' + (score === order.length ? 'Flawless! Your sensei is impressed.' : pass ? 'Nice work — you passed! Want to go for a perfect score?' : 'Every black belt was once a white belt who kept going. Try again — you’ve got this.') + '</p>' +
+        '<button type="button" class="btn qz-retry">↻ ' + (score === order.length ? 'Play again' : 'Try again') + '</button></div>';
+      $('.qz-retry', el).addEventListener('click', function () { i = 0; score = 0; if (opts.reshuffle) order = sample(); render(); });
+      if (score === order.length) confetti(40);
+      if (opts.onDone) opts.onDone(score, order.length, pass);
+    }
+    render();
+    return { restart: function () { i = 0; score = 0; render(); } };
+  }
+
+  // ---------- Belt ceremony ----------
+  function ceremony(w, onClose) {
+    var ov = document.createElement('div'); ov.className = 'ceremony'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-labelledby', 'cer-title');
+    ov.innerHTML = '<div class="cer-card">' +
+      '<svg class="cer-belt" viewBox="0 0 240 120" aria-hidden="true"><defs><linearGradient id="cerg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="' + w.color + '"/><stop offset="1" stop-color="' + w.color + '" stop-opacity=".78"/></linearGradient></defs>' +
+      '<path class="cer-l" d="M10 48 H110 V68 H10 Z" fill="url(#cerg)" stroke="#0003" stroke-width="2"/>' +
+      '<path class="cer-r" d="M130 48 H230 V68 H130 Z" fill="url(#cerg)" stroke="#0003" stroke-width="2"/>' +
+      '<rect class="cer-knot" x="104" y="42" width="32" height="32" rx="6" fill="url(#cerg)" stroke="#0004" stroke-width="2"/>' +
+      '<path class="cer-tail1" d="M110 72 L92 112 L106 114 L120 76 Z" fill="url(#cerg)" stroke="#0003" stroke-width="2"/>' +
+      '<path class="cer-tail2" d="M130 72 L148 112 L134 114 L120 76 Z" fill="url(#cerg)" stroke="#0003" stroke-width="2"/></svg>' +
+      '<p class="cer-kicker">Belt Ceremony</p><h2 id="cer-title">' + STUDENT + ', you earned the ' + esc(w.name) + '!</h2>' +
+      '<p class="cer-sub">' + esc(avatar() + ' ' + nick()) + ' bows to the sensei. The dojo cheers. <b>+200 XP</b></p>' +
+      '<button type="button" class="btn primary cer-ok">Bow and continue 🙇</button></div>';
+    document.body.appendChild(ov);
+    sfx('win'); confetti(90);
+    var ok = $('.cer-ok', ov); ok.focus();
+    function close() { if (ov.parentNode) ov.parentNode.removeChild(ov); document.removeEventListener('keydown', key); if (onClose) onClose(); }
+    function key(e) { if (e.key === 'Escape') close(); }
+    ok.addEventListener('click', close); document.addEventListener('keydown', key);
+  }
+
+  window.Dojo = {
+    state: function () { return st; }, save: save, reset: reset, storageOK: storageOK,
+    esc: esc, $: $, $all: $all, today: today, hash: hash, shuffle: shuffle, reducedMotion: reducedMotion,
+    profile: profile, nick: nick, avatar: avatar, student: STUDENT, favs: favs, theme: theme, fill: fill,
+    setProfile: function (p) { st.profile = p; save(); refreshBar(); },
+    allLessons: allLessons, worldById: worldById, worldUnlocked: worldUnlocked, worldProgress: worldProgress,
+    lessonDone: lessonDone, testReady: testReady, lessonHref: lessonHref, nextStep: nextStep, countDone: countDone, countBelts: countBelts,
+    BADGES: BADGES, badgeCount: badgeCount, checkBadges: checkBadges,
+    addXP: addXP, markActivity: markActivity, markQuiz: markQuiz, markChallenge: markChallenge, markDaily: markDaily,
+    streakNow: streakNow, earnBelt: earnBelt, recordArcade: recordArcade,
+    sfx: sfx, setSound: setSound, toast: toast, confetti: confetti, quiz: quiz, ceremony: ceremony, refreshBar: refreshBar,
+    root: ROOT, C: C, page: P,
+  };
+
+  function boot() { buildBar(); checkBadges(true); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+
+</script>
+<script>
+window.LESSON={"id":"white/turing-test","title":"You Be the Judge","story":[["sensei","In \u003cb>1950\u003c/b>, a brilliant British mathematician named \u003cb>Alan Turing\u003c/b> asked a giant question: \u003ci>“Can machines think?”\u003c/i>"],["sensei","Turing is one of the founders of computer science. During World War II he helped crack secret enemy codes."],["sensei","“Thinking” is hard to define, so Turing proposed a game instead. A \u003cb>judge\u003c/b> chats by typing with two hidden players: one human, one machine."],["you","And if the judge can’t tell which one is the machine?"],["sensei","Then the machine passes. Today we call it the \u003cb>Turing Test\u003c/b>. Put on your judge’s robe, {{nick}}. Five rounds. Find the bots."]],"quiz":[{"q":"What is the Turing Test?","a":["A judge chats with a hidden human and a hidden machine and tries to tell which is which","A test of how fast a computer is","A math exam for robots","A chess game against a computer"],"c":0,"why":"Turing called it the “imitation game.” The question is whether the machine’s conversation can pass for a human’s."},{"q":"Who proposed it, and when?","a":["Alan Turing, in 1950","Al-Khwarizmi, about 1,200 years ago","A chatbot, in 2022","Nobody knows"],"c":0,"why":"Alan Turing described it in his 1950 paper “Computing Machinery and Intelligence.”"},{"q":"A chatbot fools a judge in a short chat. What does that prove?","a":["It can imitate human conversation — not that it understands or has feelings","It is alive","It is smarter than every human","It never makes mistakes"],"c":0,"why":"Imitating conversation is impressive, but it isn’t the same as understanding or feeling."},{"q":"Why was the instant answer to 38,427 × 9,613 a clue?","a":["Most people can’t multiply huge numbers instantly and perfectly","Humans can’t do math","Bots can’t do math","The answer was wrong"],"c":0,"why":"Superhuman speed can give a machine away. Being TOO perfect is a clue!"}]};
+window.ACTIVITY=(function (el, api) {
+      var D = api.D;
+      var rounds = [
+        { q: 'What did you have for breakfast?', A: 'Toast with jam. I also spilled orange juice all over my homework. Great start to the day 😅', B: 'Why do you ask what I had for breakfast?', bot: 'B', clue: 'Old chatbots like <b>ELIZA</b> (from the 1960s) often turned your words back into a question instead of answering. It was a clever trick, but it gave them away.' },
+        { q: 'What’s 38,427 × 9,613?', A: '369,398,751.', B: 'Uhh… no idea. Can I use a calculator? Do I HAVE to?', bot: 'A', clue: 'An instant, perfect answer to a giant multiplication is a machine giveaway. In Turing’s own 1950 paper, his example machine <b>pauses</b> and even gets a sum slightly wrong, like a person might!' },
+        { q: 'How do you feel about rainy days?', A: 'Rainy days can feel cozy for many people, while others find them gloomy. Some enjoy reading indoors, while others prefer sunny weather for outdoor activities.', B: 'honestly I love them if I don’t have practice lol. if I do it’s the WORST', bot: 'A', clue: 'Answer A talks about what “many people” think instead of giving its own opinion. It’s polished and balanced, a common style for AI assistants.' },
+        { q: 'Tell me about your weekend.', A: 'My cousin came over and we built a massive couch-cushion fort. Then my little brother knocked it down in about four seconds.', B: 'It was great! We went hiking with my family and saw an amazing sunset from the top of the trail.', bot: 'both', clue: '<b>Plot twist: BOTH answers were written by a chatbot.</b> Modern AI can write very human-sounding text in a short chat. Sometimes you truly can’t tell.' },
+        { q: 'What does your house smell like right now?', A: 'I don’t have a sense of smell or a house — I’m an AI, so I can’t smell anything.', B: 'Popcorn. Someone burned it. AGAIN.', bot: 'A', clue: 'Some chatbots are designed to be honest about being AI. That’s a good thing! But not every bot is built that way.' },
+      ];
+      var r = 0, right = 0;
+      function show() {
+        if (r >= rounds.length) return end();
+        var R = rounds[r];
+        el.innerHTML = '<p class="tt-round">Round ' + (r + 1) + ' of ' + rounds.length + ' · Score ' + right + '</p><div class="tt-q">🧑‍⚖️ Judge: ' + R.q + '</div>' +
+          '<div class="tt-ans"><div class="tt-a" id="tt-A"><b>PLAYER A</b>' + R.A + '</div><div class="tt-a" id="tt-B"><b>PLAYER B</b>' + R.B + '</div></div>' +
+          '<div class="tt-pick" role="group" aria-label="Which player is the bot?"><button type="button" class="btn" data-v="A">🤖 A is the bot</button><button type="button" class="btn" data-v="B">🤖 B is the bot</button><button type="button" class="btn" data-v="both">🤷 Can’t tell</button></div><div id="tt-out" aria-live="polite"></div>';
+        D.$all('.tt-pick button', el).forEach(function (b) {
+          b.addEventListener('click', function () {
+            var v = b.getAttribute('data-v'), ok = v === R.bot; if (ok) right++;
+            D.$all('.tt-pick button', el).forEach(function (x) { x.disabled = true; });
+            if (R.bot === 'both') { D.$('#tt-A', el).classList.add('bot'); D.$('#tt-B', el).classList.add('bot'); } else D.$('#tt-' + R.bot, el).classList.add('bot');
+            D.$('#tt-out', el).innerHTML = '<div class="tt-clue"><p><b>' + (ok ? '✅ Good judging!' : '❌ Fooled you!') + '</b> ' + R.clue + '</p><button type="button" class="btn primary small" id="tt-next">' + (r + 1 < rounds.length ? 'Next round →' : 'See the verdict') + '</button></div>';
+            D.sfx(ok ? 'good' : 'bad');
+            var nx = D.$('#tt-next', el); nx.focus(); nx.addEventListener('click', function () { r++; show(); });
+          });
+        });
+      }
+      function end() {
+        el.innerHTML = '<div class="tt-clue"><h3>⚖️ Final verdict: ' + right + ' / ' + rounds.length + '</h3><p>' + (right >= 4 ? 'Sharp judging!' : 'Those bots were sneaky!') + ' Here’s the big idea: modern chatbots can fool many people in short chats. But passing the Turing Test only shows a machine can <b>imitate</b> human conversation. It doesn’t prove it understands, feels or thinks the way you do.</p><button type="button" class="btn small" id="tt-again">↻ Judge again</button></div>';
+        D.$('#tt-again', el).addEventListener('click', function () { r = 0; right = 0; show(); });
+        api.done();
+      }
+      show();
+    });
+window.CHALLENGE=(function (el, api) {
+      var D = api.D;
+      D.quiz(el, [
+        { q: 'Which question is best for catching an OLD-fashioned chatbot?', a: ['Ask a follow-up about something it said a few messages ago', 'Ask “Are you a bot?”', 'Say hello', 'Ask its favorite color'], c: 0, why: 'Old chatbots barely remembered the conversation, so follow-ups tripped them up. And a bot can simply lie if you ask “Are you a bot?”' },
+        { q: 'A chatbot answers every question smoothly. Does that mean it understands like a person?', a: ['Not necessarily — it may be producing likely-sounding words without understanding like you do', 'Yes — smooth answers prove understanding', 'Yes — computers never pretend', 'No — chatbots can’t write sentences'], c: 0, why: 'Smooth language can come from patterns learned from huge amounts of text. Sounding smart and understanding are different things.' },
+        { q: 'You’re chatting online and can’t tell if it’s a person or a bot. What’s the smartest move?', a: ['Be careful what you share either way, and ask a trusted adult if something feels off', 'Share your address to test it', 'Assume it’s definitely a human', 'Assume bots can’t trick you'], c: 0, why: 'Online you can’t always know who — or what — you’re talking to. Protect your personal info no matter what.' },
+        { q: 'If a machine passes the Turing Test, what has it shown?', a: ['That it can imitate human conversation well enough to fool judges', 'That it has feelings', 'That it is alive', 'That it is always right'], c: 0, why: 'The test measures imitation of conversation, not feelings, life or truthfulness.' },
+      ], { onDone: function (s) { if (s >= 3) api.done(); } });
+    });
+</script>
+<script>
+(function(){var D=window.Dojo,T=D.theme('lesson');D.$all('.fill').forEach(function(e){e.innerHTML=D.fill(e.innerHTML,T);});})();
+</script>
+<script>
+/* Lesson page controller: story → activity → quiz → challenge. */
+(function () {
+  'use strict';
+  var D = window.Dojo, Lz = window.LESSON;
+  if (!D || !Lz) return;
+  var T = D.theme('lesson');
+  var id = Lz.id;
+
+  function senseiSVG(size) {
+    return '<svg class="sensei-svg" width="' + size + '" height="' + size + '" viewBox="0 0 64 64" aria-hidden="true">' +
+      '<rect x="8" y="12" width="48" height="44" rx="14" fill="var(--sensei, #e9eef5)" stroke="#1d1d1f" stroke-width="3"/>' +
+      '<rect x="6" y="20" width="52" height="9" rx="3" fill="var(--band, #d62828)" stroke="#1d1d1f" stroke-width="2"/>' +
+      '<path d="M56 24 l7 -5 l-1 9 z" fill="var(--band, #d62828)" stroke="#1d1d1f" stroke-width="2"/>' +
+      '<circle cx="24" cy="38" r="5" fill="#1d1d1f"/><circle cx="40" cy="38" r="5" fill="#1d1d1f"/>' +
+      '<circle cx="26" cy="36" r="1.6" fill="#fff"/><circle cx="42" cy="36" r="1.6" fill="#fff"/>' +
+      '<path d="M26 48 q6 5 12 0" fill="none" stroke="#1d1d1f" stroke-width="3" stroke-linecap="round"/>' +
+      '<line x1="32" y1="12" x2="32" y2="4" stroke="#1d1d1f" stroke-width="3"/><circle cx="32" cy="4" r="3" fill="var(--band, #d62828)"/></svg>';
+  }
+  D.senseiSVG = senseiSVG;
+
+  // ---- story ----
+  var storyEl = document.getElementById('story');
+  if (storyEl) {
+    storyEl.innerHTML = Lz.story.map(function (line) {
+      var who = line[0], text = D.fill(line[1], T);
+      if (who === 'narr') return '<p class="st-narr">' + text + '</p>';
+      var isYou = who === 'you';
+      var face = isYou ? '<span class="st-face you" aria-hidden="true">' + D.esc(D.avatar()) + '</span>' : '<span class="st-face">' + senseiSVG(46) + '</span>';
+      var name = isYou ? D.esc(D.nick()) : 'Sensei Byte';
+      return '<div class="st-line ' + (isYou ? 'st-you' : 'st-sensei') + '">' + face + '<div class="st-bubble"><span class="st-name">' + name + '</span>' + text + '</div></div>';
+    }).join('');
+  }
+
+  // ---- checklist ----
+  function refreshChecklist() {
+    var s = D.state().lessons[id] || {};
+    var map = { act: !!s.act, quiz: !!(s.quiz && s.quiz.best / s.quiz.total >= 0.6), ch: !!s.ch };
+    D.$all('[data-step]').forEach(function (li) {
+      var k = li.getAttribute('data-step'); var on = map[k];
+      li.classList.toggle('on', on); var m = li.querySelector('.ck'); if (m) m.textContent = on ? '✓' : '';
+    });
+    var banner = document.getElementById('complete');
+    if (banner) banner.hidden = !s.done;
+  }
+
+  function api(kind) {
+    var fired = false;
+    return {
+      T: T, D: D, nick: D.nick(), fill: function (s) { return D.fill(s, T); },
+      done: function (msg) {
+        if (fired) return; fired = true;
+        var first = kind === 'act' ? D.markActivity(id) : D.markChallenge(id);
+        if (msg !== false) D.toast(kind === 'act' ? '🥋 Activity complete!' : '🔥 Challenge conquered!');
+        if (first) D.confetti(kind === 'act' ? 30 : 50);
+        refreshChecklist();
+        if (kind === 'act') { var q = document.getElementById('quiz-sec'); if (q) q.classList.add('ready'); }
+      },
+      isDone: function () { var s = D.state().lessons[id] || {}; return kind === 'act' ? !!s.act : !!s.ch; },
+    };
+  }
+
+  // ---- activity ----
+  var actEl = document.getElementById('activity');
+  if (actEl && window.ACTIVITY) {
+    try { window.ACTIVITY(actEl, api('act')); }
+    catch (e) { actEl.innerHTML = '<p class="err">This activity hit a snag. Try reloading the page.</p>'; if (window.console) console.error(e); }
+  }
+
+  // ---- quiz ----
+  var qEl = document.getElementById('quiz');
+  if (qEl) D.quiz(qEl, Lz.quiz, { T: T, onDone: function (sc, tot) { D.markQuiz(id, sc, tot); refreshChecklist(); } });
+
+  // ---- challenge (built on first open) ----
+  var chBox = document.getElementById('challenge-box');
+  var chEl = document.getElementById('challenge');
+  var chBuilt = false;
+  function buildChallenge() {
+    if (chBuilt || !chEl || !window.CHALLENGE) return; chBuilt = true;
+    try { window.CHALLENGE(chEl, api('ch')); }
+    catch (e) { chEl.innerHTML = '<p class="err">This challenge hit a snag. Try reloading the page.</p>'; if (window.console) console.error(e); }
+  }
+  if (chBox) chBox.addEventListener('toggle', function () { if (chBox.open) buildChallenge(); });
+  if (chBox && chBox.open) buildChallenge();
+
+  // ---- profile nudge ----
+  if (!D.profile()) {
+    var n = document.getElementById('nudge');
+    if (n) { n.hidden = false; }
+  }
+  refreshChecklist();
+})();
+
+</script>
+</body>
+</html>
