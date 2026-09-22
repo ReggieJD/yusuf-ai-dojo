@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Is It AI? · White Belt · Yusuf's AI Dojo</title>
-<meta name="description" content="A machine doing a job by itself. Automatic is not the same as intelligent — a timer is automatic, but it is not AI.">
+<title>Data Detective · Yellow Belt · Yusuf's AI Dojo</title>
+<meta name="description" content="A data point that is very different from the rest. It might be a mistake — or something really interesting.">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%A5%8B%3C%2Ftext%3E%3C%2Fsvg%3E">
@@ -174,61 +174,55 @@ footer.site a{color:inherit}
 }
 
 
-:root{--bg:#f7f2e6;--bg2:#ece3cf;--ink:#1b1b1b;--muted:#5a5247;--card:#fffdf6;--line:#1b1b1b26;
---accent:#b8241b;--accent-ink:#fff;--accent2:#1f3a60;--radius:6px;--band:#b8241b;--sensei:#fbf7ec;
---font-head:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;--head-weight:700;
---shadow:0 1px 0 #1b1b1b30, 0 10px 24px #3b2a1014}
-body{background-color:var(--bg);background-image:
- radial-gradient(circle at 20% 10%,#ffffff80 0,transparent 40%),
- radial-gradient(circle at 85% 70%,#e9dcc0 0,transparent 45%),
- url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.8%22%20numOctaves%3D%222%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.45%200%200%200%200%20.38%200%200%200%200%20.25%200%200%200%20.07%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22160%22%20height%3D%22160%22%20filter%3D%22url(%23n)%22%2F%3E%3C%2Fsvg%3E")}
-.card{border:none;border-left:6px solid var(--ink);border-radius:4px 14px 14px 4px}
-.sec-title .ico{border-radius:50%;background:var(--accent);box-shadow:inset 0 0 0 3px #fff6}
-.sec-title h2{position:relative;padding-bottom:6px}
-.sec-title h2::after{content:"";position:absolute;left:0;bottom:-4px;width:120px;height:10px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%2010%22%3E%3Cpath%20d%3D%22M2%206%20C30%201%2060%209%20118%203%22%20stroke%3D%22%231b1b1b%22%20stroke-width%3D%224%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.75%22%2F%3E%3C%2Fsvg%3E") no-repeat;background-size:contain}
-.hero-enso{width:150px;height:150px;position:relative;display:grid;place-items:center;margin:0 0 6px -8px}
-.hero-enso svg{position:absolute;inset:0}
-.hero-enso path{stroke-dasharray:420;stroke-dashoffset:420;animation:brush 1.6s .2s ease-out forwards}
-.hero-enso .em{font-size:3.6rem;animation:inkIn .8s 1.2s both}
-@keyframes brush{to{stroke-dashoffset:0}}
-@keyframes inkIn{from{opacity:0;transform:scale(.7)}}
-.hero .kicker{border-radius:3px;font-family:var(--font-head);letter-spacing:.12em}
-.hanko{position:absolute;right:6px;top:28px;width:74px;height:74px;border:3px solid var(--accent);color:var(--accent);border-radius:10px;display:grid;place-items:center;font:700 .72rem/1.1 var(--font-head);text-align:center;transform:rotate(8deg);opacity:.85;padding:4px;text-transform:uppercase;letter-spacing:.06em}
-@media (max-width:520px){.hanko{width:58px;height:58px;font-size:.6rem;top:20px}}
-details.challenge{background:repeating-linear-gradient(90deg,var(--card) 0 22px,#f1e8d3 22px 23px);border-radius:6px}
-.btn{border-radius:6px}
+:root{--bg:#0f1b2d;--bg2:#fff1c1;--ink:#16181d;--muted:#4a4f5c;--card:#fffbea;--line:#16181d26;
+--accent:#ffd23f;--accent-ink:#16181d;--accent2:#1d4ed8;--radius:10px;--band:#ffd23f;--sensei:#fff7d6;
+--font-head:Impact,Haettenschweiler,"Arial Narrow Bold","Franklin Gothic Bold",sans-serif;--head-weight:400;--head-track:.02em;--head-case:uppercase;
+--shadow:0 0 0 3px #16181d, 0 10px 0 #0006}
+body{background-color:#0f1b2d;background-image:radial-gradient(#ffd23f22 1.5px,transparent 1.6px),linear-gradient(180deg,#132743,#0f1b2d 60%);background-size:18px 18px,100% 100%}
+.hero,.hero h1,.world-map .hero h1,.belt-test .hero h1{color:#fffbea}
+.hero .hook,.wm-progress p{color:#c9d3e6}
+footer.site{color:#9fb0cc}
+.card{border:none}
+.sec-title .ico{border-radius:6px;background:#16181d;color:#ffd23f;box-shadow:inset 0 0 0 2px #ffd23f}
+.hero .kicker{border-radius:4px;font-family:var(--font-head);letter-spacing:.12em;font-weight:400}
+.hanko{position:absolute;right:6px;top:26px;padding:6px 10px;border:3px solid #ffd23f;color:#ffd23f;border-radius:6px;font:400 .8rem/1.1 var(--font-head);text-transform:uppercase;letter-spacing:.1em;transform:rotate(-4deg);text-align:center;background:#0f1b2d}
+.board{display:inline-flex;align-items:center;gap:12px;background:#16181d;border:4px solid #3a4258;border-radius:14px;padding:10px 16px;margin-bottom:10px;box-shadow:0 0 0 4px #0f1b2d,0 0 24px #ffd23f33}
+.board .num{font:400 2.6rem/1 var(--font-head);color:#ffd23f;text-shadow:0 0 8px #ffd23f88;letter-spacing:.08em;background:repeating-linear-gradient(0deg,#0000 0 3px,#0003 3px 4px);-webkit-background-clip:text;padding:0 4px}
+.board .em{font-size:2.6rem;animation:dribble 1.8s ease-in-out infinite}
+@keyframes dribble{50%{transform:translateY(-6px)}}
+.board .lbl{font:700 .7rem/1.2 var(--font-body);color:#9fb0cc;text-transform:uppercase;letter-spacing:.14em}
+details.challenge{background:repeating-linear-gradient(90deg,#fffbea 0 30px,#fff1c1 30px 60px)}
+.world-map .wm-path::before{border-left-color:#ffd23f66}
+.btn{border-radius:8px}
 
 
-.sm{max-width:520px;margin:0 auto;text-align:center}
-.sm-bar{display:flex;justify-content:space-between;font-weight:800;margin-bottom:10px}
-.sm-stage{position:relative;height:230px;perspective:800px}
-.sm-card{position:absolute;inset:0;margin:auto;width:min(100%,340px);height:210px;border-radius:22px;background:var(--card);border:3px solid var(--ink);box-shadow:0 10px 0 var(--ink);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:6px;touch-action:pan-y;user-select:none;animation:smIn .35s ease-out;transition:transform .3s, opacity .3s}
-.sm-card .e{font-size:3.2rem}
-.sm-card p{font-weight:800;font-size:1.15rem;margin:0}
-.sm-card.left{transform:translateX(-140%) rotate(-18deg);opacity:0}.sm-card.right{transform:translateX(140%) rotate(18deg);opacity:0}
-@keyframes smIn{from{transform:translateY(-30px) scale(.9);opacity:0}}
-.sm-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.sm-btns .btn{min-height:64px;font-size:1.1rem}
-.sm-why{min-height:4.5em;margin-top:12px;padding:10px;border-radius:12px}
-.sm-why.ok{background:var(--good-bg);color:#0d3b22}.sm-why.no{background:var(--bad-bg);color:#5c130e}
-.sm-bins{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;text-align:left;font-size:.85rem}
-.sm-bins div{background:var(--bg2);border-radius:12px;padding:8px;min-height:60px}
+.dd-wrap{overflow-x:auto}
+.dd{width:100%;border-collapse:collapse;min-width:340px;background:#fff}
+.dd th,.dd td{border:1px solid #16181d33;padding:8px;text-align:left}
+.dd thead th{background:#16181d;color:#ffd23f;font-family:var(--font-head);font-weight:400;letter-spacing:.04em}
+.dd tbody tr{cursor:pointer}
+.dd tbody tr:hover,.dd tbody tr:focus{background:#fff1c1;outline:none}
+.dd tr.solved{background:#e3f6ea}.dd tr.cleared{background:#f2f4f7;color:#4a4f5c}
+.dd td.miss{color:#b3261e;font-style:italic}
+.dd-ask{margin-top:12px;background:#fff1c1;border-radius:10px;padding:12px}
+.dd-ask .row button{flex:1 1 140px}
+.dd-score{font-weight:800}
 
-.gz{display:grid;gap:12px}.gz-item{padding:12px;border-radius:12px;border:2px solid var(--line);background:var(--bg)}.gz-item p{margin:0 0 8px;font-weight:700}.gz-item .row button{flex:1;min-width:90px}.gz-item.ok{border-color:var(--good)}.gz-item.no{border-color:var(--bad)}.gz-why{margin-top:8px;font-size:.93rem}
+
 </style>
 </head>
-<body class="world-white">
+<body class="world-yellow">
 <a class="sr-only" href="#main">Skip to content</a>
 <header id="dojo-bar"><a class="db-home" href="../../index.html">🏯 Dojo</a></header>
 <noscript><div class="wrap"><p>This dojo needs JavaScript turned on to run its games and quizzes.</p></div></noscript>
 
-<main id="main" class="wrap lesson l-is-it-ai">
+<main id="main" class="wrap lesson l-data-detective">
   <section class="hero">
-    <div class="hanko" aria-hidden="true">White<br>Belt</div>
-    <div class="hero-enso" aria-hidden="true"><svg viewBox="0 0 150 150"><path d="M112 30 C 80 6, 24 22, 20 72 C 16 122, 76 146, 116 118 C 146 96, 140 52, 118 38" fill="none" stroke="#1f3a60" stroke-width="11" stroke-linecap="round" opacity=".88"/></svg><span class="em">🗂️</span></div>
-    <span class="kicker">White Belt · Lesson 3 of 6</span>
-    <h1>Is It AI?</h1>
-    <p class="hook fill">Companies stick “AI” labels on everything. Can you tell the real AI from the ordinary machines?</p>
+    <div class="hanko" aria-hidden="true">Yellow<br>Belt</div>
+    <div class="board" aria-hidden="true"><span class="em">🔍</span><span><span class="lbl">Home</span><br><span class="num">06</span></span></div>
+    <span class="kicker">Yellow Belt · Lesson 6 of 6</span>
+    <h1>Data Detective</h1>
+    <p class="hook fill">Missing values, impossible typos, sneaky duplicates, and one outlier that’s actually real. Can you crack the case?</p>
     <ul class="steps" aria-label="Lesson checklist">
       <li data-step="act"><span class="ck" aria-hidden="true"></span>Activity</li>
       <li data-step="quiz"><span class="ck" aria-hidden="true"></span>Quiz</li>
@@ -243,8 +237,8 @@ details.challenge{background:repeating-linear-gradient(90deg,var(--card) 0 22px,
   </section>
 
   <section class="card act-card" aria-labelledby="h-act">
-    <div class="sec-title"><span class="ico" aria-hidden="true">🥋</span><h2 id="h-act">Do It: The AI Sorting Machine</h2></div>
-    <p class="instructions fill">A card slides in. Sort it: 🤖 AI or 🔧 Not AI. On a keyboard, use ← for Not AI and → for AI. On a touchscreen, you can swipe.</p>
+    <div class="sec-title"><span class="ico" aria-hidden="true">🥋</span><h2 id="h-act">Do It: Crack the Data Case</h2></div>
+    <p class="instructions fill">Tap each row, then say what’s going on. Find all 4 problems, and don’t accuse innocent rows!</p>
     <div id="activity" class="activity"></div>
   </section>
 
@@ -255,31 +249,31 @@ details.challenge{background:repeating-linear-gradient(90deg,var(--card) 0 22px,
   </section>
 
   <details class="challenge" id="challenge-box">
-    <summary><span class="flame" aria-hidden="true">🔥</span><span>Challenge Mode: The Gray Zone</span><span class="tag">+30 XP</span></summary>
-    <div class="challenge-body"><div><p class="fill">Real life isn’t always black and white. For each item choose <b>AI</b>, <b>Not AI</b> or <b>It depends!</b> Get 4 of 5 to win.</p><div id="challenge"></div></div></div>
+    <summary><span class="flame" aria-hidden="true">🔥</span><span>Challenge Mode: The Fix-It Plan</span><span class="tag">+30 XP</span></summary>
+    <div class="challenge-body"><div><p class="fill">Finding problems is half the job. Choose the best fix for each. Get 3 of 4.</p><div id="challenge"></div></div></div>
   </details>
 
   <section class="card" aria-labelledby="h-term">
     <div class="sec-title"><span class="ico" aria-hidden="true">🔑</span><h2 id="h-term">Key Term</h2></div>
-    <div class="term"><span class="scroll" aria-hidden="true">📜</span><dl><dt>Automation</dt><dd>A machine doing a job by itself. Automatic is not the same as intelligent — a timer is automatic, but it is not AI.</dd></dl></div>
+    <div class="term"><span class="scroll" aria-hidden="true">📜</span><dl><dt>Outlier</dt><dd>A data point that is very different from the rest. It might be a mistake — or something really interesting.</dd></dl></div>
     <p><a href="../../scrolls.html">See all your Dojo Scrolls →</a></p>
   </section>
 
   <section class="card complete" id="complete" hidden>
     <h2>🎉 Lesson complete!</h2>
     <p>You earned this one. Keep the momentum going.</p>
-    <a class="btn primary" href="al-khwarizmi.html">Next: The Algorithm Scholar →</a>
+    <a class="btn primary" href="belt-test.html">Yellow Belt Test →</a>
   </section>
 
   <nav class="lesson-nav" aria-label="Lesson navigation">
-    <a class="btn" href="ai-all-around.html">← AI All Around You</a>
-    <a class="btn primary" href="al-khwarizmi.html">Next: The Algorithm Scholar →</a>
+    <a class="btn" href="garbage-in-garbage-out.html">← Garbage In, Garbage Out</a>
+    <a class="btn primary" href="belt-test.html">Yellow Belt Test →</a>
   </nav>
 </main>
 <footer class="site"><div class="wrap">Built for Yusuf with 🥋 · Progress is saved only on this device · <a href="../../parents.html">For parents</a></div></footer>
 <script>
 window.CURRIC={"worlds":[{"id":"white","name":"White Belt","world":"What Is AI?","color":"#f4f1ea","ink":"#1d1d1f","emoji":"🥋","blurb":"What AI really is, where it hides in your day, and where the word \"algorithm\" came from.","built":true,"lessons":[{"id":"rules-vs-learning","title":"Rules vs Learning","emoji":"🤖","min":12,"term":"Machine Learning","def":"When a computer finds patterns in examples, instead of only following rules a person wrote."},{"id":"ai-all-around","title":"AI All Around You","emoji":"📱","min":10,"term":"Artificial Intelligence (AI)","def":"Computer systems that do tasks that usually need human smarts — like recognizing, predicting, deciding, or creating."},{"id":"is-it-ai","title":"Is It AI?","emoji":"🗂️","min":10,"term":"Automation","def":"A machine doing a job by itself. Automatic is not the same as intelligent — a timer is automatic, but it is not AI."},{"id":"al-khwarizmi","title":"The Algorithm Scholar","emoji":"📜","min":15,"term":"Algorithm","def":"A precise, step-by-step set of instructions for solving a problem."},{"id":"turing-test","title":"You Be the Judge","emoji":"🕵️","min":12,"term":"Turing Test","def":"A test where a judge chats with a hidden human and a hidden machine and tries to tell which is which."},{"id":"ai-myths","title":"Myth Busters","emoji":"💥","min":10,"term":"Hype","def":"Claims that make something sound more amazing — or scarier — than it really is."}]},{"id":"yellow","name":"Yellow Belt","world":"Data Is Power","color":"#ffd23f","ink":"#1d1d1f","emoji":"📊","blurb":"Data is the fuel of AI. Collect it, label it, chart it, and learn why bad data makes bad AI.","built":true,"lessons":[{"id":"what-is-data","title":"What Is Data?","emoji":"🔢","min":10,"term":"Data","def":"Facts, numbers, words, pictures or sounds collected so they can be studied."},{"id":"collect-and-label","title":"Collect & Label","emoji":"🏷️","min":12,"term":"Label","def":"The correct answer attached to an example, like tagging a photo \"cat\". AI learns from labeled examples."},{"id":"stats-court","title":"Stats Court","emoji":"🏀","min":15,"term":"Correlation","def":"When two things tend to change together. It does NOT prove that one causes the other."},{"id":"averages-and-patterns","title":"Averages & Patterns","emoji":"📈","min":12,"term":"Average (Mean)","def":"Add up all the numbers, then divide by how many numbers there are."},{"id":"garbage-in-garbage-out","title":"Garbage In, Garbage Out","emoji":"🗑️","min":12,"term":"Garbage In, Garbage Out","def":"If the data going into a system is bad, the results coming out will be bad too."},{"id":"data-detective","title":"Data Detective","emoji":"🔍","min":12,"term":"Outlier","def":"A data point that is very different from the rest. It might be a mistake — or something really interesting."}]},{"id":"orange","name":"Orange Belt","world":"How Machines Learn","color":"#ff8c42","ink":"#1d1d1f","emoji":"⚙️","blurb":"Train your own classifier, test it fairly, and learn the difference between memorizing and understanding.","built":false,"lessons":[{"id":"train-a-classifier","title":"Train a Classifier","emoji":"🧺","min":15,"term":"Classifier","def":"A model that sorts things into groups (classes), like \"spam\" or \"not spam\"."},{"id":"train-vs-test","title":"Training vs Testing","emoji":"📝","min":12,"term":"Test Set","def":"Examples kept hidden during training, used afterward to check whether the model really learned."},{"id":"accuracy-score","title":"Accuracy Score","emoji":"🎯","min":10,"term":"Accuracy","def":"The share of answers a model gets right. 45 right out of 50 is 90% accuracy."},{"id":"overfitting","title":"Memorize or Understand?","emoji":"🧠","min":15,"term":"Overfitting","def":"When a model memorizes its training examples so closely that it fails on new ones."},{"id":"decision-trees","title":"Decision Trees","emoji":"🌳","min":15,"term":"Decision Tree","def":"A model that makes a decision by asking a series of yes/no questions."},{"id":"nearest-neighbor","title":"Nearest Neighbor","emoji":"📍","min":12,"term":"Nearest Neighbor","def":"A method that labels a new example by copying the label of the most similar examples it already knows."}]},{"id":"green","name":"Green Belt","world":"Inside the AI Brain","color":"#2ec27e","ink":"#0d2b1d","emoji":"🧠","blurb":"Neurons, weights, and networks — and how a computer \"learns\" by walking downhill.","built":false,"lessons":[{"id":"meet-the-neuron","title":"Meet the Neuron","emoji":"⚡","min":12,"term":"Artificial Neuron","def":"A tiny math unit: it multiplies inputs by weights, adds them up, and decides how strongly to \"fire\"."},{"id":"weights-and-bias","title":"Weights & Bias","emoji":"🎚️","min":15,"term":"Weight","def":"A number that sets how much one input matters. Training adjusts weights."},{"id":"activation-switch","title":"The Activation Switch","emoji":"🔌","min":12,"term":"Activation Function","def":"The rule a neuron uses to turn its total into an output, like \"fire only if the total is above zero\"."},{"id":"network-playground","title":"Network Playground","emoji":"🕸️","min":15,"term":"Neural Network","def":"Many artificial neurons connected in layers, passing numbers forward."},{"id":"walking-downhill","title":"Walking Downhill","emoji":"⛰️","min":15,"term":"Gradient Descent","def":"A way to improve a model by taking small steps in the direction that reduces error the fastest."},{"id":"how-networks-learn","title":"How Networks Learn","emoji":"🔁","min":15,"term":"Loss","def":"A score for how wrong a model's guesses are. Training tries to make the loss smaller."}]},{"id":"blue","name":"Blue Belt","world":"AI Senses","color":"#3a86ff","ink":"#0a1a33","emoji":"👁️","blurb":"How computers see and hear: pixels, colors, filters, edges, and sound turned into numbers.","built":false,"lessons":[{"id":"pixels","title":"Pixel Zoom","emoji":"🔬","min":10,"term":"Pixel","def":"One tiny square of color. Digital images are grids of pixels, and each pixel is stored as numbers."},{"id":"color-numbers","title":"Colors Are Numbers","emoji":"🎨","min":10,"term":"RGB","def":"Red, Green, Blue: screens make every color by mixing these three lights, each stored as a number from 0 to 255."},{"id":"filters-and-edges","title":"Filters & Edges","emoji":"✏️","min":15,"term":"Filter","def":"A small grid of numbers slid across an image to find or change things, like edges or blur."},{"id":"draw-and-guess","title":"Draw & Guess","emoji":"🖍️","min":15,"term":"Pattern Matching","def":"Comparing something new to stored examples to find the closest match."},{"id":"sound-to-numbers","title":"Sound to Numbers","emoji":"🔊","min":12,"term":"Sampling","def":"Measuring a sound wave many times per second and storing each measurement as a number."},{"id":"how-ai-sees","title":"How AI Sees","emoji":"👀","min":15,"term":"Feature","def":"A useful clue in data, like an edge, a corner, or a color patch, that helps a model recognize things."}]},{"id":"purple","name":"Purple Belt","world":"Game AI & Strategy","color":"#8e44ec","ink":"#ffffff","emoji":"♟️","blurb":"Think ahead like a chess engine, build an unbeatable tic-tac-toe AI, and train an agent by trial and error.","built":false,"lessons":[{"id":"search-trees","title":"Search Trees","emoji":"🌲","min":12,"term":"Game Tree","def":"A map of every possible move, then every reply, then every reply to that, branching like a tree."},{"id":"tic-tac-toe-minimax","title":"The Unbeatable Bot","emoji":"❌","min":18,"term":"Minimax","def":"A strategy that assumes your opponent plays their best, then picks the move that leaves you best off."},{"id":"chess-engine-thinking","title":"How Chess Engines Think","emoji":"♞","min":15,"term":"Evaluation Function","def":"A formula that scores a position, like counting material, when there is no time to search to the end."},{"id":"maze-sensei","title":"Maze Sensei","emoji":"🏯","min":15,"term":"Reinforcement Learning","def":"Learning by trial and error: an agent tries actions, gets rewards or penalties, and improves over time."},{"id":"explore-vs-exploit","title":"Explore or Exploit?","emoji":"🧭","min":12,"term":"Exploration","def":"Trying something new to learn more, instead of repeating what already works (exploitation)."},{"id":"game-character-ai","title":"Game Character AI","emoji":"👾","min":12,"term":"State Machine","def":"A set of modes (like patrol, chase, flee) and rules for switching between them."}]},{"id":"brown","name":"Brown Belt","world":"Talking Machines","color":"#9c6b3f","ink":"#ffffff","emoji":"💬","blurb":"How chatbots really work: tokens, next-word prediction, word maps, and why AI can be confidently wrong.","built":false,"lessons":[{"id":"tokens","title":"Tokens","emoji":"🧩","min":10,"term":"Token","def":"A chunk of text — a word or piece of a word — that a language model reads and writes one at a time."},{"id":"next-word","title":"Guess the Next Word","emoji":"🔮","min":12,"term":"Language Model","def":"An AI trained on lots of text to predict which token is likely to come next."},{"id":"word-maps","title":"Word Maps","emoji":"🗺️","min":15,"term":"Embedding","def":"A list of numbers that places a word on a \"meaning map\", so similar words end up close together."},{"id":"temperature","title":"The Creativity Dial","emoji":"🌡️","min":12,"term":"Temperature","def":"A setting that controls how random a model's word choices are. Low = safe and predictable, high = surprising."},{"id":"confidently-wrong","title":"Confidently Wrong","emoji":"🤥","min":15,"term":"Hallucination","def":"When an AI states something false or made-up as if it were true."},{"id":"prompt-puzzles","title":"Prompt Puzzles","emoji":"🗝️","min":15,"term":"Prompt","def":"The instructions and information you give an AI. Clear prompts get better results."}]},{"id":"black","name":"Black Belt","world":"Builder Lab & AI Citizen","color":"#1b1b1b","ink":"#f5c542","emoji":"🏆","blurb":"Build real apps with AI, and become a smart, fair, and safe AI citizen.","built":false,"lessons":[{"id":"how-app-builders-work","title":"How AI App Builders Work","emoji":"🏗️","min":12,"term":"AI App Builder","def":"A tool where you describe an app in words and AI writes the code, which you then test and improve."},{"id":"idea-to-spec","title":"From Idea to Spec","emoji":"📋","min":15,"term":"Spec","def":"Short for specification: a clear description of what an app should do, for whom, and how you know it works."},{"id":"spec-to-prompts","title":"Spec to Prompts","emoji":"✍️","min":15,"term":"Context","def":"The background information you give an AI so it understands your goal, your users and your limits."},{"id":"test-and-debug","title":"Test & Debug","emoji":"🐞","min":15,"term":"Bug","def":"A mistake in a program that makes it behave differently than it should."},{"id":"code-playground","title":"Code Playground","emoji":"💻","min":20,"term":"Code","def":"Instructions written in a programming language that a computer can run."},{"id":"app-blueprints","title":"App Blueprints","emoji":"📐","min":15,"term":"Prototype","def":"An early, simple version of an app built to test an idea quickly."},{"id":"bias-and-fairness","title":"Bias & Fairness","emoji":"⚖️","min":15,"term":"Bias (Fairness)","def":"When a system treats some people or groups unfairly — often because of unbalanced data. (Different from the \"bias\" number inside a neuron!)"},{"id":"privacy-shield","title":"Privacy Shield","emoji":"🛡️","min":12,"term":"Personal Information","def":"Details that can identify you, like your full name, address, school, photos, or passwords. Keep them private."},{"id":"spotting-fakes","title":"Spotting Fakes","emoji":"🎭","min":15,"term":"Deepfake","def":"Fake images, video or audio made with AI to look or sound real."},{"id":"learn-dont-skip","title":"Learn, Don't Skip","emoji":"🧗","min":12,"term":"Critical Thinking","def":"Checking ideas carefully — asking \"How do I know?\" — instead of just accepting them."},{"id":"trusted-adult","title":"Your Trusted Adult","emoji":"🤝","min":10,"term":"Trusted Adult","def":"A grown-up you know well and can go to when something online feels wrong, confusing, or scary."},{"id":"ai-careers","title":"Cool AI Careers","emoji":"🚀","min":12,"term":"Data Scientist","def":"Someone who collects, cleans and studies data to find answers — and often builds AI models."},{"id":"final-project","title":"Black Belt Project","emoji":"🏁","min":30,"term":"Iteration","def":"Improving something in repeated rounds: build, test, fix, repeat."}]}],"themes":{"chess":{"name":"Chess","emoji":"♟️","hero":"a grandmaster","place":"the chessboard","thing":"a knight","group":"the chess club","items":["♔","♕","♖","♗","♘","♙"]},"martial":{"name":"Martial Arts","emoji":"🥋","hero":"a black belt","place":"the dojo","thing":"a training dummy","group":"the dojo team","items":["🥋","🥊","🎯","🏆","🥇","🧘"]},"basketball":{"name":"Basketball","emoji":"🏀","hero":"a point guard","place":"the court","thing":"a basketball","group":"the team","items":["🏀","⛹️","👟","🏆","⏱️","🥇"]},"soccer":{"name":"Soccer","emoji":"⚽","hero":"a striker","place":"the pitch","thing":"a soccer ball","group":"the squad","items":["⚽","🥅","👟","🏆","🧤","🥇"]},"space":{"name":"Space Missions","emoji":"🚀","hero":"an astronaut","place":"the space station","thing":"a rocket","group":"mission control","items":["🚀","🛰️","🪐","🌙","☄️","👩‍🚀"]},"robots":{"name":"Robots","emoji":"🤖","hero":"a robot engineer","place":"the robot lab","thing":"a robot arm","group":"the robotics club","items":["🤖","🦾","🔋","⚙️","🔧","📡"]},"detective":{"name":"Detective Mysteries","emoji":"🕵️","hero":"a detective","place":"the crime lab","thing":"a magnifying glass","group":"the detective agency","items":["🔍","🕵️","🗝️","📁","🧩","👣"]},"gamedesign":{"name":"Video Game Design","emoji":"🎮","hero":"a game designer","place":"the game studio","thing":"a game controller","group":"the dev team","items":["🎮","👾","🕹️","💎","🏰","⭐"]},"inventions":{"name":"Inventions","emoji":"💡","hero":"an inventor","place":"the workshop","thing":"a gadget","group":"the inventors' club","items":["💡","🔧","⚙️","🧪","🔋","🛠️"]},"animals":{"name":"Animals","emoji":"🐯","hero":"a wildlife ranger","place":"the jungle","thing":"a tiger","group":"the ranger crew","items":["🐯","🦅","🐬","🦁","🐼","🦊"]},"music":{"name":"Music Beats","emoji":"🎧","hero":"a beat producer","place":"the studio","thing":"a drum machine","group":"the band","items":["🎧","🥁","🎹","🎸","🎤","🎵"]},"worlds":{"name":"Building Worlds","emoji":"🏰","hero":"a world builder","place":"your block world","thing":"a castle","group":"the build crew","items":["🏰","🌋","🌲","🏝️","⛏️","🧱"]}},"arcade":[]};
-window.PAGE={"root":"../../","type":"lesson","id":"white/is-it-ai","world":"white"};
+window.PAGE={"root":"../../","type":"lesson","id":"yellow/data-detective","world":"yellow"};
 /* Yusuf's AI Dojo — shared runtime. Inlined into every page so each file works on its own. */
 (function () {
   'use strict';
@@ -687,103 +681,50 @@ window.PAGE={"root":"../../","type":"lesson","id":"white/is-it-ai","world":"whit
 
 </script>
 <script>
-window.LESSON={"id":"white/is-it-ai","title":"Is It AI?","story":[["narr","🕵️ CASE FILE #3: The Mystery of the Fake AIs"],["sensei","Detective {{nick}}, we have a problem. Everything in the market is suddenly labeled “AI-powered”: toasters, toothbrushes, even water bottles."],["you","So how do I know what’s really AI?"],["sensei","Use the sensei’s test. Ask: \u003cb>does it recognize, predict, decide or create using patterns?\u003c/b> Or does it just follow one fixed rule?"],["sensei","Remember: \u003cb>automatic\u003c/b> is not the same as \u003cb>intelligent\u003c/b>. And looking like a robot proves nothing. Sort the evidence!"]],"quiz":[{"q":"A toy looks exactly like a robot, but it can only walk forward when you wind it up. Is it AI?","a":["No — looking like a robot doesn’t make something AI","Yes — all robots are AI","Yes — it moves by itself","Only if it has flashing lights"],"c":0,"why":"AI is about what a system can do — recognize, predict, decide, create — not what it looks like."},{"q":"Which clue BEST suggests something uses AI?","a":["It recognizes, predicts or decides using patterns learned from data","It uses electricity","It has a screen","It’s expensive"],"c":0,"why":"Lots of machines use electricity and screens. The AI clue is learned patterns used to recognize, predict, decide or create."},{"q":"Automatic doors open all by themselves. Why aren’t they usually called AI?","a":["They follow one simple rule: sensor detects motion → open","They’re too slow","They’re made of glass","Doors can never use AI"],"c":0,"why":"Automatic ≠ intelligent. A sensor plus one rule is automation, not AI."},{"q":"A company says its toaster is “AI-powered”. What should a smart thinker do?","a":["Ask what it actually recognizes, predicts or learns — a label alone doesn’t prove it","Believe it — companies are always right","Assume it’s dangerous","Throw the toaster away"],"c":0,"why":"“AI” is a popular marketing word. Ask what the product really does before you believe the label."}]};
+window.LESSON={"id":"yellow/data-detective","title":"Data Detective","story":[["narr","🔍 CASE FILE: The Suspicious Fitness Log"],["sensei","{{nick}}, a fitness app tracked a week of steps and sleep for an athlete. Something is off. Several things, actually."],["sensei","An \u003cb>outlier\u003c/b> is a value very different from the rest. Sometimes it’s a \u003cb>mistake\u003c/b>, like a typo. Sometimes it’s \u003cb>real and important\u003c/b>. A great detective finds out which one it is instead of guessing."],["you","So I shouldn’t just delete every weird number?"],["sensei","Exactly. Deleting real data is as bad as keeping fake data. Read the clues carefully."]],"quiz":[{"q":"What is an outlier?","a":["A data point very different from the rest","Any number bigger than 10","A missing value","The average"],"c":0,"why":"Outliers stand out. They might be mistakes, or real and important."},{"q":"Friday had 21,500 steps — tournament day. What should you do with it?","a":["Keep it — it’s real, and note why it’s unusual","Delete it because it’s big","Change it to 8,000","Delete the whole week"],"c":0,"why":"Deleting real data hides the truth. Investigate before removing anything."},{"q":"Why is a duplicate row a problem?","a":["It counts the same thing twice, skewing totals and averages","Duplicates make data prettier","It isn’t a problem","It deletes other rows"],"c":0,"why":"Double-counting makes that day look twice as important as it was."},{"q":"Sleep = 90 hours in one day. How do you know it’s a mistake?","a":["It’s impossible — a day only has 24 hours","It’s too small","Sleep can’t be measured","It’s on a Thursday"],"c":0,"why":"Checking whether a value is even possible is a data detective’s first move."}]};
 window.ACTIVITY=(function (el, api) {
       var D = api.D;
-      var cards = D.shuffle([
-        ['🚪', 'Automatic doors that open when you walk up', 0, 'A motion sensor plus one rule: “someone’s close → open”. Automatic, but not intelligent.'],
-        ['🌡️', 'A thermostat that learns your family’s schedule', 1, 'It learns patterns from when you’re home and predicts when to heat or cool.'],
-        ['🧸', 'A wind-up toy robot that walks forward', 0, 'It LOOKS like a robot, but a spring isn’t intelligence. Looks don’t make something AI!'],
-        ['🧹', 'A robot vacuum that maps rooms and avoids socks', 1, 'Many robot vacuums build a map of your home, and some use cameras with AI to recognize obstacles.'],
-        ['♟️', 'A chess app that chooses its own moves', 1, 'Chess AI searches through possible moves and scores positions to decide what to play.'],
-        ['🕰️', 'A digital clock', 0, 'It counts seconds with a steady electronic beat. Precise, but no smarts.'],
-        ['📷', 'A camera app that translates a sign in another language', 1, 'It recognizes the letters in the image, then an AI translation model translates them.'],
-        ['📺', 'A TV remote', 0, 'Press a button, send a signal. That’s it.'],
-        ['✍️', 'A chatbot that writes a story for you', 1, 'It generates new text by predicting words, using patterns learned from huge amounts of writing.'],
-        ['🛗', 'Elevator buttons', 0, 'Press 5, go to floor 5. A simple rule.'],
-        ['🎵', 'A music app that builds a playlist for your mood', 1, 'It learns from what you and others listen to and recommends songs that fit.'],
-        ['🥤', 'A vending machine that drops a snack when you pay', 0, 'Coin in, snack out: fixed rules.'],
-      ]);
-      var i = 0, right = 0, streak = 0, best = 0, busy = false, bins = { 1: [], 0: [] };
-      var ALL = cards.slice(), S = api.load();
-      if (S.order && S.order.length === ALL.length) { cards = S.order.map(function (t) { return ALL.filter(function (c) { return c[1] === t; })[0]; }).filter(Boolean); if (cards.length !== ALL.length) cards = ALL; else { i = S.i || 0; right = S.right || 0; best = S.best || 0; bins = S.bins || bins; } }
-      function persist() { api.save({ order: cards.map(function (c) { return c[1]; }), i: i, right: right, best: best, bins: bins }); }
-      el.innerHTML = '<div class="sm"><div class="sm-bar"><span id="sm-n"></span><span id="sm-streak"></span></div><div class="sm-stage" id="sm-stage"></div>' +
-        '<div class="sm-btns"><button type="button" class="btn" id="sm-no">🔧 Not AI</button><button type="button" class="btn primary" id="sm-yes">🤖 AI</button></div>' +
-        '<div class="sm-why" id="sm-why" aria-live="polite"></div><div class="sm-bins"><div><b>🔧 Not AI</b><div id="sm-b0"></div></div><div><b>🤖 AI</b><div id="sm-b1"></div></div></div></div>';
-      var stage = D.$('#sm-stage', el), why = D.$('#sm-why', el);
-      function show() {
-        D.$('#sm-n', el).textContent = 'Card ' + Math.min(i + 1, cards.length) + ' / ' + cards.length + ' · ✅ ' + right;
-        D.$('#sm-streak', el).textContent = streak > 1 ? '🔥 ' + streak + ' in a row' : '';
-        if (i >= cards.length) return end();
-        var c = cards[i];
-        stage.innerHTML = '<div class="sm-card" id="sm-card"><span class="e" aria-hidden="true">' + c[0] + '</span><p>' + c[1] + '</p></div>';
-        swipe(D.$('#sm-card', el)); busy = false;
-      }
-      function answer(v) {
-        if (busy || i >= cards.length) return; busy = true;
-        var c = cards[i], ok = v === c[2];
-        if (ok) { right++; streak++; best = Math.max(best, streak); D.sfx('good'); } else { streak = 0; D.sfx('bad'); }
-        why.className = 'sm-why ' + (ok ? 'ok' : 'no');
-        why.innerHTML = (ok ? '✅ <b>Correct!</b> ' : '❌ <b>It’s ' + (c[2] ? 'AI' : 'not AI') + '.</b> ') + c[3];
-        bins[c[2]].push(c[0]); D.$('#sm-b' + c[2], el).textContent = bins[c[2]].join(' ');
-        var card = D.$('#sm-card', el); if (card) card.classList.add(v ? 'right' : 'left');
-        i++; persist(); setTimeout(show, D.reducedMotion() ? 50 : 380);
-      }
-      function end() {
-        stage.innerHTML = '<div class="sm-card" style="animation:none"><span class="e" aria-hidden="true">' + (right >= 10 ? '🏆' : '🕵️') + '</span><p>Case closed! ' + right + ' / ' + cards.length + '</p><p style="font-weight:600;font-size:.95rem">Best streak: ' + best + '</p><button type="button" class="btn small" id="sm-again">↻ Sort again</button></div>';
-        D.$('#sm-again', el).addEventListener('click', function () { cards = D.shuffle(cards); i = 0; right = 0; streak = 0; bins = { 1: [], 0: [] }; persist(); D.$('#sm-b0', el).textContent = ''; D.$('#sm-b1', el).textContent = ''; why.textContent = ''; why.className = 'sm-why'; show(); });
-        api.done();
-      }
-      function swipe(card) {
-        var x0 = null;
-        card.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
-        card.addEventListener('pointermove', function (e) { if (x0 == null) return; var dx = e.clientX - x0; card.style.transform = 'translateX(' + dx + 'px) rotate(' + dx / 12 + 'deg)'; });
-        function up(e) { if (x0 == null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 80) answer(dx > 0 ? 1 : 0); else card.style.transform = ''; }
-        card.addEventListener('pointerup', up); card.addEventListener('pointercancel', function () { x0 = null; card.style.transform = ''; });
-      }
-      D.$('#sm-yes', el).addEventListener('click', function () { answer(1); });
-      D.$('#sm-no', el).addEventListener('click', function () { answer(0); });
-      el.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') { answer(1); e.preventDefault(); } if (e.key === 'ArrowLeft') { answer(0); e.preventDefault(); } });
-      D.$('#sm-b0', el).textContent = bins[0].join(' '); D.$('#sm-b1', el).textContent = bins[1].join(' ');
-      if (i > 0 && i < cards.length) { why.className = 'sm-why'; why.textContent = '💾 Welcome back! You’d sorted ' + i + ' cards.'; }
-      show();
-    });
-window.CHALLENGE=(function (el, api) {
-      var D = api.D;
-      var items = [
-        ['👾 An enemy in a video game that chases you', 'd', 'Game designers call it “AI”, but it’s usually hand-written rules like “if the player is close, chase”. That’s not machine learning. A few newer games do use learning, so: it depends!'],
-        ['💡 A “smart” light that turns on at sunset', 'n', 'It follows a schedule rule. The word “smart” in a product name doesn’t mean AI.'],
-        ['📝 A spell-checker', 'd', 'Old spell-checkers just compared your words to a dictionary list (rules). Many modern ones use machine learning to guess what you meant. It depends on the checker!'],
-        ['🏭 A factory robot arm that welds the same spot all day', 'n', 'Many factory robots just repeat exact programmed motions. Impressive machines, but not AI.'],
-        ['🔎 A web search engine that ranks the best results', 'a', 'Modern search engines use machine learning to understand your question and rank pages.'],
+      var R = [
+        ['Mon', '8,200', '9', '', 'ok'], ['Tue', '7,900', '8.5', '', 'ok'], ['Wed', '', '9', '', 'miss'], ['Thu', '8,100', '90', '', 'typo'],
+        ['Fri', '21,500', '9', 'Tournament day 🏆', 'real'], ['Sat', '7,600', '10', '', 'ok'], ['Sat', '7,600', '10', '', 'dup'], ['Sun', '8,300', '9', '', 'ok'],
       ];
-      var done = 0, right = 0;
-      function render(fresh) {
-        done = 0; right = 0; if (fresh) api.save({ ans: {} });
-        el.innerHTML = '<div class="gz">' + items.map(function (it, i) {
-          return '<div class="gz-item" data-i="' + i + '"><p>' + it[0] + '</p><div class="row"><button type="button" class="btn small" data-v="a">🤖 AI</button><button type="button" class="btn small" data-v="n">🔧 Not AI</button><button type="button" class="btn small" data-v="d">🤔 It depends!</button></div><div class="gz-why" aria-live="polite"></div></div>';
-        }).join('') + '</div><p class="feedback" id="gz-sum" aria-live="polite"></p>';
-        D.$all('.gz-item button', el).forEach(function (b) {
+      var C = [['miss', '🕳️ Missing value'], ['typo', '🤪 Impossible value (typo)'], ['dup', '👯 Duplicate row'], ['real', '🌟 Real but unusual'], ['ok', '✅ Looks fine']];
+      var WHY = { miss: 'Wednesday’s steps are blank. The tracker may have been off, so the value is missing.', typo: '90 hours of sleep in one day is impossible (a day has 24 hours!). Probably a typo for 9.', dup: 'Saturday appears twice with identical values: a duplicate that would count that day double.', real: 'A huge number, but the note explains it: tournament day. It’s a real outlier, so keep it!', ok: 'Nothing suspicious here.' };
+      var S = api.load(), solved = S.solved || {}, cur = null;
+      el.innerHTML = '<div class="dd-wrap"><table class="dd"><caption class="sr-only">Fitness log for one week</caption><thead><tr><th scope="col">Day</th><th scope="col">Steps</th><th scope="col">Sleep (h)</th><th scope="col">Note</th></tr></thead><tbody>' +
+        R.map(function (r, i) { return '<tr tabindex="0" data-i="' + i + '"><td>' + r[0] + '</td><td class="' + (r[1] ? '' : 'miss') + '">' + (r[1] || '(blank)') + '</td><td>' + r[2] + '</td><td>' + r[3] + '</td></tr>'; }).join('') +
+        '</tbody></table></div><p class="dd-score" id="dd-score" aria-live="polite"></p><div id="dd-ask" aria-live="polite"></div>';
+      function score() {
+        var n = Object.keys(solved).filter(function (k) { return R[k][4] !== 'ok'; }).length;
+        D.$('#dd-score', el).textContent = '🔍 Problems found: ' + n + ' / 4';
+        D.$all('tbody tr', el).forEach(function (tr) { var i = tr.getAttribute('data-i'); tr.classList.toggle('solved', !!solved[i] && R[i][4] !== 'ok'); tr.classList.toggle('cleared', !!solved[i] && R[i][4] === 'ok'); });
+        if (n === 4) { D.$('#dd-ask', el).innerHTML = '<p class="feedback ok">🏆 Case closed! You found the missing value, the typo and the duplicate — and you protected the real outlier instead of deleting it. That’s how data detectives work.</p>'; api.done(); }
+      }
+      function ask(i) {
+        cur = i; var r = R[i];
+        var box = D.$('#dd-ask', el);
+        box.innerHTML = '<div class="dd-ask"><p><b>' + r[0] + ':</b> ' + (r[1] || '(blank)') + ' steps, ' + r[2] + ' h sleep' + (r[3] ? ' · “' + r[3] + '”' : '') + '. What’s going on?</p><div class="row">' + C.map(function (c) { return '<button type="button" class="btn small" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div><p class="feedback" aria-live="polite"></p></div>';
+        D.$all('button', box).forEach(function (b) {
           b.addEventListener('click', function () {
-            var box = b.closest('.gz-item'), it = items[+box.getAttribute('data-i')];
-            if (box.classList.contains('ok') || box.classList.contains('no')) return;
-            var ok = b.getAttribute('data-v') === it[1]; done++; if (ok) right++;
-            var A = api.load().ans || {}; A[box.getAttribute('data-i')] = b.getAttribute('data-v'); api.save({ ans: A });
-            box.classList.add(ok ? 'ok' : 'no'); D.$all('button', box).forEach(function (x) { x.disabled = true; });
-            box.querySelector('.gz-why').innerHTML = (ok ? '✅ ' : '❌ Best answer: <b>' + { a: 'AI', n: 'Not AI', d: 'It depends' }[it[1]] + '</b>. ') + it[2];
-            D.sfx(ok ? 'good' : 'bad');
-            if (done === items.length) {
-              var s = D.$('#gz-sum', el);
-              if (right >= 4) { s.className = 'feedback ok'; s.textContent = right + '/5 — you can handle the gray zone. That’s expert-level thinking.'; api.done(); }
-              else { s.className = 'feedback no'; s.innerHTML = right + '/5. Read the explanations and <button type="button" class="btn small" id="gz-again">try again</button>'; D.$('#gz-again', el).addEventListener('click', function () { render(true); }); }
-            }
+            var v = b.getAttribute('data-v'), f = box.querySelector('.feedback');
+            if (v === r[4]) { D.sfx('good'); solved[i] = true; api.save({ solved: solved }); f.className = 'feedback ok'; f.textContent = '✅ ' + WHY[v]; score(); }
+            else { D.sfx('bad'); b.disabled = true; f.className = 'feedback no'; f.textContent = 'Not quite. Look at every column in this row, including the note.'; }
           });
         });
       }
-      render();
-      var A0 = api.load().ans || {};
-      Object.keys(A0).forEach(function (i) { var b = D.$('.gz-item[data-i="' + i + '"] button[data-v="' + A0[i] + '"]', el); if (b) b.click(); });
+      D.$all('tbody tr', el).forEach(function (tr) {
+        tr.addEventListener('click', function () { ask(+tr.getAttribute('data-i')); });
+        tr.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ask(+tr.getAttribute('data-i')); } });
+      });
+      score();
+    });
+window.CHALLENGE=(function (el, api) {
+      api.D.quiz(el, [
+        { q: 'Wednesday’s steps are missing. Best fix?', a: ['Find the real value if possible — otherwise leave it out and say so', 'Make up a number that looks nice', 'Copy Thursday’s number without telling anyone', 'Delete the whole dataset'], c: 0, why: 'Inventing data is worse than admitting a gap.' },
+        { q: 'Sleep says 90 hours. Best fix?', a: ['Check the original source; it was probably 9 — fix it and note the change', 'Keep it', 'Change it to 24', 'Ignore sleep forever'], c: 0, why: 'Verify, fix, and keep a record of what you changed.' },
+        { q: 'Saturday appears twice. Best fix?', a: ['Remove the extra copy', 'Keep both', 'Delete both', 'Add a third copy'], c: 0, why: 'One real day = one row.' },
+        { q: 'Tournament day: 21,500 steps. Best fix?', a: ['Keep it, and note that it was a special day', 'Delete it', 'Divide it by 2', 'Replace it with the average'], c: 0, why: 'Real outliers are part of the true story.' },
+      ], { saveKey: 'chquiz', onDone: function (s) { if (s >= 3) api.done(); } });
     });
 </script>
 <script>

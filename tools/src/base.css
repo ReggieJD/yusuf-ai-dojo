@@ -24,7 +24,7 @@ p{margin:0 0 .8em}
 noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px}
 
 /* ---- top bar ---- */
-#dojo-bar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:8px;padding:8px 12px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+#dojo-bar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--card);background:color-mix(in srgb,var(--card) 92%,transparent);color:var(--ink);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);flex-wrap:wrap}
 #dojo-bar a,#dojo-bar button{min-height:44px}
 .db-home{display:inline-flex;align-items:center;gap:6px;font-weight:800;text-decoration:none;color:var(--ink);padding:0 12px;border-radius:999px;background:var(--card);border:2px solid var(--line)}
 .db-me{display:inline-flex;align-items:center;gap:6px;font-weight:700;margin-right:auto;min-width:0}
@@ -48,7 +48,7 @@ noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px
 .hero .hook{font-size:1.12rem;color:var(--muted);max-width:40em}
 .hero-art{font-size:3.4rem;line-height:1;margin-bottom:6px}
 .steps{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:14px 0 0;list-style:none}
-.steps li{display:flex;align-items:center;gap:6px;padding:6px 12px 6px 6px;border-radius:999px;background:var(--card);border:2px solid var(--line);font-weight:700;font-size:.9rem}
+.steps li{display:flex;align-items:center;gap:6px;padding:6px 12px 6px 6px;border-radius:999px;background:var(--card);color:var(--ink);border:2px solid var(--line);font-weight:700;font-size:.9rem}
 .steps .ck{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;border:2px solid var(--line);font-size:.8rem}
 .steps li.on .ck{background:var(--good);color:#fff;border-color:var(--good)}
 .nudge{background:var(--card);border:2px dashed var(--accent);border-radius:14px;padding:10px 14px;margin:10px 0 0}
@@ -80,7 +80,7 @@ noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px
 .qz-dot.done{background:var(--good)} .qz-dot.now{background:var(--accent)}
 .qz-q{font-size:1.2rem;font-weight:700}
 .qz-choices{display:grid;gap:10px}
-.qz-choice{text-align:left;min-height:52px;padding:12px 16px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:600 1rem/1.35 var(--font-body);cursor:pointer}
+.qz-choice{text-align:left;min-height:52px;padding:12px 16px;border-radius:14px;border:2px solid var(--line);background:var(--bg2);color:var(--ink);font:600 1rem/1.35 var(--font-body);cursor:pointer}
 .qz-choice:hover:not(:disabled){border-color:var(--accent)}
 .qz-choice.right{background:var(--good-bg);border-color:var(--good);color:#0d3b22}
 .qz-choice.right::after{content:"  ✓";font-weight:900}
@@ -96,10 +96,10 @@ noscript p{background:#fff3cd;color:#1d1d1f;padding:12px 16px;border-radius:12px
 
 /* ---- challenge ---- */
 details.challenge{border:3px solid var(--ink);border-radius:var(--radius);background:repeating-linear-gradient(135deg,var(--card) 0 18px,var(--bg2) 18px 20px);margin:18px 0;box-shadow:var(--shadow)}
-details.challenge>summary{list-style:none;cursor:pointer;padding:18px;display:flex;align-items:center;gap:12px;font:800 1.2rem/1.2 var(--font-head);min-height:56px}
+details.challenge>summary{color:var(--ink);list-style:none;cursor:pointer;padding:18px;display:flex;align-items:center;gap:12px;font:800 1.2rem/1.2 var(--font-head);min-height:56px}
 details.challenge>summary::-webkit-details-marker{display:none}
 details.challenge>summary .flame{font-size:1.8rem}
-details.challenge>summary .tag{margin-left:auto;font:700 .8rem var(--font-body);padding:4px 10px;border-radius:999px;background:var(--ink);color:var(--bg)}
+details.challenge>summary .tag{margin-left:auto;font:700 .8rem var(--font-body);padding:4px 10px;border-radius:999px;background:var(--ink);color:var(--card);white-space:nowrap}
 details.challenge[open]>summary .tag::after{content:" ▲"} details.challenge:not([open])>summary .tag::after{content:" ▼"}
 .challenge-body{padding:0 18px 20px;background:transparent}
 .challenge-body>div{background:var(--card);border-radius:14px;padding:16px;border:2px solid var(--line)}
@@ -141,6 +141,13 @@ footer.site a{color:inherit}
 .cer-card h2{font-size:1.6rem}
 
 /* ---- generic interactive helpers used by activities ---- */
+.so{display:grid;gap:10px}
+.so-item{padding:12px;border:2px solid var(--line);border-radius:12px;background:var(--bg2)}
+.so-item p{margin:0 0 8px;font-weight:700}
+.so-item .row button{flex:1 1 auto;min-width:84px}
+.so-item.ok{border-color:var(--good)} .so-item.no{border-color:var(--bad)}
+.so-item .so-right{outline:3px solid var(--good);outline-offset:1px}
+.so-why{font-size:.93rem;margin-top:6px}
 .tap{min-height:48px;min-width:48px;cursor:pointer;touch-action:manipulation}
 .pill{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--bg2);font-weight:700;font-size:.85rem}
 .meter{height:14px;border-radius:999px;background:var(--bg2);overflow:hidden;border:2px solid var(--line)}

@@ -19,7 +19,7 @@ const worlds = [
     id: 'yellow', name: 'Yellow Belt', world: 'Data Is Power', color: '#ffd23f', ink: '#1d1d1f', emoji: '📊',
     blurb: 'Data is the fuel of AI. Collect it, label it, chart it, and learn why bad data makes bad AI.',
     parents: 'What data is, collecting and labeling data, reading charts of basketball and soccer stats, averages and patterns, correlation vs. causation, "garbage in, garbage out," and spotting outliers and missing data.',
-    built: false,
+    built: true,
     lessons: [
       { id: 'what-is-data', title: 'What Is Data?', emoji: '🔢', min: 10, term: 'Data', def: 'Facts, numbers, words, pictures or sounds collected so they can be studied.' },
       { id: 'collect-and-label', title: 'Collect & Label', emoji: '🏷️', min: 12, term: 'Label', def: 'The correct answer attached to an example, like tagging a photo "cat". AI learns from labeled examples.' },

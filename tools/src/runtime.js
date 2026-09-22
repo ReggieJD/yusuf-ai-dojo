@@ -330,6 +330,39 @@
     return { restart: function () { i = 0; score = 0; render(); } };
   }
 
+
+  // ---------- Sorter: each item gets one choice; explanations; pass mark; autosave via api.save/load ----------
+  // o = { items: [[html, answer, why?]], choices: [[value, label]], need: n, win: 'message', key: 'ans' }
+  function sorter(el, api, o) {
+    var key = o.key || 'ans', need = o.need || o.items.length;
+    el.innerHTML = '<div class="so">' + o.items.map(function (it, i) {
+      return '<div class="so-item" data-i="' + i + '"><p>' + it[0] + '</p><div class="row">' + o.choices.map(function (c) { return '<button type="button" class="btn small" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div><div class="so-why" aria-live="polite"></div></div>';
+    }).join('') + '</div><p class="feedback so-sum" aria-live="polite"></p>';
+    var A = {}, n = 0, right = 0;
+    function label(v) { for (var k = 0; k < o.choices.length; k++) if (String(o.choices[k][0]) === String(v)) return o.choices[k][1]; return v; }
+    function pick(box, v, quiet) {
+      var i = +box.getAttribute('data-i'), it = o.items[i];
+      if (box.classList.contains('ok') || box.classList.contains('no')) return;
+      var ok = String(v) === String(it[1]); n++; if (ok) right++;
+      A[i] = v; if (api.save) { var sv = {}; sv[key] = A; api.save(sv); }
+      box.classList.add(ok ? 'ok' : 'no');
+      $all('button', box).forEach(function (b) { b.disabled = true; if (b.getAttribute('data-v') === String(it[1])) b.classList.add('so-right'); });
+      $('.so-why', box).innerHTML = (ok ? '✅ ' : '❌ Best answer: <b>' + label(it[1]) + '</b>. ') + (it[2] || '');
+      if (!quiet) sfx(ok ? 'good' : 'bad');
+      if (n === o.items.length) {
+        var sum = $('.so-sum', el);
+        if (right >= need) { sum.className = 'feedback ok so-sum'; sum.innerHTML = right + '/' + o.items.length + ' — ' + (o.win || 'Nice work!'); if (api.done) api.done(); }
+        else {
+          sum.className = 'feedback no so-sum'; sum.innerHTML = right + '/' + o.items.length + '. You need ' + need + '. Read the explanations, then <button type="button" class="btn small so-again">try again</button>';
+          $('.so-again', el).addEventListener('click', function () { if (api.save) { var z = {}; z[key] = {}; api.save(z); } sorter(el, api, o); });
+        }
+      }
+    }
+    $all('.so-item button', el).forEach(function (b) { b.addEventListener('click', function () { pick(b.closest('.so-item'), b.getAttribute('data-v')); }); });
+    var saved = api.load ? (api.load()[key] || {}) : {};
+    Object.keys(saved).forEach(function (i) { var box = $('.so-item[data-i="' + i + '"]', el); if (box) pick(box, saved[i], true); });
+  }
+
   // ---------- Belt ceremony ----------
   function ceremony(w, onClose) {
     var ov = document.createElement('div'); ov.className = 'ceremony'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-labelledby', 'cer-title');
@@ -362,7 +395,7 @@
     BADGES: BADGES, badgeCount: badgeCount, checkBadges: checkBadges,
     addXP: addXP, markActivity: markActivity, markQuiz: markQuiz, markChallenge: markChallenge, markDaily: markDaily,
     streakNow: streakNow, earnBelt: earnBelt, recordArcade: recordArcade,
-    sfx: sfx, setSound: setSound, toast: toast, confetti: confetti, quiz: quiz, ceremony: ceremony, refreshBar: refreshBar,
+    sfx: sfx, setSound: setSound, toast: toast, confetti: confetti, quiz: quiz, sorter: sorter, ceremony: ceremony, refreshBar: refreshBar,
     root: ROOT, C: C, page: P,
   };
 
