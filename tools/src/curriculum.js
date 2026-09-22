@@ -103,7 +103,7 @@ const worlds = [
     id: 'black', name: 'Black Belt', world: 'Builder Lab & AI Citizen', color: '#1b1b1b', ink: '#f5c542', emoji: '🏆',
     blurb: 'Build real apps with AI, and become a smart, fair, and safe AI citizen.',
     parents: 'How AI app builders work, writing app ideas as clear specs, turning specs into prompts, testing and debugging, a live code playground, app blueprints to take to real builders (with an adult), bias and fairness, privacy, deepfakes, using AI to learn rather than to skip thinking, when to ask a trusted adult, AI careers, and a final project.',
-    built: false,
+    built: true,
     lessons: [
       { id: 'how-app-builders-work', title: 'How AI App Builders Work', emoji: '🏗️', min: 12, term: 'AI App Builder', def: 'A tool where you describe an app in words and AI writes the code, which you then test and improve.' },
       { id: 'idea-to-spec', title: 'From Idea to Spec', emoji: '📋', min: 15, term: 'Spec', def: 'Short for specification: a clear description of what an app should do, for whom, and how you know it works.' },

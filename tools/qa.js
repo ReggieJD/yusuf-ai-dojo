@@ -173,6 +173,16 @@ const FLOWS = require('./qa-flows');
     } catch (e) { failures++; record('flow: belt test ' + w, false, e.message.split('\n')[0]); }
   }
 
+  // certificate unlocks after the Black Belt
+  if (!filter || filter.includes('black') || filter.includes('flow')) {
+    await pg.goto(base + 'certificate.html');
+    const ok = await pg.evaluate(() => !document.getElementById('cert').hidden && document.querySelector('.c-name').textContent === 'Yusuf');
+    const hasBlack = await pg.evaluate(() => !!Dojo.state().belts.black);
+    if (hasBlack) { record('flow: certificate shows after Black Belt', ok); if (!ok) failures++; }
+    const builder = await pg.evaluate(() => !!Dojo.state().badges.builder);
+    if (hasBlack) { record('flow: Master Builder badge from final project', builder); if (!builder) failures++; }
+  }
+
   // daily dojo streak
   if (!filter || filter.includes('daily') || filter.includes('flow')) {
     try {

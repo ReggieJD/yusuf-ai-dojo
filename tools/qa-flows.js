@@ -410,6 +410,78 @@ module.exports = {
     for (const [f, v] of [['role', 'Act as a coach'], ['task', 'Make a practice plan'], ['aud', 'For kids aged 11'], ['fmt', 'A numbered list'], ['lim', 'Thirty minutes total']]) await pg.fill(`[data-f="${f}"]`, v);
     for (const s of ['1', '2', '3']) await pg.click(`#bt-proj [data-s="${s}"][data-ok="1"]`);
   },
+
+  'black/how-app-builders-work': {
+    activity: async (pg) => { for (let i = 0; i < 6; i++) await pg.click(`[data-st="${i}"]`); await pg.click('[data-b="A"]'); await pg.click('[data-b="B"]'); await pg.click('#activity [data-ok="1"]'); },
+    challenge: (pg) => solveSorter(pg, '#challenge'),
+  },
+  'black/idea-to-spec': {
+    activity: async (pg) => {
+      for (const [f, v] of [['name', 'Free Throw Tracker'], ['users', 'Kids on my basketball team'], ['problem', 'We forget how many free throws we make each practice'], ['f1', 'Tap buttons to log shots'], ['f2', 'Show the percentage in big numbers'], ['f3', 'Save each practice session'], ['not', 'No accounts or photos'], ['test', 'Seven makes out of ten shows seventy percent']]) await pg.fill(`#activity [data-f="${f}"]`, v);
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'black/spec-to-prompts': {
+    activity: async (pg) => { for (let k = 0; k < 3; k++) { await pg.click('#activity [data-ok="1"]'); await pg.waitForTimeout(1600); } for (let i = 0; i < 4; i++) await pg.click(`[data-o="${i}"]`); },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'black/test-and-debug': {
+    activity: async (pg) => {
+      for (const [k, v] of [['pass1', 'p'], ['pass2', 'f'], ['pass3', 'p'], ['reset', 'f']]) await pg.click(`.td-test[data-t="${k}"] [data-m="${v}"]`);
+      await pg.waitForTimeout(1500); await pg.click('[data-rep="1"]');
+      for (const k of ['pass1', 'pass2', 'pass3', 'reset']) await pg.click(`.td-test[data-t="${k}"] [data-m="p"]`);
+      await pg.waitForTimeout(1500);
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'black/code-playground': {
+    activity: async (pg) => {
+      await pg.click('[data-app="clock"]'); await pg.click('[data-app="cards"]');
+      await pg.$eval('#cp-code', (t) => { t.value = t.value.replace('#fffdf6', '#ffe8a3'); t.dispatchEvent(new Event('input', { bubbles: true })); });
+      await pg.waitForTimeout(900);
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'black/app-blueprints': {
+    activity: async (pg) => {
+      for (const id of ['stats', 'chess', 'belt', 'quiz', 'drill']) { const d = await pg.$(`details.bp[data-bp="${id}"]`); if (!(await d.evaluate((x) => x.open))) await pg.click(`details.bp[data-bp="${id}"] > summary`); }
+      await pg.click('[data-copy="stats"]');
+      for (let i = 0; i < 3; i++) await pg.check(`[data-ck="stats${i}"]`);
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'black/bias-and-fairness': {
+    activity: async (pg) => { await pg.click('[data-s1="1"]'); await pg.click('[data-s2="1"]'); await pg.check('#bf-club'); await pg.click('[data-s3="1"]'); },
+    challenge: (pg) => solveSorter(pg, '#challenge'),
+  },
+  'black/privacy-shield': { activity: (pg) => solveSorter(pg, '#activity'), challenge: (pg) => solveQuiz(pg, '#challenge') },
+  'black/spotting-fakes': { activity: (pg) => solveSorter(pg, '#activity'), challenge: (pg) => solveSorter(pg, '#challenge') },
+  'black/learn-dont-skip': { activity: (pg) => solveSorter(pg, '#activity'), challenge: (pg) => solveQuiz(pg, '#challenge') },
+  'black/trusted-adult': {
+    activity: async (pg) => { await pg.click('[data-t="0"]'); await pg.click('[data-t="2"]'); await solveSorter(pg, '#ta-sort'); },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'black/ai-careers': {
+    activity: async (pg) => {
+      for (let i = 0; i < 4; i++) await pg.click(`[data-q="${i}"][data-o="0"]`);
+      for (const c of ['ds', 'rob', 'eth']) await pg.click(`.cm-card[data-c="${c}"] > summary`);
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'black/final-project': {
+    activity: async (pg) => {
+      await pg.fill('[data-f="name"]', 'Kata Coach'); await pg.selectOption('[data-f="ai"]', 'recommend'); await pg.fill('[data-f="pitch"]', 'An app that recommends which drill to practice next');
+      await pg.click('#fp-next');
+      for (const [f, v] of [['users', 'Kids at my dojo'], ['problem', 'We never know which drill to practice next'], ['f1', 'Log each drill I practice'], ['f2', 'Recommend the next drill'], ['f3', 'Show my weekly minutes'], ['not', 'No names or photos'], ['test', 'After logging kicks it suggests a different drill']]) await pg.fill(`[data-f="${f}"]`, v);
+      await pg.click('#fp-next');
+      for (const [f, v] of [['data', 'My past drill logs and minutes'], ['wrong', 'It might repeat the same drill too often so I add a shuffle'], ['fair', 'It must work for beginners too so I test with different levels']]) await pg.fill(`[data-f="${f}"]`, v);
+      await pg.click('#fp-next'); await pg.click('#fp-next');
+      for (const c of ['c1', 'c2', 'c3', 'c4']) await pg.check(`[data-c="${c}"]`);
+      await pg.click('#fp-next');
+    },
+    challenge: (pg) => solveQuiz(pg, '#challenge'),
+  },
+  'test:black': async (pg) => { for (let k = 0; k < 4; k++) await pg.click('#bt-proj [data-ok="1"]'); },
   'test:white': async (pg) => {
     const ans = ['r', 'n', 'p', 'c', 'n', 'r'];
     for (let i = 0; i < 6; i++) await pg.click(`.gi-item[data-i="${i}"] button[data-v="${ans[i]}"]`);
