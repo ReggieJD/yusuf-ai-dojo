@@ -237,6 +237,64 @@ const FLOWS = require('./qa-flows');
     await c2.close();
   }
 
+  // arcade: locked with no badges, then every game is played through to a win
+  if (!filter || filter.includes('arcade') || filter.includes('flow')) {
+    const c3 = await browser.newContext({ viewport: { width: 390, height: 800 }, hasTouch: true });
+    const p3 = await c3.newPage(); const e3 = [];
+    p3.on('pageerror', (e) => e3.push(e.message));
+    const SOLVE = {
+      'pattern-ninja': () => { const el = document.getElementById('stage'); (el.__ans || []).forEach((i) => { const b = el.querySelector('.pn-grid button[data-i="' + i + '"]'); if (b && !b.disabled) b.click(); }); },
+      'data-dunk': () => { const el = document.getElementById('stage'); const b = el.querySelector('.dd-opts button[data-i="' + el.__ans + '"]'); if (b && !b.disabled) b.click(); },
+      'neural-penalty-kicks': () => {
+        const el = document.getElementById('stage'); const go = el.querySelector('#pk-go'); const rt = el.querySelector('#pk-retry');
+        if (rt) return rt.click();
+        if (!go) return;
+        ['w1', 'w2', 'b'].forEach((k, i) => { const r = el.querySelector('#pk-' + k); r.value = el.__sol[i]; r.dispatchEvent(new Event('input')); });
+        el.querySelector('#pk-go').click();
+      },
+      'minimax-checkmate': () => {
+        const el = document.getElementById('stage'); const s = el.__sol; if (!s || el.__qaSol === s) return; el.__qaSol = s;
+        el.querySelector('[data-sq="' + s[0] + '"]').click(); el.querySelector('[data-sq="' + s[1] + '"]').click();
+      },
+      'token-tetris': () => { const el = document.getElementById('stage'); if (el.__toks) el.__toks[el.__ans].click(); },
+      'maze-race': () => {
+        const el = document.getElementById('stage'); const m = el.querySelector('.mr-msg');
+        if (!m || !/GO!/.test(m.textContent) || el.__qaPath === el.__path) return; el.__qaPath = el.__path;
+        el.__path.forEach((d) => el.querySelector('[data-d="' + d + '"]').click());
+      },
+      'bias-detective': () => { const el = document.getElementById('stage'); const b = el.querySelector('.bd-opts button[data-i="' + el.__ans + '"]'); if (b && !b.disabled) b.click(); },
+      'spot-the-fake': () => { const el = document.getElementById('stage'); const b = el.querySelector('.sf-opts button[data-k="' + el.__ans + '"]'); if (b && !b.disabled) b.click(); },
+    };
+    for (const [id, solve] of Object.entries(SOLVE)) {
+      e3.length = 0;
+      try {
+        await p3.goto(base + 'arcade/' + id + '.html');
+        await p3.evaluate(() => { const s = Dojo.state(); s.unlockAll = false; s.badges = {}; Dojo.save(); });
+        await p3.reload();
+        if (!(await p3.$('.ar-lock'))) throw new Error('not locked with 0 badges');
+        await p3.evaluate(() => { Dojo.state().unlockAll = true; Dojo.save(); });
+        await p3.reload();
+        await p3.click('#ar-start');
+        const t0 = Date.now();
+        while (!(await p3.$('#ar-again'))) {
+          if (Date.now() - t0 > 180000) throw new Error('timed out');
+          await p3.evaluate(solve).catch(() => {});
+          await p3.waitForTimeout(120);
+        }
+        const h = await p3.textContent('.ar-screen h2');
+        const rec = await p3.evaluate((g) => Dojo.state().arcade[g], id);
+        if (h !== 'You win!' || !rec || rec.wins !== 1) throw new Error('result: ' + h + ' ' + JSON.stringify(rec));
+        // replay starts a fresh game
+        await p3.click('#ar-again');
+        await p3.waitForTimeout(400);
+        if (await p3.$('#ar-again')) throw new Error('replay did not start');
+        if (e3.length) throw new Error(e3.join(' | '));
+        record('arcade: ' + id + ' locks, plays to a win, replays', true, 'score ' + rec.best);
+      } catch (e) { failures++; record('arcade: ' + id, false, e.message.split('\n')[0]); }
+    }
+    await c3.close();
+  }
+
   await browser.close(); srv.close();
   const bad = results.filter((r) => !r.ok).length;
   console.log(`\n${results.length - bad}/${results.length} checks passed.`);

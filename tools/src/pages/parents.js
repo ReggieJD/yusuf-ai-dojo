@@ -42,6 +42,12 @@ module.exports = function (ctx) {
       <tbody>${rows}</tbody>
     </table></div>
     <p><b>Also included:</b> a Daily Dojo (a 5-minute review that builds a streak), badges, a Bonus Arcade of concept games that unlock with badges, a glossary with flashcards (“Dojo Scrolls”), and a printable certificate at Black Belt.</p>
+    <h3>🕹️ Bonus Arcade</h3>
+    <p>Eight replayable games with levels, scores and win/lose screens. Each one practices a real AI idea. Games unlock as he earns badges, so lessons come first.</p>
+    <div class="pp-scroll"><table class="pp-table">
+      <thead><tr><th scope="col">Game</th><th scope="col">AI idea it practices</th><th scope="col">Unlocks at</th></tr></thead>
+      <tbody>${(ctx.arcade || []).filter((g) => g.built).map((g) => `<tr><td>${g.emoji} ${esc(g.title)}</td><td>${esc(g.concept)}</td><td>${g.need} badge${g.need > 1 ? 's' : ''}</td></tr>`).join('')}</tbody>
+    </table></div>
   </section>
 
   <section class="card">

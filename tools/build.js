@@ -171,7 +171,9 @@ for (const name of ['index', 'parents', 'scrolls', 'badges', 'daily', 'certifica
 if (arcade.some((g) => g.built)) {
   buildPage('arcade/index.html', require('./src/pages/arcade.js'), Object.assign({}, ctx0, { root: '../' }));
   for (const g of arcade.filter((x) => x.built)) {
-    buildPage(`arcade/${g.id}.html`, require(`./src/arcade/${g.id}.js`), Object.assign({}, ctx0, { root: '../', game: g }));
+    const shell = require('./src/arcade-shell');
+    const p = shell(g, require(`./src/arcade/${g.id}.js`), esc, fnSrc);
+    write(`arcade/${g.id}.html`, page(Object.assign({ root: '../' }, p)));
   }
 }
 

@@ -138,6 +138,15 @@ const themes = {
 };
 
 // Arcade games; `need` = number of badges required to unlock.
-const arcade = [];
+const arcade = [
+  { id: 'pattern-ninja', title: 'Pattern Ninja', emoji: '🥷', need: 1, built: true, concept: 'Learning a rule from labeled examples', blurb: 'Discover the secret rule from examples, then slice every matching tile.' },
+  { id: 'data-dunk', title: 'Data Dunk', emoji: '🏀', need: 2, built: true, concept: 'Reading charts fast', blurb: 'Read the chart, answer fast, and dunk before the shot clock runs out.' },
+  { id: 'neural-penalty-kicks', title: 'Neural Penalty Kicks', emoji: '⚽', need: 3, built: true, concept: 'Tuning weights and bias', blurb: 'Tune your goalkeeper neuron’s weights to predict where shots will go.' },
+  { id: 'minimax-checkmate', title: 'Minimax Checkmate', emoji: '♟️', need: 4, built: true, concept: 'Searching for the winning move', blurb: 'Find the checkmate in one. Think like a search engine.' },
+  { id: 'token-tetris', title: 'Token Tetris', emoji: '🧩', need: 5, built: true, concept: 'Next-token prediction', blurb: 'Catch the most likely next token before the stack reaches the top.' },
+  { id: 'maze-race', title: 'Maze Sensei Race', emoji: '🏯', need: 6, built: true, concept: 'Reinforcement learning', blurb: 'Race a learning AI through the maze. It gets smarter every level!' },
+  { id: 'bias-detective', title: 'Bias Detective', emoji: '🔍', need: 8, built: true, concept: 'Fairness testing', blurb: 'Compare results across groups and catch the unfair AI.' },
+  { id: 'spot-the-fake', title: 'Spot the Fake', emoji: '🎭', need: 10, built: true, concept: 'Fact-checking and deepfake awareness', blurb: 'Real, fake, or check first? Rapid-fire media literacy.' },
+];
 
 module.exports = { worlds, themes, arcade };
